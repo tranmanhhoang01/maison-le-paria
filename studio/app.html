@@ -116,6 +116,7 @@
   </button>
   <div style="margin-top:auto; display:grid; gap:8px">
     <button class="ghost" id="domainBtn" style="padding:9px; font-size:11px">Tên miền</button>
+    <button class="ghost" id="repoBtn" style="padding:9px; font-size:11px">Kho GitHub</button>
     <div class="micro" id="gitState">…</div>
   </div>
 </aside>
@@ -175,6 +176,22 @@ function drawGit() {
     ? 'Chưa nối GitHub'
     : `${g.remote ? g.remote.replace(/^https:\/\/github\.com\//, '').replace(/\.git$/, '') : 'chưa có remote'}<br>nhánh ${g.branch ?? '—'} · ${g.dirty} thay đổi`
   $('domainBtn').textContent = data.domain ?? 'Chưa gán tên miền'
+}
+
+$('repoBtn').onclick = async () => {
+  const remote = prompt(
+    'Địa chỉ kho GitHub (dán bằng ⌘V):',
+    data.git.remote ?? 'https://github.com/',
+  )
+  if (!remote) return
+  try {
+    await api('/api/git-remote', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ remote }),
+    })
+    await refresh()
+    alert('Đã lưu địa chỉ kho. Bấm Triển khai để đẩy lên.')
+  } catch (err) { alert(err.message) }
 }
 
 $('domainBtn').onclick = async () => {
@@ -432,6 +449,27 @@ async function connectGithub() {
   await run('/api/git-init', { remote }, 'Nối GitHub')
 }
 
+/* Git nói bằng tiếng Anh và bằng mã số. Đây là bản dịch cho vài lỗi hay gặp
+   nhất, để cửa sổ nhật ký nói được điều cần làm tiếp theo. */
+function explain(log) {
+  const cases = [
+    [/Repository not found|repository .* not found/i,
+      'GitHub không tìm thấy kho này.\n· Kiểm tra địa chỉ ở nút “Kho GitHub” — còn chỗ giữ chỗ như TÊN-BẠN không?\n· Kho đã được tạo trên github.com chưa?'],
+    [/could not read Username|Authentication failed|terminal prompts disabled|Invalid username or (password|token)/i,
+      'GitHub từ chối đăng nhập.\nGitHub không nhận mật khẩu tài khoản — cần một Personal Access Token:\n· github.com/settings/tokens → Generate new token (classic) → tích quyền “repo”\n· Mở Terminal, chạy: cd ~/Desktop/maison-le-paria && git push\n· Dán token vào ô mật khẩu. macOS sẽ nhớ cho những lần sau.'],
+    [/remote origin already exists/i,
+      'Kho đã có địa chỉ rồi. Dùng nút “Kho GitHub” để đổi thay vì thêm mới.'],
+    [/rejected|non-fast-forward|fetch first/i,
+      'Trên GitHub có thay đổi mà máy này chưa có.\nMở Terminal, chạy: cd ~/Desktop/maison-le-paria && git pull --rebase && git push'],
+    [/Permission denied \(publickey\)/i,
+      'Khoá SSH chưa được cài. Dễ hơn: đổi địa chỉ kho sang dạng https://github.com/… ở nút “Kho GitHub”.'],
+    [/does not appear to be a git repository/i,
+      'Địa chỉ kho không hợp lệ. Kiểm tra lại ở nút “Kho GitHub”.'],
+  ]
+  const hit = cases.find(([re]) => re.test(log))
+  return hit ? `── Nguyên nhân ──\n${hit[1]}` : '── Xem dòng lỗi phía trên để biết nguyên nhân ──'
+}
+
 /* ── console ── */
 function openConsole(title) {
   $('console').dataset.open = 'true'
@@ -461,6 +499,7 @@ async function run(path, payload, title, keepOpen) {
   $('consoleState').dataset.kind = failed ? 'bad' : 'ok'
   $('consoleState').textContent = failed ? `${title} — thất bại` : `${title} — xong`
   $('log').textContent = $('log').textContent.replace(/__DONE__|__FAIL__/g, '')
+  if (failed) log('\n' + explain(all) + '\n')
   await refresh()
 }
 

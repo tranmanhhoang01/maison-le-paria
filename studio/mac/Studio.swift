@@ -146,6 +146,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
         appItem.submenu = appMenu
         main.addItem(appItem)
 
+        // Without this menu the standard keyboard shortcuts do not exist, and
+        // ⌘V does nothing anywhere in the app — including in the box that asks
+        // for a GitHub address, which is the one place it is needed most.
+        let editItem = NSMenuItem()
+        let editMenu = NSMenu(title: "Sửa")
+        editMenu.addItem(withTitle: "Hoàn tác", action: Selector(("undo:")), keyEquivalent: "z")
+        editMenu.addItem(withTitle: "Làm lại", action: Selector(("redo:")), keyEquivalent: "Z")
+        editMenu.addItem(.separator())
+        editMenu.addItem(withTitle: "Cắt", action: Selector(("cut:")), keyEquivalent: "x")
+        editMenu.addItem(withTitle: "Sao chép", action: Selector(("copy:")), keyEquivalent: "c")
+        editMenu.addItem(withTitle: "Dán", action: Selector(("paste:")), keyEquivalent: "v")
+        editMenu.addItem(withTitle: "Chọn tất cả", action: Selector(("selectAll:")), keyEquivalent: "a")
+        editItem.submenu = editMenu
+        main.addItem(editItem)
+
         let viewItem = NSMenuItem()
         let viewMenu = NSMenu(title: "Hiển thị")
         viewMenu.addItem(withTitle: "Tải lại", action: #selector(reload), keyEquivalent: "r")
@@ -327,8 +342,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
         alert.addButton(withTitle: "OK")
         alert.addButton(withTitle: "Huỷ")
 
-        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 320, height: 24))
+        let field = NSTextField(frame: NSRect(x: 0, y: 0, width: 420, height: 24))
         field.stringValue = defaultText ?? ""
+        field.isEditable = true
+        field.isSelectable = true
         alert.accessoryView = field
         alert.window.initialFirstResponder = field
 

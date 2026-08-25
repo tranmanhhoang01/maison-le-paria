@@ -397,17 +397,54 @@ const server = createServer(async (req, res) => {
 
     if (route === '/api/git-init' && req.method === 'POST') {
       const { remote } = JSON.parse(await body(req))
-      if (!/^(https:\/\/github\.com\/|git@github\.com:)/.test(remote ?? '')) {
-        json(res, 400, { error: 'Địa chỉ phải là kho GitHub.' })
+      const url = (remote ?? '').trim()
+
+      if (!/^(https:\/\/github\.com\/|git@github\.com:)/.test(url)) {
+        json(res, 400, { error: 'Địa chỉ phải bắt đầu bằng https://github.com/ hoặc git@github.com:' })
         return
       }
+      // The instructions use placeholders; pasting one verbatim points the
+      // repository at an address that does not exist, and the push fails with
+      // a bare error code. Catching it here says why.
+      if (/T[ÊE]N-B[ẠA]N|ten-ban|username|your-?name|USER/i.test(url)) {
+        json(res, 400, { error: 'Địa chỉ còn chỗ giữ chỗ — thay bằng tên tài khoản GitHub thật của bạn.' })
+        return
+      }
+
+      // `git remote add` fails with code 128 if origin already exists, which
+      // it does the moment anyone has run git by hand. Set it instead.
+      const existing = await git('remote', 'get-url', 'origin')
+      const wire = existing.code === 0
+        ? ['git', ['remote', 'set-url', 'origin', url]]
+        : ['git', ['remote', 'add', 'origin', url]]
+
       stream(res, [
         ['git', ['init', '-b', 'main']],
-        ['git', ['remote', 'add', 'origin', remote]],
+        wire,
         ['git', ['add', '-A']],
         ['git', ['commit', '-m', 'Maison Le Paria', '--allow-empty']],
         ['git', ['push', '-u', 'origin', 'main']],
       ])
+      return
+    }
+
+    if (route === '/api/git-remote' && req.method === 'POST') {
+      const { remote } = JSON.parse(await body(req))
+      const url = (remote ?? '').trim()
+      if (!/^(https:\/\/github\.com\/|git@github\.com:)/.test(url)) {
+        json(res, 400, { error: 'Địa chỉ phải bắt đầu bằng https://github.com/ hoặc git@github.com:' })
+        return
+      }
+      if (/T[ÊE]N-B[ẠA]N|ten-ban|username|your-?name|USER/i.test(url)) {
+        json(res, 400, { error: 'Địa chỉ còn chỗ giữ chỗ — thay bằng tên tài khoản GitHub thật của bạn.' })
+        return
+      }
+      const existing = await git('remote', 'get-url', 'origin')
+      const out = existing.code === 0
+        ? await git('remote', 'set-url', 'origin', url)
+        : await git('remote', 'add', 'origin', url)
+      if (out.code !== 0) { json(res, 500, { error: out.out }); return }
+      json(res, 200, { remote: url })
       return
     }
 
