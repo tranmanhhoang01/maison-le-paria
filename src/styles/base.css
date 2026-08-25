@@ -1,0 +1,77 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body, #root { height: 100%; }
+
+html {
+  background: var(--void);
+  -webkit-text-size-adjust: 100%;
+  /* On <html>, not <body>: `overflow-x` on the body makes the body itself the
+     scroll container, and then the keyboard stops scrolling the page. */
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  background: var(--void);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 200;
+  font-size: var(--t-body);
+  line-height: 1.6;
+  overscroll-behavior-y: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, p, figure { margin: 0; }
+button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+::selection { background: var(--beige); color: var(--void); }
+
+:focus-visible { outline: 1px solid var(--beige); outline-offset: 4px; }
+
+/* ── Shared type primitives ─────────────────────────────────────────── */
+.meta {
+  font-size: var(--t-meta);
+  font-weight: 300;
+  letter-spacing: var(--track-meta);
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.meta--dim { color: var(--ash); }
+.micro { font-size: var(--t-micro); letter-spacing: var(--track-wide); text-transform: uppercase; color: var(--ash); }
+.serif { font-family: var(--serif); font-weight: 300; letter-spacing: -0.015em; line-height: 0.95; }
+
+/* A line that draws itself in, used under every title. */
+.rule {
+  height: 1px; background: var(--line);
+  transform-origin: left; transform: scaleX(0);
+  transition: transform var(--dur-slow) var(--ease);
+}
+[data-in='true'] .rule { transform: scaleX(1); }
+
+/* Entrance primitive: children lift once their section is marked in. */
+.lift { opacity: 0; transform: translateY(1.1em); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
+[data-in='true'] .lift { opacity: 1; transform: none; }
+[data-in='true'] .lift:nth-child(2) { transition-delay: 0.08s; }
+[data-in='true'] .lift:nth-child(3) { transition-delay: 0.16s; }
+[data-in='true'] .lift:nth-child(4) { transition-delay: 0.24s; }
+[data-in='true'] .lift:nth-child(5) { transition-delay: 0.32s; }
+
+/* The canvas sits behind everything and never takes pointer events itself —
+   individual meshes opt in through R3F's event layer. */
+.stage {
+  position: fixed; inset: 0;
+  z-index: 0;
+}
+.overlay { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
+.overlay > * { pointer-events: auto; }
+
+
+
+/* The universe is a fixed layer and never adds height, so the page only
+   scrolls when a panel puts something in normal flow. The one thing that must
+   never scroll behind it is the open viewer. */
+html, body { height: auto; min-height: 100%; }
+body:has(.viewer) { overflow: hidden; }

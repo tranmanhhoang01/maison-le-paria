@@ -1,0 +1,31 @@
+{
+  "//": "Tên và mô tả các bộ ảnh. App quản trị (npm run studio) ghi file này. Khoá = tên thư mục trong 'ảnh web' đã bỏ dấu.",
+  "order": [
+    "fn",
+    "jpeg",
+    "fn-buoi-1"
+  ],
+  "sets": {
+    "fn": {
+      "title": "TỊNH",
+      "subtitle": "Áo dài / Sen / Ánh sáng trong nhà",
+      "description": "Một buổi chiều đứng yên. Tà áo, nhành sen và thứ ánh sáng chỉ đi qua khung cửa một lần trong ngày — được giữ lại đúng lúc nó sắp tan.",
+      "year": "2025",
+      "location": "Việt Nam"
+    },
+    "jpeg": {
+      "title": "HỒI",
+      "subtitle": "Áo dài / Yên Tử / Kiến trúc cổ",
+      "description": "Nước chảy qua đá, rêu bám lên tường, sương chưa kịp rời vai áo. Một câu chuyện thị giác về ký ức, kiến trúc và những gì còn ở lại.",
+      "year": "2025",
+      "location": "Yên Tử, Quảng Ninh"
+    },
+    "fn-buoi-1": {
+      "title": "MẶT NƯỚC",
+      "subtitle": "Thử nghiệm / Phản chiếu / Chiều muộn",
+      "description": "Chân dung dựng trên mặt hồ. Một sắc hồng duy nhất đặt giữa nước xanh và nắng ngược, đến khi ranh giới giữa người và phản chiếu bị xoá đi.",
+      "year": "2025",
+      "location": "Việt Nam"
+    }
+  }
+}

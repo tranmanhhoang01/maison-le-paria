@@ -1,0 +1,130 @@
+/* ── Panels: about / contact / index ────────────────────────────────── */
+/* In normal flow, not a fixed overlay: that way the page itself scrolls, and
+   the keyboard, the scrollbar and a phone's momentum all work without being
+   re-implemented. */
+.panel-layer { position: relative; z-index: 30; min-height: 100vh; }
+.panel-layer:focus { outline: none; }
+.panel-layer__scrim {
+  position: fixed; inset: 0; z-index: -1;
+  background: rgba(6, 7, 8, 0.975);
+  animation: fade 1s var(--ease) both;
+}
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.panel {
+  position: relative; min-height: 100%;
+  display: flex; align-items: center;
+  padding: clamp(6rem, 14vh, 10rem) var(--edge) clamp(4rem, 10vh, 7rem);
+}
+.panel__inner { width: min(62ch, 100%); }
+.panel__eyebrow { color: var(--beige); }
+.panel__title { font-size: var(--t-title); margin-top: 0.8rem; }
+.panel .rule { margin: 2rem 0; }
+.panel__lead { font-size: clamp(1.1rem, 1.6vw, 1.45rem); font-weight: 200; line-height: 1.55; }
+.panel__body { margin-top: 1.4rem; color: var(--ink-dim); font-weight: 200; }
+.panel__roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.8rem; margin-top: 3.4rem; }
+.panel__roles dt { color: var(--ash-deep); margin-bottom: 0.5rem; }
+.panel__roles dd { margin: 0; color: var(--ink-dim); font-size: 0.95rem; }
+
+/* Contact */
+.channels { list-style: none; margin: 3rem 0 0; padding: 0; }
+.channel {
+  display: flex; align-items: baseline; gap: 1.4rem;
+  padding: 1.1rem 0; border-top: 1px solid var(--line-soft);
+}
+.channel:last-child { border-bottom: 1px solid var(--line-soft); }
+.channel > span:first-child { flex: 0 0 8rem; color: var(--ash-deep); }
+.channel a { position: relative; color: var(--ink); }
+.channel a::after {
+  content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px;
+  background: currentColor; transform: scaleX(0); transform-origin: right;
+  transition: transform 0.6s var(--ease);
+}
+.channel a:hover::after { transform: scaleX(1); transform-origin: left; }
+.cta {
+  display: inline-flex; align-items: center; gap: 1rem; margin-top: 3.4rem; color: var(--ink);
+  transition: gap var(--dur-fast) var(--ease);
+}
+.cta__line { display: block; width: 3rem; height: 1px; background: currentColor; transition: width var(--dur-fast) var(--ease); }
+.cta:hover { gap: 1.4rem; }
+.cta:hover .cta__line { width: 4.4rem; }
+
+/* ── The library ────────────────────────────────────────────────────── */
+.panel--library { display: block; padding: 0; }
+
+.library {
+  width: min(1240px, 88vw);
+  margin: 0 auto;
+  padding: clamp(6rem, 14vh, 9rem) 0 clamp(5rem, 12vh, 8rem);
+}
+.library__head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 2rem;
+  padding-bottom: 1.2rem; border-bottom: 1px solid var(--line-soft);
+}
+.library__count { color: var(--ash-deep); }
+
+.series { margin-top: clamp(5rem, 13vh, 9rem); }
+.series__head { max-width: 46ch; margin-bottom: clamp(2.4rem, 6vh, 4rem); }
+.series__num { color: var(--beige); }
+.series__title { font-size: clamp(2.2rem, 6vw, 4.2rem); margin: 0.3rem 0 0.9rem; }
+.series__sub { color: var(--ink-dim); }
+.series__note { margin-top: 1.1rem; color: var(--ash); font-weight: 200; }
+
+/* One photograph, whole. A landscape takes the full width of the page; a
+   portrait takes the full height of the screen. Neither is ever cropped to
+   fit a grid, and neither is ever shrunk to match the other. */
+.frame {
+  position: relative;
+  aspect-ratio: var(--ratio);
+  margin: 0 auto clamp(2.4rem, 7vh, 5.5rem);
+  background-size: cover; background-position: center;
+}
+.frame[data-orient='wide'] { width: 100%; }
+.frame[data-orient='tall'] { width: min(100%, calc(90vh * var(--ratio))); }
+.frame__open {
+  display: block; width: 100%; height: 100%;
+  padding: 0; border: 0; background: none; cursor: zoom-in;
+}
+.frame img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+/* No fade here on purpose. The library exists to be looked at, and a
+   photograph that spends a second easing itself in is a photograph you cannot
+   look at yet. The blur behind it is the placeholder; the moment the real
+   file paints, it simply covers it. */
+
+.frame__cap {
+  display: flex; justify-content: space-between; gap: 1.5rem;
+  margin-top: 0.85rem; color: var(--ash);
+  text-align: left;
+}
+.frame__zoom { opacity: 0; transition: opacity 0.5s var(--ease); }
+.frame:hover .frame__zoom { opacity: 1; }
+
+.library__foot {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-top: clamp(5rem, 12vh, 8rem); padding-top: 1.4rem;
+  border-top: 1px solid var(--line-soft);
+}
+.library__foot .serif { font-size: 1.4rem; }
+.library__foot .micro { color: var(--ash-deep); }
+
+@media (max-width: 860px) {
+  .library { width: 100%; padding-left: var(--edge); padding-right: var(--edge); }
+  .frame { width: 100%; }
+  .frame__zoom { display: none; }
+}
+
+/* ── Flat fallback ──────────────────────────────────────────────────── */
+.flat { position: relative; z-index: 5; padding: 24vh var(--edge) 12vh; }
+.flat__head h1 { font-size: var(--t-title); }
+.flat__head p { margin-top: 1rem; color: var(--ash); }
+.flat__project { margin-top: clamp(6rem, 16vh, 12rem); }
+.flat__project h2 { font-size: var(--t-heading); margin-top: 0.6rem; }
+.flat__desc { margin-top: 1rem; max-width: 52ch; color: var(--ink-dim); }
+.flat__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: clamp(0.6rem, 1.6vw, 1.4rem); margin-top: 3rem; }
+.flat__cell img { width: 100%; background-size: cover; object-fit: cover; }
+
+

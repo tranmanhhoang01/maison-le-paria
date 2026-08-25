@@ -1,0 +1,17 @@
+node_modules
+dist
+.DS_Store
+*.local
+.tmp-images-*
+
+# Ảnh gốc nằm ngoài repo (trong "ảnh web" trên Desktop) — chỉ các bản đã dựng
+# cho web trong public/images được đẩy lên GitHub.
+
+# App macOS được dựng tại máy (npm run app)
+Maison Le Paria Studio.app
+studio/mac/Studio.iconset
+studio/mac/.Studio.generated.swift
+
+# Cấu hình của trình soạn thảo trên máy
+.vscode
+.claude

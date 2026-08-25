@@ -1,0 +1,56 @@
+# Mỗi lần Studio bấm "Triển khai", nó đẩy code lên nhánh main và tệp này chạy:
+# dựng site rồi xuất bản lên GitHub Pages. Không cần làm gì thêm bằng tay.
+name: Xuất bản
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Có domain riêng (public/CNAME) thì đường dẫn gốc là '/';
+      # chưa có thì site nằm ở github.io/<ten-repo>/ nên phải đặt base theo repo.
+      - name: Xác định đường dẫn gốc
+        run: |
+          if [ -f public/CNAME ]; then
+            echo "SITE_BASE=/" >> $GITHUB_ENV
+          else
+            echo "SITE_BASE=/${GITHUB_REPOSITORY#*/}/" >> $GITHUB_ENV
+          fi
+      # Ảnh đã được dựng sẵn ở máy và nằm trong repo, nên ở đây chỉ cần build.
+      - run: npm run build
+      # GitHub Pages không có fallback cho SPA: /thu-vien khi tải lại sẽ 404
+      # nếu không có tệp này.
+      - run: cp dist/index.html dist/404.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.pages.outputs.page_url }}
+    steps:
+      - id: pages
+        uses: actions/deploy-pages@v4

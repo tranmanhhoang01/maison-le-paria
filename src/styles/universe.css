@@ -1,0 +1,131 @@
+/* ── The field ──────────────────────────────────────────────────────── */
+.universe {
+  position: fixed; inset: 0; z-index: 1;
+  overflow: hidden;
+  cursor: grab;
+  touch-action: none;          /* the plane handles its own dragging */
+  overscroll-behavior: none;
+}
+.universe:active { cursor: grabbing; }
+
+.universe__plane {
+  position: absolute; left: 50%; top: 50%;
+  width: 0; height: 0;
+  will-change: transform;
+}
+
+/* ── One photograph ─────────────────────────────────────────────────── */
+.photo {
+  position: absolute;
+  padding: 0; border: 0; background: none;
+  background-size: cover; background-position: center;
+  transform: translate3d(-50%, -50%, 0);
+  will-change: transform, opacity;
+  cursor: pointer;
+  /* Scaling a raster is the one thing that can soften a photograph, so the
+     browser is told to keep its hands off the sampling quality. */
+  image-rendering: auto;
+  transition: filter 0.6s var(--ease-soft);
+  outline-offset: 6px;
+}
+.photo img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0;
+  transition: opacity 0.85s var(--ease);
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.photo[data-loaded='true'] .photo__tile { opacity: 1; }
+.photo[data-instant='true'] .photo__tile { transition: none; }
+/* The 2400px original arrives on top of the tile once zoom has outgrown it,
+   and simply stays there — no flicker, no reflow, nothing to re-decode. */
+.photo__full { transition: opacity 0.5s var(--ease); }
+.photo[data-hires='true'] .photo__full { opacity: 1; }
+
+/* ── Dust ───────────────────────────────────────────────────────────── */
+.dust {
+  position: fixed; inset: 0; z-index: 0;
+  pointer-events: none;
+}
+
+/* ── The single wall label ──────────────────────────────────────────── */
+/* Type sits on top of photographs now, so it brings its own shade with it. */
+.label::before {
+  content: ''; position: absolute; z-index: -1;
+  left: calc(var(--edge) * -1); right: -8rem; bottom: calc(clamp(1.4rem, 4vh, 2.4rem) * -1); top: -3rem;
+  background: linear-gradient(to top right, rgba(6, 7, 8, 0.92), rgba(6, 7, 8, 0.55) 45%, transparent 75%);
+  pointer-events: none;
+}
+.label {
+  position: fixed; left: var(--edge); bottom: clamp(1.4rem, 4vh, 2.4rem);
+  z-index: 20; display: grid; gap: 0.35rem;
+  pointer-events: none;
+  opacity: 0; transform: translateY(0.5rem);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.label[data-on='true'] { opacity: 1; transform: none; }
+.label__set { font-size: clamp(1.5rem, 3.4vw, 2.6rem); line-height: 1; }
+.label__meta { color: var(--ash); max-width: min(38ch, calc(100vw - var(--edge) * 2)); }
+
+@media (max-width: 860px) {
+  .label__meta { letter-spacing: 0.16em; font-size: 0.58rem; }
+  .label::before { right: -2rem; }
+}
+
+/* ── Opening titles ─────────────────────────────────────────────────── */
+.intro {
+  position: fixed; inset: 0; z-index: 55;
+  display: grid; place-items: center;
+  background: var(--void-deep);
+  text-align: center; padding: 0 var(--edge);
+  transition: opacity 1.5s var(--ease), visibility 1.5s;
+}
+.intro[data-gone='true'] { opacity: 0; visibility: hidden; pointer-events: none; }
+.intro__name {
+  font-size: clamp(2.8rem, 10vw, 8rem); line-height: 0.9;
+  display: flex; flex-direction: column;
+  animation: introIn 1.6s var(--ease) both;
+}
+.intro__tag { margin-top: 1.6rem; color: var(--ash); animation: introIn 1.6s var(--ease) 0.25s both; }
+.intro__hint { margin-top: 3.4rem; color: var(--ash-deep); animation: introIn 1.6s var(--ease) 0.6s both; }
+.intro__sound { margin-top: 0.9rem; color: var(--beige); opacity: .75; animation: introIn 1.6s var(--ease) 0.9s both; }
+/* The opening screen is one big button: clicking it is what lets the room
+   have sound, because a browser will not allow that without a gesture. */
+.intro { cursor: pointer; }
+@keyframes introIn { from { opacity: 0; transform: translateY(0.6em); } to { opacity: 1; transform: none; } }
+
+/* Stops a click on the universe from landing behind the open viewer. */
+.viewer-lock { position: fixed; inset: 0; z-index: 45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro__name, .intro__tag, .intro__hint { animation: none; }
+}
+
+/* ── The screen between two pages ───────────────────────────────────── */
+.curtain {
+  position: fixed; inset: 0; z-index: 58;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 1.4rem; text-align: center; padding: 0 var(--edge);
+  background: var(--void-deep);
+}
+/* While it is up it also swallows clicks — a button you cannot see is not a
+   button you should be able to press. */
+.curtain[data-phase='gone'] { pointer-events: none; }
+/* Closing is instant — anything slower and you see the page you are leaving
+   half-replaced. Opening takes its time. */
+.curtain[data-phase='cover']  { opacity: 1; transition: none; }
+.curtain[data-phase='reveal'] { opacity: 0; transition: opacity 0.7s var(--ease); }
+.curtain[data-phase='gone']   { opacity: 0; visibility: hidden; transition: opacity 0.4s var(--ease), visibility 0.4s; }
+
+.curtain__name {
+  font-size: clamp(1.9rem, 5.5vw, 3.4rem); line-height: 0.95;
+  display: flex; flex-direction: column;
+}
+.curtain__tag { color: var(--ash-deep); }
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain[data-phase='reveal'] { transition-duration: 0.15s; }
+}

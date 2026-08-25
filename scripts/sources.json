@@ -1,0 +1,16 @@
+{
+  "root": "/Users/hoangnoo/Desktop/ảnh web",
+  "outDir": "public/images",
+  "manifest": "src/data/generated/images.json",
+  "sizes": {
+    "tile": 1000,
+    "wide": 1600,
+    "full": 2400,
+    "lqip": 40
+  },
+  "quality": {
+    "tile": 72,
+    "wide": 78,
+    "full": 76
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "//": "Âm thanh của website. Thêm nhạc bằng app Studio, hoặc: npm run music <đường-dẫn>",
+  "ambience": {
+    "//": "Tiếng phòng tổng hợp sẵn trong trình duyệt, không cần tệp nào.",
+    "enabled": false,
+    "volume": 0.09
+  },
+  "music": {
+    "//": "Nhạc nền. 'file' để trống = không có nhạc, chỉ có tiếng phòng.",
+    "file": "audio/nhac.m4a",
+    "volume": 0.32,
+    "loop": true,
+    "fadeIn": 6,
+    "credit": ""
+  }
+}

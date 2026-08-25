@@ -1,0 +1,49 @@
+/* The whole visual language lives here. Nothing below this file invents a
+   colour, a duration or an easing curve of its own. */
+:root {
+  /* Ground */
+  --void:        #08090a;
+  --void-deep:   #050506;
+  --charcoal:    #101113;
+  --smoke:       #191a1d;
+
+  /* Ink */
+  --ink:         #e9e5de;   /* warm off-white — never pure #fff */
+  --ink-dim:     #9d9890;
+  --ash:         #6b6862;
+  --ash-deep:    #3a3835;
+  --beige:       #c9bda8;   /* the single accent, used sparingly */
+
+  --line:        rgba(233, 229, 222, 0.13);
+  --line-soft:   rgba(233, 229, 222, 0.07);
+
+  /* Type */
+  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --sans:  'Be Vietnam Pro', -apple-system, 'Helvetica Neue', sans-serif;
+
+  --t-display: clamp(3rem, 11.5vw, 10.5rem);
+  --t-title:   clamp(2.4rem, 7.5vw, 6rem);
+  --t-heading: clamp(1.6rem, 3.2vw, 2.6rem);
+  --t-body:    clamp(0.95rem, 0.55vw + 0.8rem, 1.15rem);
+  --t-meta:    0.6875rem;
+  --t-micro:   0.625rem;
+
+  --track-meta: 0.24em;
+  --track-wide: 0.4em;
+
+  /* Motion — slow, and always the same slowness */
+  --ease:      cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-fast:  0.45s;
+  --dur:       0.9s;
+  --dur-slow:  1.6s;
+  --dur-veil:  1.1s;
+
+  /* Space */
+  --gut: clamp(1.25rem, 3.6vw, 3.5rem);
+  --edge: max(var(--gut), env(safe-area-inset-left));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --dur-fast: 0.01s; --dur: 0.01s; --dur-slow: 0.01s; --dur-veil: 0.2s; }
+}
