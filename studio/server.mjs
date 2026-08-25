@@ -369,12 +369,19 @@ const server = createServer(async (req, res) => {
     if (route === '/api/deploy' && req.method === 'POST') {
       const { message } = JSON.parse(await body(req) || '{}')
       const note = (message || 'Cập nhật ảnh').replace(/["`$\\]/g, '')
+
+      // `git push` on its own fails on a branch that has never been pushed —
+      // and the first deploy is always such a branch. Naming the destination
+      // works in both cases and sets the upstream on the way through.
+      const head = await git('rev-parse', '--abbrev-ref', 'HEAD')
+      const branch = head.code === 0 && head.out ? head.out : 'main'
+
       stream(res, [
         [process.execPath, ['scripts/import-images.mjs']],
         [process.execPath, ['node_modules/vite/bin/vite.js', 'build']],
         ['git', ['add', '-A']],
         ['git', ['commit', '-m', note, '--allow-empty']],
-        ['git', ['push']],
+        ['git', ['push', '-u', 'origin', branch]],
       ])
       return
     }

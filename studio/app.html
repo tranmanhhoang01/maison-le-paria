@@ -463,6 +463,8 @@ function explain(log) {
       'Trên GitHub có thay đổi mà máy này chưa có.\nMở Terminal, chạy: cd ~/Desktop/maison-le-paria && git pull --rebase && git push'],
     [/Permission denied \(publickey\)/i,
       'Khoá SSH chưa được cài. Dễ hơn: đổi địa chỉ kho sang dạng https://github.com/… ở nút “Kho GitHub”.'],
+    [/has no upstream branch|set-upstream/i,
+      'Nhánh này chưa từng được đẩy lên GitHub.\nĐã sửa trong bản mới — bấm Triển khai lại.'],
     [/does not appear to be a git repository/i,
       'Địa chỉ kho không hợp lệ. Kiểm tra lại ở nút “Kho GitHub”.'],
   ]
