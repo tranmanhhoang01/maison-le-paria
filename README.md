@@ -346,3 +346,4 @@ bụi và tiêu đề mở đầu.
 - **Âm thanh** tổng hợp bằng WebAudio (nhiễu nâu qua lowpass + LFO 40 giây), không có
   file audio nào phải tải. Không bao giờ tự phát.
 - Trong dev, không expose gì ra `window`; bản production sạch.
+# maisonleparia

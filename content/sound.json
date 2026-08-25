@@ -9,7 +9,7 @@
     "//": "Nhạc nền. 'file' để trống = không có nhạc, chỉ có tiếng phòng.",
     "file": "audio/nhac.m4a",
     "volume": 0.32,
-    "loop": true,
+    "loop": false,
     "fadeIn": 6,
     "credit": ""
   }
