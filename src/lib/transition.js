@@ -1,4 +1,4 @@
-import { navigate } from './router.js'
+import { navigate, currentPath } from './router.js'
 import { setCurtain, experience } from '../store/experience.js'
 
 /**
@@ -20,7 +20,7 @@ const clear = () => { timers.forEach(clearTimeout); timers = [] }
 const later = (fn, ms) => { timers.push(setTimeout(fn, ms)) }
 
 export function travelTo(path) {
-  if (path === window.location.pathname) return
+  if (path === currentPath()) return
   if (experience.get().curtain) return   // already travelling
 
   clear()

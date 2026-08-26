@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { site } from '../../data/site.js'
-import { useRoute } from '../../lib/router.js'
+import { useRoute, hrefFor } from '../../lib/router.js'
 import { travelTo } from '../../lib/transition.js'
 import { useExperience } from '../../store/experience.js'
 import { SoundToggle } from './SoundToggle.jsx'
@@ -26,7 +26,7 @@ export function Nav() {
   return (
     <>
       <header className="nav" data-hidden={!!viewer} data-open={open}>
-        <a className="nav__mark" href="/" onClick={(e) => go(e, '/')} aria-label={site.name}>
+        <a className="nav__mark" href={hrefFor('/')} onClick={(e) => go(e, '/')} aria-label={site.name}>
           {site.name}
         </a>
 
@@ -35,7 +35,7 @@ export function Nav() {
             <a
               key={item.path}
               className="nav__link meta"
-              href={item.path}
+              href={hrefFor(item.path)}
               data-current={isCurrent(item.path)}
               onClick={(e) => go(e, item.path)}
             >
@@ -61,7 +61,7 @@ export function Nav() {
             <a
               key={item.path}
               className="menu__link serif lift"
-              href={item.path}
+              href={hrefFor(item.path)}
               onClick={(e) => go(e, item.path)}
             >
               {item.label}
