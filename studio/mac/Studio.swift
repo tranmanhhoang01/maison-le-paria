@@ -11,9 +11,65 @@
 import AppKit
 import WebKit
 
-// Written into the binary at build time by studio/mac/build.mjs
-let projectRoot = PROJECT_ROOT
+// Where this app was built. Only a starting guess: the app may well be
+// running on a different Mac, under a different user, from a different folder.
+let builtAt = PROJECT_ROOT
 let studioPort = STUDIO_PORT
+
+/// Resolved at launch — see `locateProject()`.
+var projectRoot = builtAt
+
+// MARK: - Finding the project
+
+private let savedRootKey = "projectRoot"
+
+private func isProject(_ path: String) -> Bool {
+    let fm = FileManager.default
+    return fm.fileExists(atPath: path + "/studio/server.mjs")
+        && fm.fileExists(atPath: path + "/package.json")
+}
+
+/**
+ Three places to look, in order of how much they can be trusted:
+
+ 1. the folder the app is sitting in — copy the whole project to another Mac
+    with the app inside it and everything simply works;
+ 2. a folder chosen previously and remembered;
+ 3. where the app happened to be built.
+
+ If none of them hold a project, the app asks.
+ */
+func locateProject() -> String? {
+    let parent = (Bundle.main.bundlePath as NSString).deletingLastPathComponent
+    if isProject(parent) { return parent }
+    if let saved = UserDefaults.standard.string(forKey: savedRootKey), isProject(saved) { return saved }
+    if isProject(builtAt) { return builtAt }
+    return nil
+}
+
+@discardableResult
+func askForProject() -> String? {
+    let panel = NSOpenPanel()
+    panel.canChooseDirectories = true
+    panel.canChooseFiles = false
+    panel.allowsMultipleSelection = false
+    panel.message = "Chọn thư mục dự án Maison Le Paria"
+    panel.prompt = "Chọn"
+
+    while panel.runModal() == .OK {
+        guard let picked = panel.url?.path else { break }
+        if isProject(picked) {
+            UserDefaults.standard.set(picked, forKey: savedRootKey)
+            return picked
+        }
+        let wrong = NSAlert()
+        wrong.messageText = "Không phải thư mục dự án"
+        wrong.informativeText = "Thư mục cần chứa package.json và studio/server.mjs.\nHãy chọn thư mục maison-le-paria."
+        wrong.addButton(withTitle: "Chọn lại")
+        wrong.runModal()
+    }
+    return nil
+}
 
 // MARK: - Finding node
 
@@ -81,10 +137,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     var server: Process?
 
     func applicationDidFinishLaunching(_ note: Notification) {
+        guard let root = locateProject() ?? askForProject() else {
+            fail("Không tìm thấy thư mục dự án Maison Le Paria.\n\nĐặt app vào bên trong thư mục dự án, hoặc mở lại và chọn thư mục đó.")
+            return
+        }
+        projectRoot = root
+
         buildMenu()
         buildWindow()
-        startServer()
-        waitForServer()
+
+        // If a Studio is already answering on this port — another window, or a
+        // server left over from a previous run — use it rather than starting a
+        // second one that would fight for the port and lose in silence.
+        probe { [weak self] alive in
+            if !alive { self?.startServer() }
+            self?.waitForServer()
+        }
+    }
+
+    /// One quick knock on the door, to see whether anyone is home.
+    private func probe(_ done: @escaping (Bool) -> Void) {
+        var request = URLRequest(url: URL(string: "http://localhost:\(studioPort)/api/state")!)
+        request.timeoutInterval = 1.5
+        URLSession.shared.dataTask(with: request) { _, response, _ in
+            let alive = (response as? HTTPURLResponse)?.statusCode == 200
+            DispatchQueue.main.async { done(alive) }
+        }.resume()
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ app: NSApplication) -> Bool { true }
@@ -165,6 +243,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
         let viewMenu = NSMenu(title: "Hiển thị")
         viewMenu.addItem(withTitle: "Tải lại", action: #selector(reload), keyEquivalent: "r")
         viewMenu.addItem(withTitle: "Mở website", action: #selector(openSite), keyEquivalent: "p")
+        viewMenu.addItem(.separator())
+        viewMenu.addItem(withTitle: "Đổi thư mục dự án…", action: #selector(changeProject), keyEquivalent: "")
         viewItem.submenu = viewMenu
         main.addItem(viewItem)
 
@@ -172,6 +252,23 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
     }
 
     @objc private func reload() { webView.reload() }
+    /// For when the project moves, or this Mac holds more than one copy.
+    @objc private func changeProject() {
+        guard let picked = askForProject() else { return }
+        let alert = NSAlert()
+        alert.messageText = "Đã đổi thư mục dự án"
+        alert.informativeText = "\(picked)\n\nStudio sẽ khởi động lại để dùng thư mục mới."
+        alert.addButton(withTitle: "Khởi động lại")
+        alert.runModal()
+
+        // Hand over to a fresh copy of ourselves, then step aside.
+        let task = Process()
+        task.executableURL = URL(fileURLWithPath: "/usr/bin/open")
+        task.arguments = ["-n", Bundle.main.bundlePath]
+        try? task.run()
+        NSApp.terminate(nil)
+    }
+
     @objc private func openSite() {
         NSWorkspace.shared.open(URL(string: "http://localhost:5173")!)
     }
@@ -180,7 +277,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
 
     private func startServer() {
         guard let node = findNode() else {
-            fail("Không tìm thấy Node trên máy.\n\nStudio cần Node để chạy. Bản đã cài nằm ở ~/.local/node.")
+            fail("""
+                Không tìm thấy Node trên máy này.
+
+                Studio cần Node để chạy. Cài từ nodejs.org (bản LTS), mở lại app là xong.
+                """)
             return
         }
         let task = Process()
@@ -190,8 +291,22 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
         var env = ProcessInfo.processInfo.environment
         env["STUDIO_PORT"] = String(studioPort)
         task.environment = env
+        let output = Pipe()
+        task.standardError = output
         do { try task.run(); server = task } catch {
             fail("Không khởi động được Studio.\n\n\(error.localizedDescription)")
+            return
+        }
+
+        // A server that exits immediately has something to say; say it, rather
+        // than leaving the window blank for thirty seconds.
+        task.terminationHandler = { [weak self] finished in
+            guard finished.terminationStatus != 0 else { return }
+            let text = String(data: output.fileHandleForReading.readDataToEndOfFile(), encoding: .utf8) ?? ""
+            DispatchQueue.main.async {
+                guard self?.webView.url == nil else { return }   // page already loaded; nothing to report
+                self?.fail(text.isEmpty ? "Studio dừng ngay khi khởi động." : text)
+            }
         }
     }
 

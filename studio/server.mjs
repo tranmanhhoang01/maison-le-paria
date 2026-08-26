@@ -22,7 +22,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const cfg = JSON.parse(fs.readFileSync(path.join(root, 'scripts/sources.json'), 'utf8'))
 const CATALOGUE = path.join(root, 'content/sets.json')
 const SOUND = path.join(root, 'content/sound.json')
-const ORIGINALS = cfg.root
+// `root` may be relative to the project — see scripts/sources.json.
+const ORIGINALS = path.resolve(root, cfg.root)
 const PORT = Number(process.env.STUDIO_PORT ?? 5199)
 
 const IMAGE_RE = /\.(jpe?g|png|tiff?|webp)$/i
@@ -459,6 +460,15 @@ const server = createServer(async (req, res) => {
   } catch (err) {
     json(res, 500, { error: err.message })
   }
+})
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n  ! Cổng ${PORT} đang bận — có một Studio khác đang chạy.`)
+    console.error(`    Đóng bản đó rồi mở lại, hoặc chạy với cổng khác: STUDIO_PORT=5200\n`)
+    process.exit(2)
+  }
+  throw err
 })
 
 server.listen(PORT, () => {

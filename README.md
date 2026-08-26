@@ -99,6 +99,61 @@ chứa được, rồi chạy vòng lặp đẩy các khung ra cho hết chồng
 cụm đặc tự nhiên, không cột không hàng, và mỗi ảnh giữ đúng tỉ lệ gốc — không
 cắt vuông, không cắt tròn.
 
+## Dùng trên một máy Mac khác
+
+Chép riêng tệp `.app` sang máy khác thì **không chạy được** — nó chỉ là cái vỏ, mọi thứ
+thật nằm trong thư mục dự án. Cần mang cả dự án đi.
+
+### Cách gọn nhất: tải từ GitHub
+
+```bash
+git clone git@github.com:tranmanhhoang01/maison-le-paria.git
+cd maison-le-paria
+npm install     # dựng lại node_modules cho đúng máy đó
+npm run app     # tạo Maison Le Paria Studio.app ngay trong thư mục
+```
+
+Máy đó cần **Node** (tải bản LTS ở nodejs.org) và **Xcode Command Line Tools**
+(`xcode-select --install`) để biên dịch app.
+
+### Hoặc chép cả thư mục
+
+Chép `maison-le-paria` **và** thư mục ảnh gốc `ảnh web` sang máy mới, giữ nguyên cách xếp
+cạnh nhau:
+
+```
+Desktop/
+  maison-le-paria/     ← dự án, có app bên trong
+  ảnh web/             ← ảnh gốc
+```
+
+Rồi chạy `npm install && npm run app`. Đừng chép `node_modules` — nó chứa phần biên dịch
+riêng cho từng loại chip, mang sang máy khác dễ hỏng.
+
+### App tự tìm dự án ở đâu
+
+Theo thứ tự: **thư mục chứa chính nó** → thư mục đã chọn lần trước → nơi nó được biên dịch.
+Không thấy ở đâu cả thì nó hỏi. Muốn đổi thủ công: menu **Hiển thị → Đổi thư mục dự án**.
+
+Nhờ vậy chỉ cần để app nằm trong thư mục dự án là mọi thứ tự khớp, dù trên máy nào, tài
+khoản nào, thư mục nào.
+
+### Ảnh gốc không đi cùng repo
+
+Chỉ ảnh đã dựng cho web nằm trong git. Trên máy mới, `ảnh web` sẽ trống — website vẫn chạy
+đủ 41 ảnh, nhưng muốn **thêm hoặc sửa** ảnh thì phải mang thư mục gốc theo.
+
+Đường dẫn tới thư mục đó ghi trong `scripts/sources.json` dạng **tương đối** (`../ảnh web`),
+nên chỉ cần giữ đúng cách xếp cạnh nhau là không phải sửa gì.
+
+### Lần đầu mở app trên máy khác
+
+macOS sẽ chặn vì app không có chữ ký của nhà phát triển trả phí. Bấm chuột phải vào app →
+**Mở** → **Mở** lần nữa. Chỉ phải làm một lần.
+
+Muốn triển khai lên GitHub từ máy đó thì máy đó cũng cần khoá SSH riêng
+(`ssh-keygen -t ed25519`, rồi dán khoá công khai vào github.com/settings/keys).
+
 ## Studio — app quản trị
 
 Một app macOS thật: có cửa sổ riêng, icon riêng trong Dock, mở bằng cách bấm đúp.

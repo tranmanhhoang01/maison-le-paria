@@ -70,7 +70,11 @@ const hamming = (a, b) => {
 const outRoot = path.join(root, cfg.outDir)
 fs.rmSync(outRoot, { recursive: true, force: true })
 
-const folders = fs.readdirSync(cfg.root, { withFileTypes: true })
+// `root` may be written relative to the project, so that copying the whole
+// folder to another Mac keeps working. resolve() handles both forms.
+const sourceRoot = path.resolve(root, cfg.root)
+
+const folders = fs.readdirSync(sourceRoot, { withFileTypes: true })
   .filter((e) => e.isDirectory() && !e.name.startsWith('.'))
   .map((e) => e.name)
   .sort((a, b) => a.localeCompare(b, 'vi'))
@@ -78,7 +82,7 @@ const folders = fs.readdirSync(cfg.root, { withFileTypes: true })
 const sets = []
 
 for (const folder of folders) {
-  const files = imagesIn(path.join(cfg.root, folder))
+  const files = imagesIn(path.join(sourceRoot, folder))
   if (!files.length) continue
 
   const kept = []

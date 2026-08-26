@@ -1,5 +1,6 @@
 {
-  "root": "/Users/hoangnoo/Desktop/ảnh web",
+  "//": "Đường dẫn ảnh gốc. Ghi tương đối (so với thư mục dự án) để chép sang máy khác vẫn chạy.",
+  "root": "../ảnh web",
   "outDir": "public/images",
   "manifest": "src/data/generated/images.json",
   "sizes": {
