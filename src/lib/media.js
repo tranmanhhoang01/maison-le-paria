@@ -8,7 +8,13 @@
  *
  *   VITE_MEDIA_BASE=https://media.maisonleparia.com
  */
-const BASE = (import.meta.env?.VITE_MEDIA_BASE ?? '/images').replace(/\/$/, '')
+/**
+ * Note the BASE_URL: on GitHub Pages this site lives under /<tên-repo>/, and a
+ * hard-coded '/images' would ask the server for a path one level above the
+ * site — every photograph 404s and the page falls back to its blur.
+ */
+const BASE = (import.meta.env?.VITE_MEDIA_BASE ?? `${import.meta.env.BASE_URL}images`)
+  .replace(/\/$/, '')
 
 export const mediaUrl = (relativePath) => `${BASE}/${relativePath}`
 
