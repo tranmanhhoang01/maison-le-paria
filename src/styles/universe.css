@@ -3,25 +3,27 @@
   position: fixed; inset: 0; z-index: 1;
   overflow: hidden;
   cursor: grab;
-  touch-action: none;          /* the plane handles its own dragging */
+  touch-action: none;          /* the sky handles its own dragging */
   overscroll-behavior: none;
+  background: #05060b;
 }
 .universe:active { cursor: grabbing; }
 
-.universe__plane {
-  position: absolute; left: 50%; top: 50%;
-  width: 0; height: 0;
-  will-change: transform;
-}
+/* The night sky: stars, nebulae and spiral arms, all painted. */
+.cosmos { position: absolute; inset: 0; display: block; }
+
+.universe__layer { position: absolute; inset: 0; }
 
 /* ── One photograph ─────────────────────────────────────────────────── */
 .photo {
-  position: absolute;
+  position: absolute; left: 0; top: 0;
   padding: 0; border: 0; background: none;
   background-size: cover; background-position: center;
-  transform: translate3d(-50%, -50%, 0);
   will-change: transform, opacity;
   cursor: pointer;
+  /* A photograph flying out of a star field needs an edge, or it reads as a
+     hole cut in the sky. */
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 18px 60px rgba(0, 0, 0, 0.6);
   /* Scaling a raster is the one thing that can soften a photograph, so the
      browser is told to keep its hands off the sampling quality. */
   image-rendering: auto;

@@ -119,6 +119,13 @@ for (const folder of folders) {
     const blur = await pipeline.clone().resize({ width: cfg.sizes.lqip, height: cfg.sizes.lqip, fit: 'inside' })
       .webp({ quality: 52 }).toBuffer()
 
+    // The colour the photograph actually is. Dominant, not mean: averaging
+    // every pixel of any photograph lands on the same muddy grey, while the
+    // dominant colour is the one a person would name if asked.
+    const stats = await pipeline.clone().stats()
+    const d = stats.dominant
+    const rgb = [d.r, d.g, d.b]
+
     images.push({
       id: base,
       tile: `${id}/${base}-tile.webp`,
@@ -126,13 +133,21 @@ for (const folder of folders) {
       full: `${id}/${base}-full.webp`,
       lqip: `data:image/webp;base64,${blur.toString('base64')}`,
       ratio: +(w / h).toFixed(4),
+      rgb,
       source: path.basename(src),
     })
   }
 
   // Recorded so the studio can tell "not processed yet" apart from
   // "processed and deliberately left out as a duplicate".
-  sets.push({ id, folder, images, skipped })
+  // A set's colour is the most saturated of its photographs' dominants — the
+  // one frame that says what the whole set is about, chromatically.
+  const chroma = (c) => Math.max(...c) - Math.min(...c)
+  const rgb = images.length
+    ? images.map((im) => im.rgb).sort((a, b) => chroma(b) - chroma(a))[0]
+    : [180, 180, 200]
+
+  sets.push({ id, folder, images, skipped, rgb })
   console.log(`  ${folder.padEnd(14)} ${images.length} ảnh${files.length !== images.length ? `  (bỏ ${files.length - images.length} ảnh trùng)` : ''}`)
 }
 

@@ -93,6 +93,20 @@ Thấu kính phóng to dưới con trỏ **nhạt dần khi zoom vào** — khi 
 chiếm một phần ba màn hình thì phóng thêm chỉ là nhiễu. Đó cũng chính là thứ cho
 phép trần zoom được đặt cao đúng bằng mức bản 2400px cho phép.
 
+**Tổng quan là một bầu trời đêm.** Mỗi bộ ảnh là một thiên hà xoắn, quay chậm giữa
+trường sao và tinh vân. Rê chuột tới thiên hà nào, ảnh của bộ đó tuôn ra khỏi lõi bay về
+phía người xem rồi xếp thành vòng; đưa chuột đi, chúng thu về. Các thiên hà còn lại mờ đi
+để nhường chỗ.
+
+Không có tấm ảnh vũ trụ nào trong dự án — **sao, tinh vân và cánh tay xoắn đều vẽ bằng
+thuật toán** (`lib/cosmos.js`), sinh một lần ra canvas ẩn lúc khởi động rồi mỗi khung hình
+chỉ đóng dấu lên màn hình. Nhờ vậy vài nghìn điểm sáng chuyển động ở 60fps mà không tải
+thêm byte nào.
+
+**Màu mỗi thiên hà lấy từ chính bộ ảnh của nó** — pipeline đọc màu chủ đạo của từng tấm,
+chọn tấm rực nhất làm màu của bộ. Nếu hai bộ trùng sắc quá thì tự tách nhau ra để không
+đọc nhầm thành một.
+
 **Bố cục chòm sao** (`src/lib/constellation.js`): ảnh được gieo trên một xoắn ốc
 góc vàng (đặc ở giữa, thưa dần ra ngoài, không thẳng hàng), gieo *chật hơn* mức
 chứa được, rồi chạy vòng lặp đẩy các khung ra cho hết chồng lấn. Kết quả là một

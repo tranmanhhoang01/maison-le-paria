@@ -1,107 +1,55 @@
 import { mulberry32 } from './math.js'
 
 /**
- * Lays every photograph out on one infinite plane.
+ * Where the galaxies sit, and where each photograph flies to when its galaxy
+ * opens.
  *
- * Two rules the Apple Watch grid gets right and a masonry grid does not:
- * the cluster has a centre and an edge, and nothing is aligned to a column.
- * So: seed the positions on a golden-angle spiral (dense in the middle,
- * loosening outward, no rows), then relax the boxes apart until nothing
- * overlaps — with enough breathing room that a magnified tile still doesn't
- * touch its neighbours.
- *
- * Photographs keep their own proportions. Each is given an *area*, not a
- * width — so a panorama and a portrait can carry equal weight in the field
- * without either being cropped.
+ * Everything is in world units — one unit is a few hundred pixels depending
+ * on zoom — and everything is deterministic, because a field of stars that
+ * rearranged itself on every reload would stop being a place.
  */
 
-const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5))
+const GOLDEN = Math.PI * (3 - Math.sqrt(5))
 
-/** Room left around every tile so magnification never causes a collision. */
-const PADDING = 0.13
+export function buildCosmos(sets, { compact = false } = {}) {
+  const rand = mulberry32(20260826)
+  const orbit = compact ? 2.2 : 2.9
 
-export function buildConstellation(photos, { spread = 1 } = {}) {
-  const rand = mulberry32(20260824)
+  return sets.map((set, i) => {
+    // Galaxies on a wide ring, turned so no two sit directly above each other.
+    const angle = (i / sets.length) * Math.PI * 2 - Math.PI / 2 + 0.35
+    // Sized so three of them share a screen without touching, and so the
+    // largest body of work reads as the largest galaxy.
+    const radius = set.images.length > 14 ? 1.3 : 1.02
 
-  const items = photos.map((photo, i) => {
-    // Rhythm: most frames sit around the base size, every so often one is
-    // given real presence. Without this the field reads as wallpaper.
-    const beat = i % 9 === 4 ? 1.75 : i % 5 === 2 ? 1.28 : 1
-    const jitter = 0.86 + rand() * 0.34
-    const area = beat * jitter
-
-    const ratio = photo.ratio ?? 0.75
-    const w = Math.sqrt(area * ratio)
-    const h = Math.sqrt(area / ratio)
-
-    // The spiral starts *tighter* than the frames can actually sit. Relaxation
-    // then pushes them apart to exactly touching — which packs the cluster as
-    // densely as its own contents allow, instead of leaving the gaps that a
-    // spiral spaced by guesswork would.
-    const t = i + 0.5
-    const radius = Math.sqrt(t) * 0.6 * spread
-    const angle = t * GOLDEN_ANGLE
-
-    return {
-      photo,
-      w, h,
-      x: Math.cos(angle) * radius,
-      y: Math.sin(angle) * radius * 0.82,   // slightly wide: screens are wide
-      weight: beat,
+    const place = {
+      x: Math.cos(angle) * orbit * (compact ? 0.72 : 1),
+      y: Math.sin(angle) * orbit * (compact ? 0.92 : 0.55),
+      radius,
+      spin: (i % 2 === 0 ? 1 : -1) * (0.014 + rand() * 0.010),
     }
-  })
 
-  relax(items)
-  return centre(items)
-}
-
-/** Push overlapping boxes apart. Converges in well under 100 passes at n≈50. */
-function relax(items, passes = 140) {
-  for (let pass = 0; pass < passes; pass++) {
-    let moved = 0
-    for (let i = 0; i < items.length; i++) {
-      for (let j = i + 1; j < items.length; j++) {
-        const a = items[i]
-        const b = items[j]
-        const dx = b.x - a.x
-        const dy = b.y - a.y
-        const minX = (a.w + b.w) / 2 + PADDING
-        const minY = (a.h + b.h) / 2 + PADDING
-        const overlapX = minX - Math.abs(dx)
-        const overlapY = minY - Math.abs(dy)
-        if (overlapX <= 0 || overlapY <= 0) continue
-
-        // Separate along whichever axis needs the smaller correction, so the
-        // cluster stays compact instead of exploding outward.
-        if (overlapX / minX < overlapY / minY) {
-          const push = (overlapX / 2) * (dx < 0 ? -1 : 1)
-          a.x -= push; b.x += push
-        } else {
-          const push = (overlapY / 2) * (dy < 0 ? -1 : 1)
-          a.y -= push; b.y += push
-        }
-        moved++
+    // Where the photographs go when the galaxy opens: a loose spiral thrown
+    // outward from the core, so they read as streaming out rather than
+    // arriving in a tidy circle.
+    const burst = set.images.map((image, n) => {
+      const a = n * GOLDEN + i * 1.7
+      const t = (n + 1) / set.images.length
+      const dist = radius * (1.2 + t * 0.95) + rand() * 0.34
+      const height = (1.15 + rand() * 0.6) * (compact ? 0.76 : 1)
+      return {
+        image,
+        angle: a,
+        x: Math.cos(a) * dist,
+        y: Math.sin(a) * dist * 0.78,
+        w: height * (image.ratio ?? 0.75),
+        h: height,
+        // Staggered so they leave the core in a stream, not all at once.
+        delay: (n / set.images.length) * 0.42,
+        spinOut: (rand() - 0.5) * 0.24,
       }
-    }
-    if (!moved) break
-  }
-}
+    })
 
-function centre(items) {
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
-  for (const it of items) {
-    minX = Math.min(minX, it.x - it.w / 2)
-    maxX = Math.max(maxX, it.x + it.w / 2)
-    minY = Math.min(minY, it.y - it.h / 2)
-    maxY = Math.max(maxY, it.y + it.h / 2)
-  }
-  const cx = (minX + maxX) / 2
-  const cy = (minY + maxY) / 2
-  for (const it of items) { it.x -= cx; it.y -= cy }
-
-  return {
-    items,
-    width: maxX - minX,
-    height: maxY - minY,
-  }
+    return { ...set, place, burst }
+  })
 }

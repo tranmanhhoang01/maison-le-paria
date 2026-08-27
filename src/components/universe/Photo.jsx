@@ -2,26 +2,20 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useImageReady } from '../../hooks/useImageReady.js'
 
 /**
- * One photograph hanging in the field.
+ * One photograph, thrown out of a galaxy.
  *
- * It carries two files: the 1000px tile it normally shows, and — only once
- * the zoom has grown it past that — the 2400px original, faded in over the
- * top. That is the whole trick behind zooming in without anything going soft:
- * a two-step resolution pyramid, the same idea a map uses.
- *
- * The element's transform belongs to Universe's animation frame, not to
- * React. Nothing here re-renders while you zoom or move the pointer.
+ * Its position, size and opacity all belong to the overview's animation
+ * frame, not to React — this component renders once and then holds still
+ * while the loop writes to its style. It carries two files: the 1000px tile
+ * it normally shows, and the 2400px original once it has grown past that.
  */
-export function Photo({ item, unit, index, register, onOpen, priority }) {
+export function Photo({ image, index, register, onOpen, priority }) {
   const el = useRef(null)
   const [visible, setVisible] = useState(false)
   const [hiRes, setHiRes] = useState(false)
   const tile = useImageReady()
   const full = useImageReady()
-  const { photo } = item
 
-  // Called from the animation loop every frame; only crossing the threshold
-  // is allowed to reach React.
   const requestHiRes = useCallback((want) => {
     setHiRes((current) => (current === want ? current : want || current))
   }, [])
@@ -31,9 +25,8 @@ export function Photo({ item, unit, index, register, onOpen, priority }) {
     return () => register(index, null)
   }, [index, register, requestHiRes])
 
-  // Frames near the middle of the cluster are fetched at once; the rest wait
-  // until they approach the screen. Otherwise the browser opens fifty requests
-  // in parallel and the photograph you are actually looking at arrives last.
+  // The first few frames of each galaxy load at once so a galaxy never opens
+  // onto empty rectangles; the rest wait until they are nearly on screen.
   useEffect(() => {
     if (visible) return
     if (priority) { setVisible(true); return }
@@ -41,7 +34,7 @@ export function Photo({ item, unit, index, register, onOpen, priority }) {
     if (!node) return
     const io = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setVisible(true) },
-      { rootMargin: '450px' },
+      { rootMargin: '300px' },
     )
     io.observe(node)
     return () => io.disconnect()
@@ -54,21 +47,15 @@ export function Photo({ item, unit, index, register, onOpen, priority }) {
       data-loaded={tile.ready}
       data-instant={tile.instant}
       data-hires={full.ready}
-      style={{
-        left: `${item.x * unit}px`,
-        top: `${item.y * unit}px`,
-        width: `${item.w * unit}px`,
-        height: `${item.h * unit}px`,
-        backgroundImage: `url(${photo.lqip})`,
-      }}
+      style={{ backgroundImage: `url(${image.lqip})`, visibility: 'hidden' }}
       onClick={onOpen}
-      aria-label={`${photo.setTitle} — ảnh ${photo.number}`}
+      aria-label={`${image.setTitle} — ảnh ${image.number}`}
     >
       {visible && (
         <img
           className="photo__tile"
-          src={photo.tile}
-          alt={`${photo.setTitle} — ${photo.setSubtitle}`}
+          src={image.tile}
+          alt={`${image.setTitle} — ${image.setSubtitle}`}
           decoding="async"
           draggable="false"
           fetchpriority={priority ? 'high' : 'auto'}
@@ -79,7 +66,7 @@ export function Photo({ item, unit, index, register, onOpen, priority }) {
       {hiRes && (
         <img
           className="photo__full"
-          src={photo.full}
+          src={image.full}
           alt=""
           aria-hidden="true"
           decoding="async"
