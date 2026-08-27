@@ -134,58 +134,21 @@ export function makeGalaxy(size, colour, seed) {
   return c
 }
 
-/** A drifting cloud of colour, far behind everything else. */
-export function makeNebula(size, hue, seed) {
-  const c = document.createElement('canvas')
-  c.width = c.height = size
-  const ctx = c.getContext('2d')
-  const rand = mulberry32(seed)
-  ctx.globalCompositeOperation = 'lighter'
-
-  // Kept well inside the sprite: a cloud that reaches the edge of its own
-  // canvas gets cut off square, and a straight edge in a nebula is the one
-  // thing that gives the whole illusion away.
-  for (let i = 0; i < 26; i++) {
-    const r = size * (0.10 + rand() * 0.20)
-    const x = size / 2 + (rand() - 0.5) * size * 0.34
-    const y = size / 2 + (rand() - 0.5) * size * 0.34
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r)
-    const h = (hue + (rand() - 0.5) * 46 + 360) % 360
-    g.addColorStop(0, `hsla(${h}, 85%, 60%, ${0.05 + rand() * 0.06})`)
-    g.addColorStop(1, 'transparent')
-    ctx.fillStyle = g
-    ctx.beginPath()
-    ctx.arc(x, y, r, 0, Math.PI * 2)
-    ctx.fill()
-  }
-
-  // Whatever the clouds did, the sprite fades to nothing at its own edge.
-  // Without this the nebula is a visible rectangle the moment it is scaled up.
-  ctx.globalCompositeOperation = 'destination-in'
-  const mask = ctx.createRadialGradient(size / 2, size / 2, size * 0.12, size / 2, size / 2, size * 0.5)
-  mask.addColorStop(0, 'rgba(0,0,0,1)')
-  mask.addColorStop(0.62, 'rgba(0,0,0,0.85)')
-  mask.addColorStop(1, 'rgba(0,0,0,0)')
-  ctx.fillStyle = mask
-  ctx.fillRect(0, 0, size, size)
-
-  return c
-}
-
-/** Stars, at three depths so the field has somewhere to go when you move. */
+/** Stars scattered through real depth, so the field has somewhere to go. */
 export function makeStars(count, seed) {
   const rand = mulberry32(seed)
   return Array.from({ length: count }, () => {
-    const depth = rand()
+    const far = rand()
     return {
       x: rand() * 2 - 1,
       y: rand() * 2 - 1,
-      depth: 0.25 + depth * 0.75,        // nearer stars move more
-      size: 0.4 + rand() * rand() * 2.4,
-      base: 0.25 + rand() * 0.6,
+      z: far * far * 22,                 // most of them a long way off
+      size: 1.0 + rand() * rand() * 4.5,
+      base: 0.3 + rand() * 0.65,
       phase: rand() * Math.PI * 2,
       speed: 0.4 + rand() * 1.4,
-      warm: rand() < 0.18,
+      warm: rand() < 0.16,
+      cool: rand() < 0.22,
     }
   })
 }

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { buildCosmos } from '../../lib/constellation.js'
+import { buildCosmos, persp } from '../../lib/constellation.js'
 import { createCosmos } from '../../lib/cosmosScene.js'
 import { clamp, damp } from '../../lib/math.js'
 import { openViewer, setFocusPhoto } from '../../store/experience.js'
@@ -190,17 +190,32 @@ export function Universe({ sets, compact, active = true }) {
       let focus = -1
       let best = Infinity
       for (let i = 0; i < placed.length; i++) {
-        const g = placed[i]
-        const d = Math.hypot(fx - g.x, fy - g.y)
-        // Generous while the photographs are out, so moving toward one of
-        // them does not slam the galaxy shut on the way.
-        const reach = g.radius * (1.15 + f.open[i] * 1.5)
-        if (d < reach && d < best) { best = d; focus = i }
+        const d = Math.hypot(fx - placed[i].x, fy - placed[i].y)
+        if (d < placed[i].radius * 1.3 && d < best) { best = d; focus = i }
+      }
+
+      // Once a galaxy is open it keeps hold of the pointer until the pointer
+      // genuinely leaves the field its photographs occupy. Without this the
+      // camera drift below would carry the galaxy out from under the cursor
+      // and the whole thing would flicker open and shut.
+      if (focus === -1 && f.focus >= 0 && f.open[f.focus] > 0.2) {
+        const g = placed[f.focus]
+        const hold = cosmos[f.focus].reach * unit * f.z * g.p * 1.2
+        if (Math.hypot(fx - g.x, fy - g.y) < hold) focus = f.focus
       }
       f.focus = focus
 
       for (let i = 0; i < cosmos.length; i++) {
         f.open[i] = damp(f.open[i], focus === i ? 1 : 0, focus === i ? 3.4 : 2.6, dt)
+      }
+
+      // The camera leans toward whatever has opened, so its photographs come
+      // out into the middle of the screen instead of half of them arriving
+      // past the edge. Never while the visitor is dragging: their hand wins.
+      if (focus >= 0 && !f.dragging && f.pointers.size === 0) {
+        const g = cosmos[focus].place
+        f.tx = damp(f.tx, -g.x * unit * f.z * 0.82, 1.5, dt)
+        f.ty = damp(f.ty, -g.y * unit * f.z * 0.82, 1.5, dt)
       }
 
       // Photographs.
@@ -218,7 +233,10 @@ export function Universe({ sets, compact, active = true }) {
         const node = entry.el
 
         // Each photograph has its own moment inside the galaxy's opening.
-        const t = clamp((f.open[b.setIndex] - b.delay) / (1 - b.delay))
+        // Each frame has its own slot in the galaxy's opening, so they leave
+        // the core one after another rather than all at once.
+        const span = 1 - b.delay
+        const t = clamp((f.open[b.setIndex] - b.delay) / (span > 0.08 ? span : 0.08))
         if (t < 0.002) {
           if (node.style.visibility !== 'hidden') {
             node.style.visibility = 'hidden'
@@ -229,26 +247,34 @@ export function Universe({ sets, compact, active = true }) {
         if (node.style.visibility === 'hidden') node.style.visibility = ''
 
         const ease = t * t * (3 - 2 * t)
-        const px = cx + (g.x + b.x * ease) * scale + f.x
-        const py = cy + (g.y + b.y * ease) * scale + f.y
-        const w = b.w * scale
-        const h = b.h * scale
 
-        // Grows past its resting size on the way out — that overshoot is what
-        // reads as coming toward you rather than merely appearing.
-        const pop = 1 + Math.sin(ease * Math.PI) * 0.16
-        const size = (0.12 + ease * 0.88) * pop
+        // The journey: out of the galaxy's core, and forward past it. Depth
+        // does the growing, so a photograph arriving is a photograph coming
+        // closer, not one being scaled up in place.
+        const wx = g.x + b.x * ease
+        const wy = g.y + b.y * ease
+        const wz = g.z + (b.z - g.z) * ease
+        const p = persp(wz)
+
+        const px = cx + (wx * scale + f.x) * p
+        const py = cy + (wy * scale + f.y) * p
+        const w = b.w * scale * p
+        const h = b.h * scale * p
+
+        // Only the last breath of the journey is a fade; the rest is travel.
+        const fade = clamp(ease * 3.2)
 
         node.style.width = `${w.toFixed(1)}px`
         node.style.height = `${h.toFixed(1)}px`
         node.style.transform =
           `translate3d(${(px - w / 2).toFixed(1)}px, ${(py - h / 2).toFixed(1)}px, 0)` +
-          ` scale(${size.toFixed(3)}) rotate(${(b.spinOut * (1 - ease)).toFixed(3)}rad)`
-        node.style.opacity = ease.toFixed(3)
-        node.style.pointerEvents = ease > 0.55 ? 'auto' : 'none'
-        node.style.zIndex = String(20 + Math.round(ease * 60))
+          ` rotate(${(b.spinOut * (1 - ease)).toFixed(3)}rad)`
+        node.style.opacity = fade.toFixed(3)
+        node.style.pointerEvents = ease > 0.7 ? 'auto' : 'none'
+        // Nearer photographs cover further ones, as they should.
+        node.style.zIndex = String(20 + Math.round(p * 60))
 
-        entry.setHiRes(w * dpr * 1.2 > TILE_PX * 0.78)
+        entry.setHiRes(w * dpr > TILE_PX * 0.78)
 
         if (ease > 0.6) {
           const d = Math.hypot(fx - px, fy - py)
