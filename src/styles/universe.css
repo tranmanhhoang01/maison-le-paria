@@ -1,70 +1,138 @@
-/* ── The room ───────────────────────────────────────────────────────── */
-.room {
+/* ── The overview: the house in five screens ────────────────────────── */
+.overview {
   position: fixed; inset: 0; z-index: 1;
   overflow: hidden;
-  cursor: grab;
-  touch-action: none;
-  overscroll-behavior: none;
-  /* A wall, not a void: the darkest part of something warm. */
-  background:
-    radial-gradient(140% 100% at 50% 42%, #16130f 0%, #0c0a09 58%, #070606 100%);
+  background: radial-gradient(130% 100% at 50% 40%, #14110f 0%, #0b0908 58%, #060506 100%);
 }
-.room:active { cursor: grabbing; }
 
-/* ── One work on the wall ───────────────────────────────────────────── */
-.photo {
-  position: absolute; left: 0; top: 0;
-  padding: 0; border: 0; background: none;
-  background-size: cover; background-position: center;
+.overview__track {
+  display: flex;
+  height: 100%;
   will-change: transform;
-  cursor: pointer;
-  /* A hairline and a cast shadow: a print hung on a wall, not a hole in it. */
-  box-shadow:
-    0 0 0 1px rgba(233, 229, 222, 0.10),
-    0 22px 70px rgba(0, 0, 0, 0.62);
-  transition: filter 0.55s var(--ease-soft), box-shadow 0.55s var(--ease-soft);
-  outline-offset: 8px;
-}
-.photo:hover {
-  filter: brightness(1.05);
-  box-shadow:
-    0 0 0 1px rgba(233, 229, 222, 0.24),
-    0 26px 80px rgba(0, 0, 0, 0.7);
+  /* The whole page moves on one transition. No animation loop anywhere. */
+  transition: transform 1.05s var(--ease);
 }
 
-.photo img {
+.scene {
+  position: relative;
+  flex: 0 0 100vw;
+  height: 100%;
+  padding: clamp(5rem, 12vh, 8rem) var(--edge) clamp(3rem, 8vh, 5rem);
+  display: flex; align-items: center;
+  /* Each chapter is one screen. A wide frame must not lean into the next one. */
+  overflow: hidden;
+}
+
+/* Chapters arrive rather than appear. */
+.scene[data-here='true'] .lift { opacity: 1; transform: none; }
+.scene[data-here='true'] .lift:nth-child(2) { transition-delay: 0.10s; }
+.scene[data-here='true'] .lift:nth-child(3) { transition-delay: 0.20s; }
+.scene[data-here='true'] .lift:nth-child(4) { transition-delay: 0.30s; }
+.scene[data-here='true'] .lift:nth-child(5) { transition-delay: 0.40s; }
+
+/* ── Opening and closing ────────────────────────────────────────────── */
+.scene__centre {
+  width: min(58ch, 100%);
+  margin: 0 auto;
+  text-align: center;
+}
+.scene__backdrop {
   position: absolute; inset: 0;
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  opacity: 0;
-  transition: opacity 0.9s var(--ease);
-  -webkit-user-drag: none;
-  user-select: none;
+  background-size: cover; background-position: center;
+  opacity: 0.16;
+  /* Held right back: it is the room the name stands in, not the subject. */
+  filter: grayscale(0.3) contrast(0.92);
+  mask-image: radial-gradient(70% 60% at 50% 50%, #000 35%, transparent 100%);
+  -webkit-mask-image: radial-gradient(70% 60% at 50% 50%, #000 35%, transparent 100%);
 }
-.photo[data-loaded='true'] img { opacity: 1; }
-.photo[data-instant='true'] img { transition: none; }
-
-/* ── The wall text that opens each series ───────────────────────────── */
-.wall-text {
-  position: absolute; left: 0; top: 0;
-  will-change: transform;
-  pointer-events: none;
+.scene__name {
+  font-size: clamp(2.6rem, 8vw, 6.5rem);
+  line-height: 0.9;
+  display: flex; flex-direction: column;
 }
-.wall-text__num { color: var(--beige); }
-.wall-text__title {
-  font-size: clamp(2.4rem, 5vw, 4rem);
-  line-height: 0.95;
-  margin: 0.35rem 0 0.9rem;
-}
-.wall-text__sub { color: var(--ink-dim); }
-.wall-text__note {
-  margin-top: 1.1rem;
-  color: var(--ash);
+.scene[data-kind='closing'] .scene__name { display: block; font-size: clamp(2rem, 5.5vw, 4rem); }
+.scene__tagline { margin-top: 1.6rem; color: var(--ash); }
+.scene__line {
+  margin: 2.2rem auto 0;
+  max-width: 46ch;
+  color: var(--ink-dim);
   font-weight: 200;
-  font-size: 0.95rem;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
 }
-.wall-text__meta { margin-top: 1.6rem; color: var(--ash-deep); }
+
+.closing__channels { list-style: none; margin: 2.8rem 0 0; padding: 0; display: grid; gap: 0.9rem; }
+.closing__channels li { display: flex; justify-content: center; gap: 1.2rem; align-items: baseline; }
+.closing__channels .micro { min-width: 7rem; text-align: right; color: var(--ash-deep); }
+.closing__channels a { border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+.closing__more, .series-scene__more {
+  margin-top: 2.6rem; color: var(--ink);
+  display: inline-flex; align-items: center; gap: 0.8em;
+  border-bottom: 1px solid var(--line); padding-bottom: 0.5em;
+  transition: gap var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease);
+}
+.closing__more:hover, .series-scene__more:hover { gap: 1.3em; border-color: var(--beige); }
+
+/* ── A series chapter ───────────────────────────────────────────────── */
+.series-scene {
+  display: grid;
+  grid-template-columns: minmax(0, 30fr) minmax(0, 62fr);
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+  width: 100%;
+}
+.series-scene__num { color: var(--beige); }
+.series-scene__title { font-size: clamp(2.4rem, 6vw, 5rem); margin: 0.4rem 0 1.4rem; }
+.series-scene__note { color: var(--ink-dim); font-weight: 200; max-width: 34ch; }
+.series-scene__meta { margin-top: 1.6rem; color: var(--ash-deep); }
+
+/* Three frames on a designed grid — one to hold the eye, two for context. */
+.series-scene__plates {
+  position: relative;
+  height: min(72vh, 640px);
+}
+.plate {
+  position: absolute;
+  padding: 0; border: 0;
+  background-size: cover; background-position: center;
+  cursor: pointer;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(233, 229, 222, 0.09), 0 24px 70px rgba(0, 0, 0, 0.6);
+  transition: transform 0.8s var(--ease), box-shadow 0.8s var(--ease);
+}
+.plate:hover { transform: translateY(-6px); box-shadow: 0 0 0 1px rgba(233, 229, 222, 0.2), 0 30px 80px rgba(0, 0, 0, 0.7); }
+.plate img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.9s var(--ease); }
+.plate[data-loaded='true'] img { opacity: 1; }
+.plate[data-instant='true'] img { transition: none; }
+
+.plate[data-slot='0'] { left: 0; top: 50%; height: 100%; transform: translateY(-50%); z-index: 3; }
+.plate[data-slot='0']:hover { transform: translateY(calc(-50% - 6px)); }
+/* Anchored to the right edge, not the left: a landscape frame is far wider
+   than a portrait one, and positioning by its left edge pushed the wide ones
+   clean off the screen. Anchored this way they grow inward instead, and
+   overlapping the hero a little is what an editorial spread does anyway. */
+.plate[data-slot='1'] { right: 0; top: 0; height: 46%; z-index: 2; }
+.plate[data-slot='2'] { right: 7%; bottom: 0; height: 48%; z-index: 1; }
+
+/* ── Where you are ──────────────────────────────────────────────────── */
+.overview__marks {
+  position: absolute; left: 50%; bottom: clamp(1.4rem, 4vh, 2.4rem);
+  transform: translateX(-50%);
+  display: flex; gap: 0.7rem; z-index: 20;
+}
+.overview__mark {
+  width: 26px; height: 1px; background: var(--line);
+  transition: background var(--dur-fast) var(--ease), transform var(--dur-fast) var(--ease);
+}
+.overview__mark[data-here='true'] { background: var(--beige); transform: scaleY(2); }
+
+@media (max-width: 860px) {
+  .series-scene { grid-template-columns: 1fr; gap: 1.6rem; align-content: center; }
+  .series-scene__plates { height: 42vh; }
+  .plate[data-slot='1'] { right: 0; height: 52%; }
+  .plate[data-slot='2'] { display: none; }
+  .closing__channels li { flex-direction: column; gap: 0.2rem; align-items: center; }
+  .closing__channels .micro { min-width: 0; text-align: center; }
+}
 
 /* ── Dust ───────────────────────────────────────────────────────────── */
 .dust {
