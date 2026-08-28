@@ -119,23 +119,29 @@ attic/                       BẢN 3D CŨ bằng three.js — không nằm trong
 
 ## 6. Cơ chế Tổng quan — một bức tường triển lãm
 
-Ảnh treo thành một hàng ngang, **đứng yên**, cách đều nhau, mỗi bộ mở đầu bằng một bảng
-chú thích. Không có gì tự chuyển động, không có gì chồng lên nhau. Người xem đi dọc bức
-tường bằng con lăn chuột, kéo, hoặc phím mũi tên. Tường có điểm đầu và điểm cuối như một
-căn phòng thật.
+Ảnh treo thành hàng ngang, **đứng yên**, mỗi bộ mở đầu bằng một bảng chú thích. Không có
+gì tự chuyển động, không có gì chồng lên nhau. Tường có điểm đầu và điểm cuối như một căn
+phòng thật.
 
-**Quy tắc quan trọng nhất** (`lib/wall.js`): mọi tác phẩm căn theo **một đường tâm ngang
-duy nhất** ở tầm mắt (`EYE = 0.5`), bất kể to nhỏ. Bảo tàng treo tranh như vậy cả trăm
-năm nay vì nó biến một hàng vật thể khác nhau thành một đường tĩnh lặng.
+**Hai quy tắc** (`lib/wall.js`):
 
-- Chiều cao theo hướng ảnh: dọc 0.62 · vuông 0.55 · ngang 0.44 (đơn vị = chiều cao màn hình)
-- Khoảng cách giữa hai tác phẩm 0.13; giữa hai bộ 0.34
-- Bảng chú thích rộng 0.5, cũng căn theo đường tâm
-- Rê chuột: ảnh sáng nhẹ, viền rõ hơn — **không phóng to, không nghiêng**
-- Bấm: mở toàn màn hình
-- Con lăn chuột **không zoom và không cuộn trang** — chỉ đi dọc tường
+1. Mọi tác phẩm căn theo **một đường tâm ngang duy nhất** ở tầm mắt (`EYE = 0.5`), bất kể
+   to nhỏ. Bảo tàng treo tranh như vậy cả trăm năm vì nó biến một hàng vật thể khác nhau
+   thành một đường tĩnh lặng.
+2. **Đứng trước một tác phẩm tại một thời điểm.** Bản trước xếp 4–5 ảnh cùng màn hình,
+   cách đều, cỡ đều — mắt không có chỗ dừng và tấm nào cũng như tấm nào. Giờ khoảng cách
+   đủ rộng để chỉ một tác phẩm giữ được giữa phòng, và tường **tự dừng đúng trước nó**
+   (`stepTo` / `settle` trong Universe.jsx). Các tấm bên cạnh lùi lại: nhỏ hơn (`FALL`),
+   tối hơn (`SHADE`).
 
-Vị trí ghi thẳng vào DOM trong một vòng rAF. React render các tác phẩm đúng một lần.
+Con lăn chuột đi **một tác phẩm mỗi lần** (`NOTCH`); kéo thì tự do rồi buông ra sẽ dừng
+vào tác phẩm gần nhất; phím ←/→ đi từng bước, Home/End về đầu/cuối.
+
+Các hằng số chỉnh bố cục nằm đầu `lib/wall.js`: `EYE`, `HEIGHT`, `GAP`, `SECTION_GAP`,
+`PANEL`, `MARGIN` — tất cả tính theo **chiều cao màn hình**, không phải pixel.
+
+`MARGIN` phải ≥ nửa chiều rộng màn hình (tính theo đơn vị chiều cao), nếu không tường
+không lùi đủ để đưa tác phẩm đầu tiên vào giữa phòng.
 
 ## 7. Studio — app quản trị
 
@@ -210,7 +216,8 @@ GitHub Pages, âm thanh (tiếng phòng + nhạc nền), màn chờ chuyển tra
 3. *Ba tầng ngang trôi* — trông như ba cuộn phim rời rạc, phân cấp cứng nhắc.
 4. *Một dải ngang trôi liên tục* — bố cục đẹp hơn nhiều, nhưng vẫn động và vẫn có lúc
    chồng chéo. Mã trong `attic/cosmos/river-flowing.js`.
-5. **Bức tường triển lãm** (hiện tại) — đứng yên, cách đều, một đường tâm chung.
+5. *Bức tường, ảnh cách đều* — vẫn 4–5 ảnh một màn hình: đơn điệu và phân tán.
+6. **Bức tường, một tác phẩm một lần** (hiện tại).
 
 Bài học xuyên suốt: **mọi thứ thêm vào để gây ấn tượng đều cạnh tranh với ảnh.** Bản tốt
 nhất là bản gỡ bỏ nhiều nhất.

@@ -7,10 +7,15 @@ import { Photo } from './Photo.jsx'
 /**
  * The overview: an exhibition wall.
  *
- * Photographs hung in a line, still, evenly spaced, each series opened by its
- * wall text. Nothing moves on its own and nothing overlaps. You walk along it
- * with the wheel, a drag, or the arrow keys, and the wall has a beginning and
- * an end the way a room does.
+ * Photographs hung in a line, still, each series opened by its wall text.
+ * Nothing moves on its own and nothing overlaps. You walk along it with the
+ * wheel, a drag, or the arrow keys, and the wall has a beginning and an end
+ * the way a room does.
+ *
+ * You stand in front of one work at a time: the wall settles onto whichever
+ * piece you walked to, and its neighbours fall back — smaller, dimmer, waiting
+ * at the edge of vision. An earlier version fitted five works on the screen at
+ * once and the eye had nowhere to rest.
  *
  * Earlier versions of this page drifted, layered and orbited. Every one of
  * them ended up competing with the photographs. A wall does not compete.
@@ -19,8 +24,11 @@ import { Photo } from './Photo.jsx'
  * renders the works once and then holds still.
  */
 
-/** How far the wall travels per notch of the wheel, in viewport heights. */
-const WHEEL = 0.0016
+/** Wheel travel needed before the wall steps to the next work. */
+const NOTCH = 90
+/** How far back a neighbour falls: scale and light lost across one screen. */
+const FALL = 0.3
+const SHADE = 0.68
 
 export function Universe({ sets, compact, active = true }) {
   const room = useRef(null)
@@ -31,6 +39,8 @@ export function Universe({ sets, compact, active = true }) {
 
   const view = useRef({
     x: 0, target: 0,      // how far along the wall we have walked, in px
+    at: 0,                // which work we are standing in front of
+    wheel: 0,             // wheel travel banked toward the next step
     px: -1e4, py: -1e4,
     dragging: false, dragged: false,
     focus: null,
@@ -44,6 +54,35 @@ export function Universe({ sets, compact, active = true }) {
     const v = view.current
 
     const limit = () => Math.max(wall.width * window.innerHeight - window.innerWidth, 0)
+
+    /** Where the wall must stand for work `i` to hold the middle of the room. */
+    const standAt = (i) => {
+      const item = wall.items[clamp(i, 0, wall.items.length - 1)]
+      const vh = window.innerHeight
+      return clamp(
+        item.x * vh + (item.w * vh) / 2 - window.innerWidth / 2,
+        0, limit(),
+      )
+    }
+
+    const stepTo = (i) => {
+      v.at = clamp(i, 0, wall.items.length - 1)
+      v.target = standAt(v.at)
+      v.wheel = 0
+    }
+
+    /** After a free drag, settle onto whichever work ended up nearest. */
+    const settle = () => {
+      const vh = window.innerHeight
+      const middle = v.target + window.innerWidth / 2
+      let best = 0
+      let near = Infinity
+      wall.items.forEach((item, i) => {
+        const d = Math.abs(item.x * vh + (item.w * vh) / 2 - middle)
+        if (d < near) { near = d; best = i }
+      })
+      stepTo(best)
+    }
 
     const onPointerMove = (e) => {
       if (!active) return
@@ -61,32 +100,33 @@ export function Universe({ sets, compact, active = true }) {
       v.dragged = false
     }
     const onPointerUp = () => {
+      if (!v.dragging) return
       v.dragging = false
-      if (v.dragged) setTimeout(() => { v.dragged = false }, 0)
+      if (v.dragged) { settle(); setTimeout(() => { v.dragged = false }, 0) }
     }
 
-    // The wheel walks you along the wall. It does not zoom and it does not
-    // scroll the page — there is only one direction to go in a room like this.
+    // The wheel walks you along the wall, one work per turn. It does not zoom
+    // and it does not scroll the page — there is one direction in a room.
     const onWheel = (e) => {
       if (!active) return
       e.preventDefault()
-      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
-      v.target = clamp(v.target + delta * WHEEL * window.innerHeight, 0, limit())
+      v.wheel += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
+      if (v.wheel > NOTCH) stepTo(v.at + 1)
+      else if (v.wheel < -NOTCH) stepTo(v.at - 1)
     }
 
     const onKey = (e) => {
       if (!active) return
-      const step = window.innerWidth * 0.6
-      const moves = { ArrowRight: step, ArrowLeft: -step, PageDown: step, PageUp: -step }
-      if (e.key === 'Home') { e.preventDefault(); v.target = 0; return }
-      if (e.key === 'End') { e.preventDefault(); v.target = limit(); return }
+      const moves = { ArrowRight: 1, PageDown: 1, ArrowLeft: -1, PageUp: -1 }
+      if (e.key === 'Home') { e.preventDefault(); stepTo(0); return }
+      if (e.key === 'End') { e.preventDefault(); stepTo(wall.items.length - 1); return }
       const move = moves[e.key]
       if (move === undefined) return
       e.preventDefault()
-      v.target = clamp(v.target + move, 0, limit())
+      stepTo(v.at + move)
     }
 
-    const onResize = () => { setTick((n) => n + 1); v.target = clamp(v.target, 0, limit()) }
+    const onResize = () => { setTick((n) => n + 1); v.target = standAt(v.at) }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true })
     window.addEventListener('pointerup', onPointerUp, { passive: true })
@@ -95,6 +135,12 @@ export function Universe({ sets, compact, active = true }) {
     el.addEventListener('wheel', onWheel, { passive: false })
     window.addEventListener('keydown', onKey)
     window.addEventListener('resize', onResize)
+
+    // Stand in the right place from the first frame. Sliding into position on
+    // load would read as the room moving on its own, which is the one thing
+    // this page is not supposed to do.
+    stepTo(0)
+    v.x = v.target
 
     let raf
     let last = performance.now()
@@ -105,7 +151,7 @@ export function Universe({ sets, compact, active = true }) {
 
       const vw = window.innerWidth
       const vh = window.innerHeight
-      v.x = damp(v.x, v.target, 7, dt)
+      v.x = damp(v.x, v.target, v.dragging ? 14 : 5, dt)
 
       let looking = null
       let closest = Infinity
@@ -130,26 +176,35 @@ export function Universe({ sets, compact, active = true }) {
           node.style.pointerEvents = item.kind === 'photo' ? 'auto' : 'none'
         }
 
+        // How far this piece is from the middle of the room, in screens.
+        const away = clamp(Math.abs(left + w / 2 - vw / 2) / vw, 0, 1)
+        const near = 1 - away / 0.5      // 1 in the middle, 0 half a screen out
+        const held = clamp(near)
+
         if (item.kind === 'panel') {
           node.style.width = `${w.toFixed(1)}px`
           // translateY(-50%) after the move, so the text block is centred on
           // the same eye-level line the works hang from.
           node.style.transform =
             `translate3d(${left.toFixed(1)}px, ${(EYE * vh).toFixed(1)}px, 0) translateY(-50%)`
+          node.style.opacity = (0.25 + 0.75 * held).toFixed(3)
           continue
         }
 
         const h = item.h * vh
         const top = EYE * vh - h / 2       // every work on the same centre line
+        // Neighbours fall back rather than compete: smaller, and further into
+        // the dark the further they are from where you are standing.
+        const scale = 1 - FALL * (1 - held)
         node.style.width = `${w.toFixed(1)}px`
         node.style.height = `${h.toFixed(1)}px`
-        node.style.transform = `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0)`
+        node.style.transform =
+          `translate3d(${left.toFixed(1)}px, ${top.toFixed(1)}px, 0) scale(${scale.toFixed(3)})`
+        node.style.opacity = (1 - SHADE * (1 - held)).toFixed(3)
+        node.style.zIndex = String(10 + Math.round(held * 40))
 
-        // Which work is being looked at — for the caption, nothing more.
-        const cx = left + w / 2
-        const inside = v.px >= left && v.px <= left + w && v.py >= top && v.py <= top + h
-        const d = Math.abs(v.px - cx)
-        if (inside && d < closest) { closest = d; looking = item }
+        // The caption belongs to whatever is holding the room.
+        if (held > 0.55 && away < closest) { closest = away; looking = item }
       }
 
       const label = looking

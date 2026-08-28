@@ -19,19 +19,29 @@ import { Viewer } from './components/viewer/Viewer.jsx'
 
 const PANELS = { about: AboutPanel, contact: ContactPanel, library: LibraryPanel }
 
-/** Coarse pointer or a small screen: the centre of the screen does the pointing. */
+/**
+ * The compact hang is for small screens, and only for small screens.
+ *
+ * It used to trigger on a coarse pointer as well, which put a 1280px touch
+ * laptop — and any browser that merely reports touch capability — into the
+ * phone layout at two thirds scale.
+ */
+const isCompact = () => {
+  if (typeof window === 'undefined') return false
+  const w = window.innerWidth
+  // A width of zero means the window has not been measured yet, not that the
+  // screen is tiny. Guessing "phone" there locks the roomy hang out of a
+  // desktop browser until something happens to fire a resize.
+  return w > 0 && w < 820
+}
+
 function useCompact() {
-  const [compact, setCompact] = useState(
-    () => typeof window !== 'undefined' &&
-      (window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 820),
-  )
+  const [compact, setCompact] = useState(isCompact)
   useEffect(() => {
     let t
     const on = () => {
       clearTimeout(t)
-      t = setTimeout(() => setCompact(
-        window.matchMedia('(pointer: coarse)').matches || window.innerWidth < 820,
-      ), 200)
+      t = setTimeout(() => setCompact(isCompact()), 200)
     }
     window.addEventListener('resize', on)
     return () => { clearTimeout(t); window.removeEventListener('resize', on) }
