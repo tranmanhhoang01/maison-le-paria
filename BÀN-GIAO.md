@@ -117,30 +117,25 @@ attic/                       BẢN 3D CŨ bằng three.js — không nằm trong
 
 ---
 
-## 6. Cơ chế Tổng quan
+## 6. Cơ chế Tổng quan — một bức tường triển lãm
 
-**Một dải ngang duy nhất** — như một tờ tạp chí trải ra. Toàn bộ kho ảnh nằm trên một
-đường, trôi chậm sang trái không ngừng. Cỡ ảnh và độ cao thay đổi theo **từng tấm**, dựa
-trên một "nhịp" viết sẵn (`RHYTHM` trong `lib/river.js`), không phải ngẫu nhiên.
+Ảnh treo thành một hàng ngang, **đứng yên**, cách đều nhau, mỗi bộ mở đầu bằng một bảng
+chú thích. Không có gì tự chuyển động, không có gì chồng lên nhau. Người xem đi dọc bức
+tường bằng con lăn chuột, kéo, hoặc phím mũi tên. Tường có điểm đầu và điểm cuối như một
+căn phòng thật.
 
-- **Không có tầng, không có làn.** Đã thử chia ba tầng ngang (xa/giữa/gần) — trông như ba
-  cuộn phim rời rạc, mỗi ảnh thuộc về làn của nó chứ không thuộc về bố cục. Bỏ.
-- **Nhịp** là một mảng lặp: ảnh lớn (0.74 chiều cao màn hình) → hai ảnh nhỏ ở hai độ cao
-  khác nhau → ảnh vừa → … Lặp lại nhưng không bao giờ rơi vào cùng một thế vì kho ảnh có
-  tỉ lệ khác nhau liên tục nạp vào.
-- **Vòng lặp** dài hơn hai màn hình, nên ảnh rời khỏi mép trái đã kịp quay lại từ mép phải.
-  Không thấy mối nối.
-- **Ảnh lớn trôi nhanh hơn một chút** (`depth` 0.94–1.06) → chiều sâu nhẹ, không phá vỡ
-  khoảng cách giữa các tấm.
-- **Rê chuột lại gần:** dòng chảy **chậm còn 10%**, tấm ảnh đó sáng lên, nhô ra và nghiêng
-  vài độ về phía con trỏ (`perspective` + `rotateX/Y`).
-- **Cuộn chuột không zoom và không cuộn trang** — nó đẩy dải ảnh đi, như xoay một cuộn
-  phim. Kéo cũng vậy. Phím ←/→.
-- Ảnh chỉ dùng bản `tile` 1000px: ngay cả tấm lớn nhất cũng vẽ dưới 900 pixel thiết bị.
-  Bản `full` để dành cho viewer.
+**Quy tắc quan trọng nhất** (`lib/wall.js`): mọi tác phẩm căn theo **một đường tâm ngang
+duy nhất** ở tầm mắt (`EYE = 0.5`), bất kể to nhỏ. Bảo tàng treo tranh như vậy cả trăm
+năm nay vì nó biến một hàng vật thể khác nhau thành một đường tĩnh lặng.
 
-Vị trí, cỡ, độ nghiêng, độ mờ đều ghi **thẳng vào DOM trong một vòng rAF duy nhất**.
-React render các thẻ đúng một lần rồi đứng ngoài.
+- Chiều cao theo hướng ảnh: dọc 0.62 · vuông 0.55 · ngang 0.44 (đơn vị = chiều cao màn hình)
+- Khoảng cách giữa hai tác phẩm 0.13; giữa hai bộ 0.34
+- Bảng chú thích rộng 0.5, cũng căn theo đường tâm
+- Rê chuột: ảnh sáng nhẹ, viền rõ hơn — **không phóng to, không nghiêng**
+- Bấm: mở toàn màn hình
+- Con lăn chuột **không zoom và không cuộn trang** — chỉ đi dọc tường
+
+Vị trí ghi thẳng vào DOM trong một vòng rAF. React render các tác phẩm đúng một lần.
 
 ## 7. Studio — app quản trị
 
@@ -213,7 +208,12 @@ GitHub Pages, âm thanh (tiếng phòng + nhạc nền), màn chờ chuyển tra
    cạnh tranh với ảnh, ảnh biến thành vệ tinh quay quanh một món đồ chơi. Mã còn trong
    `attic/cosmos/` nếu cần tham khảo.
 3. *Ba tầng ngang trôi* — trông như ba cuộn phim rời rạc, phân cấp cứng nhắc.
-4. **Một dải ngang duy nhất** (hiện tại) — đúng cách các trang ảnh cao cấp làm.
+4. *Một dải ngang trôi liên tục* — bố cục đẹp hơn nhiều, nhưng vẫn động và vẫn có lúc
+   chồng chéo. Mã trong `attic/cosmos/river-flowing.js`.
+5. **Bức tường triển lãm** (hiện tại) — đứng yên, cách đều, một đường tâm chung.
+
+Bài học xuyên suốt: **mọi thứ thêm vào để gây ấn tượng đều cạnh tranh với ảnh.** Bản tốt
+nhất là bản gỡ bỏ nhiều nhất.
 
 **Chưa kiểm chứng bằng mắt:** chuyển động trôi theo thời gian thật và hiệu ứng chậm lại
 khi rê chuột (môi trường preview của trợ lý không chạy đủ khung hình). Bố cục tĩnh và

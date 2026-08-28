@@ -83,7 +83,7 @@ export default function App() {
   return (
     <>
       <Dust compact={compact} />
-      <Universe photos={photos} compact={compact} active={!Panel && !viewer} />
+      <Universe sets={sets} compact={compact} active={!Panel && !viewer} />
       <FocusLabel />
 
       {Panel && (

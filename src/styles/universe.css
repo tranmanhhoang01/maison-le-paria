@@ -1,37 +1,36 @@
-/* ── The current ────────────────────────────────────────────────────── */
-.universe {
+/* ── The room ───────────────────────────────────────────────────────── */
+.room {
   position: fixed; inset: 0; z-index: 1;
   overflow: hidden;
   cursor: grab;
   touch-action: none;
   overscroll-behavior: none;
-  /* Not black. The darkest part of something warm, so the photographs sit in
-     a room rather than on a void. */
+  /* A wall, not a void: the darkest part of something warm. */
   background:
-    radial-gradient(120% 90% at 50% 50%, #14100f 0%, #0a0809 55%, #060506 100%);
+    radial-gradient(140% 100% at 50% 42%, #16130f 0%, #0c0a09 58%, #070606 100%);
 }
-.universe:active { cursor: grabbing; }
+.room:active { cursor: grabbing; }
 
-/* Edges fall away, so frames enter and leave instead of being cut off. */
-.universe__vignette {
-  position: absolute; inset: 0; z-index: 90; pointer-events: none;
-  background:
-    linear-gradient(to right, #060506 0%, rgba(6,5,6,0) 11%, rgba(6,5,6,0) 89%, #060506 100%),
-    linear-gradient(to bottom, rgba(6,5,6,0.85) 0%, rgba(6,5,6,0) 16%, rgba(6,5,6,0) 84%, rgba(6,5,6,0.9) 100%);
-}
-
-/* ── One photograph ─────────────────────────────────────────────────── */
+/* ── One work on the wall ───────────────────────────────────────────── */
 .photo {
   position: absolute; left: 0; top: 0;
   padding: 0; border: 0; background: none;
   background-size: cover; background-position: center;
-  will-change: transform, opacity;
+  will-change: transform;
   cursor: pointer;
-  transform-style: preserve-3d;
-  transition: filter 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft);
-  outline-offset: 6px;
+  /* A hairline and a cast shadow: a print hung on a wall, not a hole in it. */
+  box-shadow:
+    0 0 0 1px rgba(233, 229, 222, 0.10),
+    0 22px 70px rgba(0, 0, 0, 0.62);
+  transition: filter 0.55s var(--ease-soft), box-shadow 0.55s var(--ease-soft);
+  outline-offset: 8px;
 }
-.photo:hover { box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75); }
+.photo:hover {
+  filter: brightness(1.05);
+  box-shadow:
+    0 0 0 1px rgba(233, 229, 222, 0.24),
+    0 26px 80px rgba(0, 0, 0, 0.7);
+}
 
 .photo img {
   position: absolute; inset: 0;
@@ -45,6 +44,27 @@
 }
 .photo[data-loaded='true'] img { opacity: 1; }
 .photo[data-instant='true'] img { transition: none; }
+
+/* ── The wall text that opens each series ───────────────────────────── */
+.wall-text {
+  position: absolute; left: 0; top: 0;
+  will-change: transform;
+  pointer-events: none;
+}
+.wall-text__num { color: var(--beige); }
+.wall-text__title {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.95;
+  margin: 0.35rem 0 0.9rem;
+}
+.wall-text__sub { color: var(--ink-dim); }
+.wall-text__note {
+  margin-top: 1.1rem;
+  color: var(--ash);
+  font-weight: 200;
+  font-size: 0.95rem;
+}
+.wall-text__meta { margin-top: 1.6rem; color: var(--ash-deep); }
 
 /* ── Dust ───────────────────────────────────────────────────────────── */
 .dust {
