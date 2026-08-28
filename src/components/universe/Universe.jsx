@@ -1,243 +1,151 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react'
-import { buildCosmos, persp } from '../../lib/constellation.js'
-import { createCosmos } from '../../lib/cosmosScene.js'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { buildRiver } from '../../lib/river.js'
 import { clamp, damp } from '../../lib/math.js'
 import { openViewer, setFocusPhoto } from '../../store/experience.js'
 import { Photo } from './Photo.jsx'
 
 /**
- * The overview: a night sky with one galaxy per body of work.
+ * The overview: one line of photographs, drifting.
  *
- * At rest you see three galaxies turning slowly in a field of stars. Bring
- * the pointer to one and its photographs stream out of the core toward you,
- * settling into a loose spiral; take the pointer away and they fall back in.
+ * A single horizontal sequence — a magazine spread unrolled — where size and
+ * height change from frame to frame on a written rhythm. Nothing else is on
+ * the screen. An earlier version stacked the work into three bands and it
+ * read as three filmstrips: tiers, not a picture.
  *
- * The sky is a canvas — stars, nebulae and spiral arms are far too many
- * objects to be elements. The photographs are real `<img>` tags, because they
- * are the one thing on this site that must stay pixel-sharp.
+ * Bring the pointer near a photograph and the current slows almost to a stop
+ * while that frame rises toward you and leans a few degrees into the light.
+ * Take the pointer away and the current resumes.
  *
- * There is no scrolling anywhere. The wheel is a crown: it zooms the whole
- * sky around wherever you are pointing. Dragging moves it.
+ * The wheel does not zoom and does not scroll the page: it scrubs the current,
+ * the way you would push a reel of film.
+ *
+ * Position and scale are written straight to the DOM inside one animation
+ * frame. React renders the tiles once and then stays out of the way.
  */
 
-const ZOOM_MIN = 0.42
-const ZOOM_MAX = 2.4
-const TILE_PX = 1000
-const FULL_PX = 2400
+/** How fast the line drifts, in px per second. */
+const SPEED = 22
+/** How close the pointer must be, in px, for a frame to answer. */
+const REACH = 210
+/** How much a frame grows when it does. */
+const LIFT = 0.09
+/** How far it leans toward the pointer, in degrees. */
+const TILT = 5
 
-export function Universe({ sets, compact, active = true }) {
-  const canvasRef = useRef(null)
-  const layer = useRef(null)
+export function Universe({ photos, compact, active = true }) {
+  const surface = useRef(null)
   const nodes = useRef([])
+  const [viewport, setViewport] = useState(() =>
+    typeof window === 'undefined' ? 1440 : window.innerWidth)
+
   const frame = useRef({
-    px: 0, py: 0,
-    tx: 0, ty: 0, x: 0, y: 0,
-    tz: 1, z: 1,
-    vx: 0, vy: 0,
-    dragging: false, dragged: false,
-    pointers: new Map(), pinch: 0,
-    focus: -1, lastFocus: -1,
-    open: [],            // 0 → 1 per galaxy, how far its photographs are out
+    px: -1e4, py: -1e4,
+    scrub: 0, scrubTarget: 0,     // extra offset from wheel or drag, in px
+    rate: 1, rateTarget: 1,       // how fast the current runs, 0 → 1
+    dragging: false, dragged: false, lastX: 0,
+    focus: null,
   })
 
-  const cosmos = useMemo(() => buildCosmos(sets, { compact }), [sets, compact])
-  const unit = compact ? 96 : 120
+  const river = useMemo(
+    () => buildRiver(photos, { compact, viewport }),
+    [photos, compact, viewport],
+  )
 
-  /** One flat list, so a photograph can be found by a single index. */
-  const flat = useMemo(() => cosmos.flatMap((set, s) =>
-    set.burst.map((b, i) => ({ ...b, set, setIndex: s, indexInSet: i }))), [cosmos])
-
-  const register = useCallback((i, entry) => { nodes.current[i] = entry }, [])
+  const register = useCallback((i, node) => { nodes.current[i] = node }, [])
 
   useEffect(() => {
-    const canvas = canvasRef.current
-    const el = layer.current
-    if (!canvas || !el) return
-
+    const el = surface.current
+    if (!el) return
     const f = frame.current
-    f.open = cosmos.map(() => 0)
-    const scene = createCosmos(canvas, cosmos, { compact })
-    const dpr = Math.min(window.devicePixelRatio || 1, 2)
 
-    f.px = window.innerWidth / 2
-    f.py = window.innerHeight / 2
-
-    /* ── input ─────────────────────────────────────────────────────── */
-
-    const bound = () => {
-      const reach = 9 * unit * f.z
-      f.tx = clamp(f.tx, -reach, reach)
-      f.ty = clamp(f.ty, -reach, reach)
-    }
-
-    const zoomAbout = (next, sx, sy) => {
-      const z0 = f.tz
-      const z1 = clamp(next, ZOOM_MIN, ZOOM_MAX)
-      if (z1 === z0) return
-      const cx = window.innerWidth / 2
-      const cy = window.innerHeight / 2
-      const wx = (sx - cx - f.tx) / z0
-      const wy = (sy - cy - f.ty) / z0
-      f.tx = sx - cx - wx * z1
-      f.ty = sy - cy - wy * z1
-      f.tz = z1
-      bound()
-    }
+    const onResize = () => setViewport(window.innerWidth)
+    window.addEventListener('resize', onResize)
 
     const onPointerMove = (e) => {
       if (!active) return
       f.px = e.clientX
       f.py = e.clientY
-      if (f.pointers.has(e.pointerId)) f.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-
-      if (f.pointers.size === 2) {
-        const [a, b] = [...f.pointers.values()]
-        const dist = Math.hypot(b.x - a.x, b.y - a.y)
-        if (f.pinch) zoomAbout(f.tz * (dist / f.pinch), (a.x + b.x) / 2, (a.y + b.y) / 2)
-        f.pinch = dist
-        f.dragged = true
-        return
-      }
       if (f.dragging) {
-        f.tx += e.movementX
-        f.ty += e.movementY
-        f.vx = e.movementX
-        f.vy = e.movementY
-        if (Math.abs(e.movementX) + Math.abs(e.movementY) > 2) f.dragged = true
-        bound()
+        f.scrubTarget -= e.movementX
+        if (Math.abs(e.movementX) > 2) f.dragged = true
       }
     }
-
+    const onPointerLeave = () => { f.px = -1e4; f.py = -1e4 }
     const onPointerDown = (e) => {
-      if (!active) return
-      f.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
-      if (f.pointers.size > 1) { f.pinch = 0; return }
-      if (e.button !== 0) return
+      if (!active || e.button !== 0) return
       f.dragging = true
       f.dragged = false
-      f.vx = 0; f.vy = 0
+    }
+    const onPointerUp = () => {
+      f.dragging = false
+      if (f.dragged) setTimeout(() => { f.dragged = false }, 0)
     }
 
-    const endPointer = (e) => {
-      f.pointers.delete(e.pointerId)
-      if (f.pointers.size < 2) f.pinch = 0
-      if (f.pointers.size === 0) {
-        f.dragging = false
-        if (f.dragged) setTimeout(() => { f.dragged = false }, 0)
-      }
-    }
-
+    // The wheel pushes the reel along instead of zooming or scrolling.
     const onWheel = (e) => {
       if (!active) return
       e.preventDefault()
-      const raw = e.ctrlKey ? e.deltaY * 2.2 : e.deltaY
-      zoomAbout(f.tz * Math.exp(-clamp(raw, -60, 60) * 0.0022), e.clientX, e.clientY)
-      f.vx = 0; f.vy = 0
+      f.scrubTarget += (Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY) * 1.6
     }
 
     const onKey = (e) => {
       if (!active) return
-      if (e.key === '+' || e.key === '=') { e.preventDefault(); zoomAbout(f.tz * 1.22, innerWidth / 2, innerHeight / 2) }
-      if (e.key === '-' || e.key === '_') { e.preventDefault(); zoomAbout(f.tz / 1.22, innerWidth / 2, innerHeight / 2) }
-      if (e.key === '0') { e.preventDefault(); zoomAbout(1, innerWidth / 2, innerHeight / 2) }
-      const step = window.innerHeight * 0.3
-      const moves = { ArrowLeft: [step, 0], ArrowRight: [-step, 0], ArrowUp: [0, step], ArrowDown: [0, -step] }
-      const move = moves[e.key]
-      if (!move) return
-      e.preventDefault()
-      f.tx += move[0]; f.ty += move[1]
-      bound()
+      const step = window.innerWidth * 0.45
+      if (e.key === 'ArrowRight') { e.preventDefault(); f.scrubTarget += step }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); f.scrubTarget -= step }
     }
 
-    const onResize = () => scene.resize()
-
     window.addEventListener('pointermove', onPointerMove, { passive: true })
+    window.addEventListener('pointerup', onPointerUp, { passive: true })
     el.addEventListener('pointerdown', onPointerDown)
-    window.addEventListener('pointerup', endPointer, { passive: true })
-    window.addEventListener('pointercancel', endPointer, { passive: true })
+    el.addEventListener('pointerleave', onPointerLeave)
     el.addEventListener('wheel', onWheel, { passive: false })
     window.addEventListener('keydown', onKey)
-    window.addEventListener('resize', onResize)
 
-    /* ── the frame ─────────────────────────────────────────────────── */
+    const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
     let raf
     let last = performance.now()
-    const started = last
+    let clock = 0
 
     const tick = (now) => {
       const dt = Math.min((now - last) / 1000, 1 / 30)
       last = now
-      const time = (now - started) / 1000
+      clock += dt
 
-      if (!f.dragging && (Math.abs(f.vx) > 0.1 || Math.abs(f.vy) > 0.1)) {
-        f.tx += f.vx; f.ty += f.vy
-        f.vx *= 0.94; f.vy *= 0.94
-        bound()
-      }
+      const vw = window.innerWidth
+      const vh = window.innerHeight
+      const unit = vh                       // band heights are fractions of the viewport
 
-      f.x = damp(f.x, f.tx, 6, dt)
-      f.y = damp(f.y, f.ty, 6, dt)
-      f.z = damp(f.z, f.tz, 7, dt)
+      // The current eases to a near-stop while you are looking at something.
+      f.rate = damp(f.rate, f.rateTarget, 3, dt)
+      f.scrub = damp(f.scrub, f.scrubTarget, 5, dt)
 
-      const placed = scene.draw(f, unit, time, f.focus, f.open)
+      const pointerInside = f.px > -1000
+      let nearest = null
+      let nearestNear = 0.34        // below this, nothing is really being looked at
 
-      // Which galaxy is the pointer on? On a touch screen the middle of the
-      // screen does the pointing, exactly as it does on the watch.
-      const fx = compact ? window.innerWidth / 2 : f.px
-      const fy = compact ? window.innerHeight / 2 : f.py
+      const loopPx = river.loop * unit
+      const flow = still ? 0 : clock * SPEED * f.rate
 
-      let focus = -1
-      let best = Infinity
-      for (let i = 0; i < placed.length; i++) {
-        const d = Math.hypot(fx - placed[i].x, fy - placed[i].y)
-        if (d < placed[i].radius * 1.3 && d < best) { best = d; focus = i }
-      }
+      for (let i = 0; i < river.frames.length; i++) {
+        const node = nodes.current[i]
+        if (!node) continue
+        const item = river.frames[i]
 
-      // Once a galaxy is open it keeps hold of the pointer until the pointer
-      // genuinely leaves the field its photographs occupy. Without this the
-      // camera drift below would carry the galaxy out from under the cursor
-      // and the whole thing would flicker open and shut.
-      if (focus === -1 && f.focus >= 0 && f.open[f.focus] > 0.2) {
-        const g = placed[f.focus]
-        const hold = cosmos[f.focus].reach * unit * f.z * g.p * 1.2
-        if (Math.hypot(fx - g.x, fy - g.y) < hold) focus = f.focus
-      }
-      f.focus = focus
+        const w = item.w * unit
+        const h = item.h * unit
 
-      for (let i = 0; i < cosmos.length; i++) {
-        f.open[i] = damp(f.open[i], focus === i ? 1 : 0, focus === i ? 3.4 : 2.6, dt)
-      }
+        // The line lives on a loop wider than two screens, so a frame leaving
+        // on the left is already re-entering on the right.
+        const shift = (flow + f.scrub) * item.depth
+        let cxp = (item.x * unit - shift) % loopPx
+        if (cxp < -loopPx * 0.25) cxp += loopPx
+        if (cxp > loopPx * 0.75) cxp -= loopPx
 
-      // The camera leans toward whatever has opened, so its photographs come
-      // out into the middle of the screen instead of half of them arriving
-      // past the edge. Never while the visitor is dragging: their hand wins.
-      if (focus >= 0 && !f.dragging && f.pointers.size === 0) {
-        const g = cosmos[focus].place
-        f.tx = damp(f.tx, -g.x * unit * f.z * 0.82, 1.5, dt)
-        f.ty = damp(f.ty, -g.y * unit * f.z * 0.82, 1.5, dt)
-      }
+        const cyp = (item.y + Math.sin(clock * 0.11 + item.phase) * 0.007) * vh
 
-      // Photographs.
-      const cx = window.innerWidth / 2
-      const cy = window.innerHeight / 2
-      const scale = unit * f.z
-      let lead = -1
-      let leadNear = Infinity
-
-      for (let i = 0; i < flat.length; i++) {
-        const entry = nodes.current[i]
-        if (!entry?.el) continue
-        const b = flat[i]
-        const g = cosmos[b.setIndex].place
-        const node = entry.el
-
-        // Each photograph has its own moment inside the galaxy's opening.
-        // Each frame has its own slot in the galaxy's opening, so they leave
-        // the core one after another rather than all at once.
-        const span = 1 - b.delay
-        const t = clamp((f.open[b.setIndex] - b.delay) / (span > 0.08 ? span : 0.08))
-        if (t < 0.002) {
+        if (cxp + w / 2 < -80 || cxp - w / 2 > vw + 80) {
           if (node.style.visibility !== 'hidden') {
             node.style.visibility = 'hidden'
             node.style.pointerEvents = 'none'
@@ -246,50 +154,39 @@ export function Universe({ sets, compact, active = true }) {
         }
         if (node.style.visibility === 'hidden') node.style.visibility = ''
 
-        const ease = t * t * (3 - 2 * t)
+        // Attention: how near the pointer is to this frame.
+        let near = 0
+        let leanX = 0
+        let leanY = 0
+        if (pointerInside) {
+          const dx = f.px - cxp
+          const dy = f.py - cyp
+          const d = Math.hypot(dx, dy)
+          near = Math.exp(-((d / REACH) ** 2))
+          if (near > 0.02) {
+            leanY = clamp(dx / REACH, -1, 1) * TILT * near
+            leanX = clamp(-dy / REACH, -1, 1) * TILT * near
+          }
+          if (near > nearestNear) { nearestNear = near; nearest = item.photo }
+        }
 
-        // The journey: out of the galaxy's core, and forward past it. Depth
-        // does the growing, so a photograph arriving is a photograph coming
-        // closer, not one being scaled up in place.
-        const wx = g.x + b.x * ease
-        const wy = g.y + b.y * ease
-        const wz = g.z + (b.z - g.z) * ease
-        const p = persp(wz)
-
-        const px = cx + (wx * scale + f.x) * p
-        const py = cy + (wy * scale + f.y) * p
-        const w = b.w * scale * p
-        const h = b.h * scale * p
-
-        // Only the last breath of the journey is a fade; the rest is travel.
-        const fade = clamp(ease * 3.2)
-
+        const scale = 1 + LIFT * near
         node.style.width = `${w.toFixed(1)}px`
         node.style.height = `${h.toFixed(1)}px`
         node.style.transform =
-          `translate3d(${(px - w / 2).toFixed(1)}px, ${(py - h / 2).toFixed(1)}px, 0)` +
-          ` rotate(${(b.spinOut * (1 - ease)).toFixed(3)}rad)`
-        node.style.opacity = fade.toFixed(3)
-        node.style.pointerEvents = ease > 0.7 ? 'auto' : 'none'
-        // Nearer photographs cover further ones, as they should.
-        node.style.zIndex = String(20 + Math.round(p * 60))
-
-        entry.setHiRes(w * dpr > TILE_PX * 0.78)
-
-        if (ease > 0.6) {
-          const d = Math.hypot(fx - px, fy - py)
-          if (d < leadNear) { leadNear = d; lead = i }
-        }
+          `translate3d(${(cxp - w / 2).toFixed(1)}px, ${(cyp - h / 2).toFixed(1)}px, 0)` +
+          ` perspective(1000px) rotateX(${leanX.toFixed(2)}deg) rotateY(${leanY.toFixed(2)}deg)` +
+          ` scale(${scale.toFixed(3)})`
+        node.style.opacity = (item.dim + (1 - item.dim) * near).toFixed(3)
+        node.style.zIndex = String(10 + Math.round(item.h * 20) + Math.round(near * 50))
+        node.style.pointerEvents = 'auto'
       }
 
-      // One caption: whichever photograph the pointer is nearest, or the
-      // galaxy itself while its photographs are still on their way out.
-      const label = lead >= 0 && leadNear < 260 ? flat[lead].image
-        : focus >= 0 ? { setTitle: cosmos[focus].title, setSubtitle: cosmos[focus].subtitle, number: String(cosmos[focus].images.length).padStart(2, '0') }
-        : null
-      if (label !== f.lastFocus) {
-        f.lastFocus = label
-        setFocusPhoto(label)
+      f.rateTarget = nearest ? 0.1 : 1
+
+      if (nearest !== f.focus) {
+        f.focus = nearest
+        setFocusPhoto(nearest)
       }
 
       raf = requestAnimationFrame(tick)
@@ -298,32 +195,30 @@ export function Universe({ sets, compact, active = true }) {
 
     return () => {
       cancelAnimationFrame(raf)
+      window.removeEventListener('resize', onResize)
       window.removeEventListener('pointermove', onPointerMove)
+      window.removeEventListener('pointerup', onPointerUp)
       el.removeEventListener('pointerdown', onPointerDown)
-      window.removeEventListener('pointerup', endPointer)
-      window.removeEventListener('pointercancel', endPointer)
+      el.removeEventListener('pointerleave', onPointerLeave)
       el.removeEventListener('wheel', onWheel)
       window.removeEventListener('keydown', onKey)
-      window.removeEventListener('resize', onResize)
       setFocusPhoto(null)
     }
-  }, [cosmos, flat, unit, compact, active])
+  }, [river, active])
 
   return (
-    <div className="universe" {...(active ? {} : { inert: '', 'aria-hidden': 'true' })}>
-      <canvas ref={canvasRef} className="cosmos" aria-hidden="true" />
-      <div ref={layer} className="universe__layer">
-        {flat.map((b, i) => (
-          <Photo
-            key={b.image.id}
-            image={b.image}
-            index={i}
-            register={register}
-            priority={b.indexInSet < 3}
-            onOpen={() => { if (!frame.current.dragged) openViewer(b.image) }}
-          />
-        ))}
-      </div>
+    <div className="universe" ref={surface} {...(active ? {} : { inert: '', 'aria-hidden': 'true' })}>
+      <div className="universe__vignette" aria-hidden="true" />
+      {river.frames.map((item, i) => (
+        <Photo
+          key={item.key}
+          image={item.photo}
+          index={i}
+          register={register}
+          priority={i < 12}
+          onOpen={() => { if (!frame.current.dragged) openViewer(item.photo) }}
+        />
+      ))}
     </div>
   )
 }

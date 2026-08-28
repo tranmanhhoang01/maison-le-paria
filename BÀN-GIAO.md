@@ -117,32 +117,30 @@ attic/                       BẢN 3D CŨ bằng three.js — không nằm trong
 
 ---
 
-## 6. Cơ chế Tổng quan (phần phức tạp nhất)
+## 6. Cơ chế Tổng quan
 
-Một `<canvas>` vẽ bầu trời + **DOM `<img>` thật** cho ảnh. Lý do tách đôi: ảnh
-phải sắc nét từng pixel, còn vài nghìn ngôi sao thì không thể là phần tử DOM.
+**Một dải ngang duy nhất** — như một tờ tạp chí trải ra. Toàn bộ kho ảnh nằm trên một
+đường, trôi chậm sang trái không ngừng. Cỡ ảnh và độ cao thay đổi theo **từng tấm**, dựa
+trên một "nhịp" viết sẵn (`RHYTHM` trong `lib/river.js`), không phải ngẫu nhiên.
 
-**Một vòng `requestAnimationFrame` duy nhất** trong `Universe.jsx` làm tất cả:
-cập nhật pan/zoom → vẽ canvas → tính thiên hà nào đang được trỏ vào → ghi
-`transform`/`opacity` thẳng vào từng thẻ ảnh. **React chỉ render một lần rồi
-đứng ngoài** — đó là lý do 41 ảnh + 1600 sao chạy mượt.
+- **Không có tầng, không có làn.** Đã thử chia ba tầng ngang (xa/giữa/gần) — trông như ba
+  cuộn phim rời rạc, mỗi ảnh thuộc về làn của nó chứ không thuộc về bố cục. Bỏ.
+- **Nhịp** là một mảng lặp: ảnh lớn (0.74 chiều cao màn hình) → hai ảnh nhỏ ở hai độ cao
+  khác nhau → ảnh vừa → … Lặp lại nhưng không bao giờ rơi vào cùng một thế vì kho ảnh có
+  tỉ lệ khác nhau liên tục nạp vào.
+- **Vòng lặp** dài hơn hai màn hình, nên ảnh rời khỏi mép trái đã kịp quay lại từ mép phải.
+  Không thấy mối nối.
+- **Ảnh lớn trôi nhanh hơn một chút** (`depth` 0.94–1.06) → chiều sâu nhẹ, không phá vỡ
+  khoảng cách giữa các tấm.
+- **Rê chuột lại gần:** dòng chảy **chậm còn 10%**, tấm ảnh đó sáng lên, nhô ra và nghiêng
+  vài độ về phía con trỏ (`perspective` + `rotateX/Y`).
+- **Cuộn chuột không zoom và không cuộn trang** — nó đẩy dải ảnh đi, như xoay một cuộn
+  phim. Kéo cũng vậy. Phím ←/→.
+- Ảnh chỉ dùng bản `tile` 1000px: ngay cả tấm lớn nhất cũng vẽ dưới 900 pixel thiết bị.
+  Bản `full` để dành cho viewer.
 
-- **Phối cảnh:** mọi vật có `z`. `persp(z) = FOCAL / (FOCAL + z)`, `FOCAL = 7`.
-  Vật xa vẽ nhỏ hơn và trôi ít hơn khi kéo → chiều sâu.
-- **Thiên hà nghiêng:** `translate → rotate(roll) → scale(1, cos(tilt)) → rotate(spin·t)`.
-  Mỗi thiên hà có `tilt` 24–72° ngẫu nhiên-có-hạt-giống.
-- **Màu thiên hà** lấy từ màu chủ đạo của chính bộ ảnh; nếu hai bộ trùng sắc thì
-  tự tách hue ra.
-- **Ảnh tuôn ra:** mỗi ảnh có `delay` riêng trải trên 0→0.78 nên chúng bật ra
-  *lần lượt*. Vị trí đích đã được **relax cho không chồng nhau** (kiểm chứng: 0 cặp).
-  Mỗi thiên hà chỉ bung 8 ảnh (6 trên điện thoại) — nhiều hơn thì hoặc chồng nhau
-  hoặc văng khỏi màn hình. Toàn bộ kho nằm ở Thư viện.
-- **Ống kính trôi theo** thiên hà đang mở (0.82 quãng đường, có damping), và
-  focus **dính** khi đã mở để camera không kéo thiên hà ra khỏi con trỏ gây nhấp nháy.
-- **Cuộn chuột = zoom**, không phải cuộn trang. Kéo để di chuyển. Chụm 2 ngón trên
-  điện thoại. Phím `+` `-` `0`, mũi tên.
-
----
+Vị trí, cỡ, độ nghiêng, độ mờ đều ghi **thẳng vào DOM trong một vòng rAF duy nhất**.
+React render các thẻ đúng một lần rồi đứng ngoài.
 
 ## 7. Studio — app quản trị
 
@@ -208,17 +206,18 @@ Nó cũng tạo `404.html` để tải lại `/thu-vien` không lỗi.
 **Đã xong và chạy thật:** Thư viện, viewer, Giới thiệu, Liên hệ, Studio, triển khai
 GitHub Pages, âm thanh (tiếng phòng + nhạc nền), màn chờ chuyển trang.
 
-**Đang làm dở — 4 tệp chưa commit:** phần Tổng quan kiểu vũ trụ.
-`Universe.jsx`, `constellation.js`, `cosmos.js`, `cosmosScene.js`.
+**Tổng quan đã qua ba đời thiết kế** — ghi lại để không quay lại vết xe cũ:
 
-Đã kiểm chứng: bầu trời có màu, thiên hà nghiêng đúng (72°/57°/25°), tinh vân hết
-mép vuông, ảnh **0 cặp chồng nhau**, ảnh bung ra đúng vị trí (chụp được khi ép
-trạng thái).
+1. *Mặt phẳng ảnh kiểu Apple Watch* — người dùng thấy rối, nhiều ảnh cùng cỡ.
+2. *Vũ trụ thiên hà* (canvas: sao, tinh vân, đĩa xoắn nghiêng) — **sai ở gốc**: trang trí
+   cạnh tranh với ảnh, ảnh biến thành vệ tinh quay quanh một món đồ chơi. Mã còn trong
+   `attic/cosmos/` nếu cần tham khảo.
+3. *Ba tầng ngang trôi* — trông như ba cuộn phim rời rạc, phân cấp cứng nhắc.
+4. **Một dải ngang duy nhất** (hiện tại) — đúng cách các trang ảnh cao cấp làm.
 
-**Chưa kiểm chứng bằng mắt:** chuyển động tuôn ra theo thời gian thật, và **ống kính
-trôi theo thiên hà vừa thêm vào chưa chạy thử lần nào** — đây là chỗ dễ có lỗi
-nhấp nháy (camera kéo thiên hà ra khỏi con trỏ → đóng → camera quay lại → lặp).
-Cần mở `npm run dev` và rê chuột vào từng thiên hà để xác nhận.
+**Chưa kiểm chứng bằng mắt:** chuyển động trôi theo thời gian thật và hiệu ứng chậm lại
+khi rê chuột (môi trường preview của trợ lý không chạy đủ khung hình). Bố cục tĩnh và
+hiệu ứng nhô/nghiêng thì đã xác nhận.
 
 **Việc còn lại người dùng phải tự làm:** điền email/điện thoại/Instagram thật vào
 `src/data/site.js` (hiện là chỗ trống), và gán tên miền.

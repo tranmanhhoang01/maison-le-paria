@@ -1,18 +1,24 @@
-/* ── The field ──────────────────────────────────────────────────────── */
+/* ── The current ────────────────────────────────────────────────────── */
 .universe {
   position: fixed; inset: 0; z-index: 1;
   overflow: hidden;
   cursor: grab;
-  touch-action: none;          /* the sky handles its own dragging */
+  touch-action: none;
   overscroll-behavior: none;
-  background: #05060b;
+  /* Not black. The darkest part of something warm, so the photographs sit in
+     a room rather than on a void. */
+  background:
+    radial-gradient(120% 90% at 50% 50%, #14100f 0%, #0a0809 55%, #060506 100%);
 }
 .universe:active { cursor: grabbing; }
 
-/* The night sky: stars, nebulae and spiral arms, all painted. */
-.cosmos { position: absolute; inset: 0; display: block; }
-
-.universe__layer { position: absolute; inset: 0; }
+/* Edges fall away, so frames enter and leave instead of being cut off. */
+.universe__vignette {
+  position: absolute; inset: 0; z-index: 90; pointer-events: none;
+  background:
+    linear-gradient(to right, #060506 0%, rgba(6,5,6,0) 11%, rgba(6,5,6,0) 89%, #060506 100%),
+    linear-gradient(to bottom, rgba(6,5,6,0.85) 0%, rgba(6,5,6,0) 16%, rgba(6,5,6,0) 84%, rgba(6,5,6,0.9) 100%);
+}
 
 /* ── One photograph ─────────────────────────────────────────────────── */
 .photo {
@@ -21,31 +27,24 @@
   background-size: cover; background-position: center;
   will-change: transform, opacity;
   cursor: pointer;
-  /* A photograph flying out of a star field needs an edge, or it reads as a
-     hole cut in the sky. */
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.09), 0 18px 60px rgba(0, 0, 0, 0.6);
-  /* Scaling a raster is the one thing that can soften a photograph, so the
-     browser is told to keep its hands off the sampling quality. */
-  image-rendering: auto;
-  transition: filter 0.6s var(--ease-soft);
+  transform-style: preserve-3d;
+  transition: filter 0.5s var(--ease-soft), box-shadow 0.5s var(--ease-soft);
   outline-offset: 6px;
 }
+.photo:hover { box-shadow: 0 30px 90px rgba(0, 0, 0, 0.75); }
+
 .photo img {
   position: absolute; inset: 0;
   width: 100%; height: 100%;
   object-fit: cover;
   display: block;
   opacity: 0;
-  transition: opacity 0.85s var(--ease);
+  transition: opacity 0.9s var(--ease);
   -webkit-user-drag: none;
   user-select: none;
 }
-.photo[data-loaded='true'] .photo__tile { opacity: 1; }
-.photo[data-instant='true'] .photo__tile { transition: none; }
-/* The 2400px original arrives on top of the tile once zoom has outgrown it,
-   and simply stays there — no flicker, no reflow, nothing to re-decode. */
-.photo__full { transition: opacity 0.5s var(--ease); }
-.photo[data-hires='true'] .photo__full { opacity: 1; }
+.photo[data-loaded='true'] img { opacity: 1; }
+.photo[data-instant='true'] img { transition: none; }
 
 /* ── Dust ───────────────────────────────────────────────────────────── */
 .dust {
