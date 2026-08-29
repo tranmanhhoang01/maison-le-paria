@@ -22,6 +22,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const cfg = JSON.parse(fs.readFileSync(path.join(root, 'scripts/sources.json'), 'utf8'))
 const CATALOGUE = path.join(root, 'content/sets.json')
 const SOUND = path.join(root, 'content/sound.json')
+const HOME = path.join(root, 'content/home.json')
 // `root` may be relative to the project — see scripts/sources.json.
 const ORIGINALS = path.resolve(root, cfg.root)
 const PORT = Number(process.env.STUDIO_PORT ?? 5199)
@@ -39,6 +40,8 @@ const readCatalogue = () => JSON.parse(fs.readFileSync(CATALOGUE, 'utf8'))
 const writeCatalogue = (data) => fs.writeFileSync(CATALOGUE, JSON.stringify(data, null, 2) + '\n')
 const readSound = () => JSON.parse(fs.readFileSync(SOUND, 'utf8'))
 const writeSound = (data) => fs.writeFileSync(SOUND, JSON.stringify(data, null, 2) + '\n')
+const readHome = () => JSON.parse(fs.readFileSync(HOME, 'utf8'))
+const writeHome = (data) => fs.writeFileSync(HOME, JSON.stringify(data, null, 2) + '\n')
 
 const AUDIO_RE = /\.(m4a|mp3|wav|aiff?|aac|flac|caf|ogg)$/i
 
@@ -143,6 +146,7 @@ async function state() {
       id,
       folder,
       meta: catalogue.sets?.[id] ?? null,
+      covers: catalogue.sets?.[id]?.covers ?? [],
       originals: originals.length,
       published: live.length,
       pending: unseen.length,
@@ -171,6 +175,7 @@ async function state() {
   return {
     sets: list,
     originalsRoot: ORIGINALS,
+    home: readHome(),
     domain,
     sound: {
       config: sound,
@@ -278,6 +283,36 @@ const server = createServer(async (req, res) => {
       const catalogue = readCatalogue()
       if (!catalogue.sets[id]) catalogue.sets[id] = {}
       Object.assign(catalogue.sets[id], meta)
+      writeCatalogue(catalogue)
+      json(res, 200, { ok: true })
+      return
+    }
+
+    /**
+     * The frame behind the opening screen, and how far it sinks into the
+     * paper. Written key by key: this file is the owner's choice, and an
+     * earlier version of this server lost someone's music by rewriting a
+     * whole file when it meant to change one line of it.
+     */
+    if (route === '/api/home' && req.method === 'POST') {
+      const patch = JSON.parse(await body(req))
+      const home = readHome()
+      if ('backdrop' in patch) home.backdrop = patch.backdrop || null
+      if ('veil' in patch) {
+        const veil = Number(patch.veil)
+        if (Number.isFinite(veil)) home.veil = Math.min(0.75, Math.max(0.05, veil))
+      }
+      writeHome(home)
+      json(res, 200, { ok: true, home })
+      return
+    }
+
+    /** Which frames introduce a set on the overview. At most three. */
+    if (route === '/api/covers' && req.method === 'POST') {
+      const { id, covers } = JSON.parse(await body(req))
+      const catalogue = readCatalogue()
+      if (!catalogue.sets[id]) catalogue.sets[id] = {}
+      catalogue.sets[id].covers = (covers ?? []).slice(0, 3)
       writeCatalogue(catalogue)
       json(res, 200, { ok: true })
       return

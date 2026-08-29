@@ -5,6 +5,9 @@ import { mulberry32 } from '../../lib/math.js'
  * The room the photographs hang in. A 2D canvas rather than a WebGL scene:
  * it costs a few hundred bytes, it never competes with the photographs for
  * the GPU, and — unlike a texture — it cannot make anything look soft.
+ *
+ * On paper these are motes in a shaft of light rather than stars, so they
+ * darken the sheet instead of glowing on it.
  */
 export function Dust({ compact }) {
   const canvas = useRef(null)
@@ -16,7 +19,7 @@ export function Dust({ compact }) {
 
     const ctx = el.getContext('2d', { alpha: true })
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const count = compact ? 34 : 90
+    const count = compact ? 26 : 70
     const rand = mulberry32(11)
 
     let w = 0
@@ -35,8 +38,8 @@ export function Dust({ compact }) {
 
     const motes = Array.from({ length: count }, () => ({
       x: rand(), y: rand(),
-      r: 0.35 + rand() * rand() * 1.5,
-      a: 0.06 + rand() * 0.2,
+      r: 0.4 + rand() * rand() * 1.7,
+      a: 0.04 + rand() * 0.1,
       vx: (rand() - 0.5) * 0.012,
       vy: (rand() - 0.5) * 0.008,
     }))
@@ -53,7 +56,7 @@ export function Dust({ compact }) {
         if (m.y > 1.02) m.y = -0.02
         ctx.beginPath()
         ctx.arc(m.x * w, m.y * h, m.r, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(210, 202, 188, ${m.a})`
+        ctx.fillStyle = `rgba(94, 72, 48, ${m.a})`
         ctx.fill()
       }
       raf = requestAnimationFrame(tick)

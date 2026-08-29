@@ -1,12 +1,14 @@
 import manifest from './generated/images.json'
 import catalogue from '../../content/sets.json'
+import homeConfig from '../../content/home.json'
 import { mediaUrl } from '../lib/media.js'
 
 /**
- * The archive, assembled from two files that nothing else has to know about:
+ * The archive, assembled from three files that nothing else has to know about:
  *
  *   generated/images.json — what photographs exist (written by the pipeline)
  *   content/sets.json     — what they are called (written by the studio app)
+ *   content/home.json     — which frame stands behind the opening
  *
  * A set with no entry in the catalogue still appears; it simply carries its
  * folder name until someone gives it a better one.
@@ -29,20 +31,32 @@ export const sets = manifest.sets
   .sort((a, b) => rank(a.id) - rank(b.id))
   .map((set, s) => {
     const meta = catalogue.sets?.[set.id] ?? fallback(set.folder)
+    const images = set.images.map((image, i) => ({
+      ...image,
+      tile: mediaUrl(image.tile),
+      wide: mediaUrl(image.wide),
+      full: mediaUrl(image.full),
+      number: String(i + 1).padStart(2, '0'),
+      setId: set.id,
+      setTitle: meta.title,
+      setSubtitle: meta.subtitle,
+    }))
+
     return {
       ...meta,
       id: set.id,
       number: String(s + 1).padStart(2, '0'),
-      images: set.images.map((image, i) => ({
-        ...image,
-        tile: mediaUrl(image.tile),
-        wide: mediaUrl(image.wide),
-        full: mediaUrl(image.full),
-        number: String(i + 1).padStart(2, '0'),
-        setId: set.id,
-        setTitle: meta.title,
-        setSubtitle: meta.subtitle,
-      })),
+      images,
+      /**
+       * The frames that introduce the set on the overview, chosen in the
+       * studio. An id that no longer exists — a photograph thrown out after
+       * it was picked — simply falls away, and the overview goes back to
+       * choosing for itself.
+       */
+      covers: (catalogue.sets?.[set.id]?.covers ?? [])
+        .map((id) => images.find((im) => im.id === id))
+        .filter(Boolean)
+        .slice(0, 3),
     }
   })
 
@@ -64,3 +78,13 @@ export const photos = (() => {
 })()
 
 export const photoIndex = (photo) => photos.findIndex((p) => p.id === photo?.id)
+
+/**
+ * The opening screen. The frame behind the name is a choice, not the first
+ * file in the first folder — it is the one photograph every visitor sees, so
+ * the studio owns it. If the chosen frame is gone, the first one stands in.
+ */
+export const home = {
+  backdrop: photos.find((p) => p.id === homeConfig.backdrop) ?? sets[0]?.images?.[0] ?? null,
+  veil: typeof homeConfig.veil === 'number' ? homeConfig.veil : 0.3,
+}

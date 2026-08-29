@@ -1,35 +1,54 @@
 /* The whole visual language lives here. Nothing below this file invents a
-   colour, a duration or an easing curve of its own. */
+   colour, a duration or an easing curve of its own.
+
+   The house used to stand on black. It reads as a photographer's default —
+   every portfolio template ships with it — and it says nothing about where
+   these photographs were made. This is giấy dó: the warm, slightly uneven
+   paper Vietnamese woodblock prints were pulled on, with mực nho for type,
+   đỏ son for the seal and a thread of gold leaf. A gallery hangs work on a
+   warm wall for the same reason: paper flatters skin, silk and lacquer, and
+   it never competes with the photograph the way a black field does. */
 :root {
-  /* Ground */
-  --void:        #08090a;
-  --void-deep:   #050506;
-  --charcoal:    #101113;
-  --smoke:       #191a1d;
+  /* Ground — giấy dó */
+  --paper:       #f0e7d7;
+  --paper-lit:   #f8f2e7;   /* the lit part of the sheet */
+  --paper-deep:  #e2d6c0;   /* a fold in it */
+  --paper-edge:  #d6c8ae;
 
-  /* Ink */
-  --ink:         #e9e5de;   /* warm off-white — never pure #fff */
-  --ink-dim:     #9d9890;
-  --ash:         #6b6862;
-  --ash-deep:    #3a3835;
-  --beige:       #c9bda8;   /* the single accent, used sparingly */
+  /* Ink — mực nho */
+  --ink:         #241a13;
+  --ink-soft:    #453629;
+  --ink-dim:     #5f4e40;
+  --ash:         #857260;   /* small labels only */
+  --ash-deep:    #a08e7a;
 
-  --line:        rgba(233, 229, 222, 0.13);
-  --line-soft:   rgba(233, 229, 222, 0.07);
+  /* The two accents. Used in threads, never in fields. */
+  --son:         #9b2c1c;   /* đỏ son — the seal, and nothing much else */
+  --son-lit:     #b7412c;
+  --gold:        #a98442;   /* thếp vàng — hairlines under titles */
+
+  /* The dark the photographs are actually looked at in. A viewer on paper
+     would glare; this is a warm lacquer, not black. */
+  --lacquer:     #1a1410;
+  --lacquer-lit: #241c16;
+
+  --line:        rgba(36, 26, 19, 0.18);
+  --line-soft:   rgba(36, 26, 19, 0.09);
+  --line-gold:   rgba(169, 132, 66, 0.42);
 
   /* Type */
-  --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --serif: 'Playfair Display', 'Times New Roman', serif;
   --sans:  'Be Vietnam Pro', -apple-system, 'Helvetica Neue', sans-serif;
 
   --t-display: clamp(3rem, 11.5vw, 10.5rem);
-  --t-title:   clamp(2.4rem, 7.5vw, 6rem);
+  --t-title:   clamp(2.2rem, 7vw, 5.2rem);
   --t-heading: clamp(1.6rem, 3.2vw, 2.6rem);
-  --t-body:    clamp(0.95rem, 0.55vw + 0.8rem, 1.15rem);
+  --t-body:    clamp(0.95rem, 0.55vw + 0.8rem, 1.1rem);
   --t-meta:    0.6875rem;
   --t-micro:   0.625rem;
 
-  --track-meta: 0.24em;
-  --track-wide: 0.4em;
+  --track-meta: 0.22em;
+  --track-wide: 0.34em;
 
   /* Motion — slow, and always the same slowness */
   --ease:      cubic-bezier(0.16, 1, 0.3, 1);
@@ -42,6 +61,15 @@
   /* Space */
   --gut: clamp(1.25rem, 3.6vw, 3.5rem);
   --edge: max(var(--gut), env(safe-area-inset-left));
+
+  /* Hồi văn — the meander border that runs along a lacquer panel or the hem
+     of an áo dài. One hairline strip, drawn once, used wherever a rule would
+     otherwise be a plain line. */
+  --meander: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='12' viewBox='0 0 48 12'%3E%3Cpath d='M0 9h6V3h12v6h6V3h12v6h6V3h6' fill='none' stroke='%23a98442' stroke-width='1' stroke-opacity='.55'/%3E%3C/svg%3E");
+
+  /* The fibre in the sheet. Very low, and multiplied so it darkens rather
+     than fogs. */
+  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23f)'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {

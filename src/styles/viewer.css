@@ -1,10 +1,13 @@
-/* The photograph becomes the room. No frame, no card, no white. */
+/* The photograph becomes the room.
+   The one place that stays dark: a full-screen photograph on paper glares,
+   and every gallery dims the room around the work for the same reason. It is
+   a warm lacquer rather than black, so it belongs to the same house. */
 .viewer {
   position: fixed; inset: 0; z-index: 50;
   /* Solid, not a blurred backdrop: a full-screen backdrop-filter costs a
      frame's worth of GPU on every device, and blurring a field of photographs
      behind a photograph adds nothing to it. */
-  background: var(--void-deep);
+  background: var(--lacquer);
   animation: viewerIn 0.9s var(--ease) both;
   touch-action: pan-y;
   cursor: default;
@@ -41,20 +44,21 @@
   position: absolute; left: var(--edge); bottom: clamp(1.4rem, 4vh, 2.4rem);
   display: grid; gap: 0.4rem;
 }
+.viewer .serif { color: var(--paper-lit); }
 .viewer__id .serif { font-size: clamp(1.4rem, 2.6vw, 2rem); }
-.viewer__id .micro { color: var(--ash); }
+.viewer__id .micro { color: var(--ash-deep); }
 
 .viewer__count {
   position: absolute; right: var(--edge); bottom: clamp(1.4rem, 4vh, 2.4rem);
-  color: var(--ink-dim); font-variant-numeric: tabular-nums;
+  color: var(--paper-deep); font-variant-numeric: tabular-nums;
 }
-.viewer__slash { margin: 0 0.4em; color: var(--ash-deep); }
+.viewer__slash { margin: 0 0.4em; color: var(--ash); }
 
 .viewer__close {
   position: absolute; right: var(--edge); top: clamp(1.2rem, 3vh, 2rem);
-  color: var(--ink-dim); transition: color var(--dur-fast), letter-spacing var(--dur-fast);
+  color: var(--paper-deep); transition: color var(--dur-fast), letter-spacing var(--dur-fast);
 }
-.viewer__close:hover { color: var(--ink); letter-spacing: 0.3em; }
+.viewer__close:hover { color: var(--paper-lit); letter-spacing: 0.3em; }
 
 /* Half-screen hit areas — the gesture, not the button, is the interface. */
 .viewer__nav {
@@ -65,10 +69,11 @@
 .viewer__nav--prev { left: 0; justify-content: flex-start; padding-left: var(--edge); cursor: w-resize; }
 .viewer__nav--next { right: 0; justify-content: flex-end; padding-right: var(--edge); cursor: e-resize; }
 .viewer__nav:hover { opacity: 1; }
-.viewer__nav span { color: var(--ink-dim); }
+.viewer__nav span { color: var(--paper-deep); }
 
 @media (max-width: 860px) {
   .viewer__layer { height: min(74vh, calc(96vw / var(--ratio))); max-width: 96vw; }
   .viewer__nav { width: 40%; }
-  .viewer__id .serif { font-size: 1.2rem; }
+  .viewer .serif { color: var(--paper-lit); }
+.viewer__id .serif { font-size: 1.2rem; }
 }

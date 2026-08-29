@@ -9,14 +9,14 @@
           "tile": "fn/fn-01-tile.webp",
           "wide": "fn/fn-01-wide.webp",
           "full": "fn/fn-01-full.webp",
-          "lqip": "data:image/webp;base64,UklGRiYBAABXRUJQVlA4IBoBAACQBwCdASobACgAPslapUynpSOiKrgMAPAZCWMAvRLrwKkwAtNw8ndjFkHg3oQH3mPBkjEXO52MA6ePuNpuKKr9Jy+5kIAA/tDbIkjerx+vQdilAxOygxMVvMpj2ekTALe84GOJ5n5Wz9b4YxeGECGsKYVlhJViK9s1UA/0LFW0X+RliD3t5eZ4JeAJ4VYFPTdtJQozQREl28DiwBXouDsng3UjX91YEiOIG5LKMBTY+wYG3RgoPyi0eCRsm4VjWo5RQJqTaOlyQepUg5oyPHGtit+s+PwTJk8eKPqxbJNPtZXc0JtOShETVE5eYd7C3pKtEA/kcDMlXyG36ll3KkS9UrA83yofiuE/bIr7JGLhUkjD6w/LoB2NwAA=",
+          "lqip": "data:image/webp;base64,UklGRjABAABXRUJQVlA4ICQBAACQBwCdASobACgAPslUpUwnpKOiMBVaqPAZCWMAvYtnOgUwFIsvfq3d8klDnu7tKxoKCdcNnn2BgotewfBYy+SbAeAdDfAA/tDbIT7poJGyuwmtxcE+JBN/6ZgGtmnPju4YY4nmcwsKPTEx0uHHW+fbMKywkqxFe2akmG28GdEs1Umr64ONAOZ3a7tAK3GhcWtvIgImitgOB58qppp6rBPVe77lIAAZsf5BR/Vc1xOLf9g3ILXFz+zS2YqPP53PxRY2pY6DZ57/ahhdPkLVLp/xAfnSDK0XB6k6pC+KaTKLS0TShZL5s68tiLSp1UtlD4j3OQgOmrfVgc1N199T+lQvpZjqNIZkMb9syviuYXSyNpktGbo9PoNeEuEbnv3t9y80AAAA",
           "ratio": 0.6665,
           "rgb": [
             56,
             56,
             40
           ],
-          "source": "1222222a 1.jpg"
+          "source": "1222222a 1-2.jpg"
         },
         {
           "id": "fn-02",
@@ -118,6 +118,7 @@
         }
       ],
       "skipped": [
+        "1222222a 1.jpg",
         "DSC_0059.jpg",
         "DSC_0110.jpg",
         "DSC_0219.jpg"

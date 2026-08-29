@@ -1,4 +1,4 @@
-/* ── Panels: about / contact / index ────────────────────────────────── */
+/* ── Panels: about / contact / library ──────────────────────────────── */
 /* In normal flow, not a fixed overlay: that way the page itself scrolls, and
    the keyboard, the scrollbar and a phone's momentum all work without being
    re-implemented. */
@@ -6,7 +6,7 @@
 .panel-layer:focus { outline: none; }
 .panel-layer__scrim {
   position: fixed; inset: 0; z-index: -1;
-  background: rgba(6, 7, 8, 0.975);
+  background: var(--paper);
   animation: fade 1s var(--ease) both;
 }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -17,14 +17,14 @@
   padding: clamp(6rem, 14vh, 10rem) var(--edge) clamp(4rem, 10vh, 7rem);
 }
 .panel__inner { width: min(62ch, 100%); }
-.panel__eyebrow { color: var(--beige); }
+.panel__eyebrow { color: var(--son); }
 .panel__title { font-size: var(--t-title); margin-top: 0.8rem; }
 .panel .rule { margin: 2rem 0; }
-.panel__lead { font-size: clamp(1.1rem, 1.6vw, 1.45rem); font-weight: 200; line-height: 1.55; }
-.panel__body { margin-top: 1.4rem; color: var(--ink-dim); font-weight: 200; }
+.panel__lead { font-size: clamp(1.05rem, 1.5vw, 1.4rem); font-weight: 300; line-height: 1.6; color: var(--ink); }
+.panel__body { margin-top: 1.4rem; color: var(--ink-soft); }
 .panel__roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.8rem; margin-top: 3.4rem; }
-.panel__roles dt { color: var(--ash-deep); margin-bottom: 0.5rem; }
-.panel__roles dd { margin: 0; color: var(--ink-dim); font-size: 0.95rem; }
+.panel__roles dt { color: var(--ash); margin-bottom: 0.5rem; }
+.panel__roles dd { margin: 0; color: var(--ink-soft); font-size: 0.95rem; }
 
 /* Contact */
 .channels { list-style: none; margin: 3rem 0 0; padding: 0; }
@@ -33,20 +33,21 @@
   padding: 1.1rem 0; border-top: 1px solid var(--line-soft);
 }
 .channel:last-child { border-bottom: 1px solid var(--line-soft); }
-.channel > span:first-child { flex: 0 0 8rem; color: var(--ash-deep); }
+.channel > span:first-child { flex: 0 0 8rem; color: var(--ash); }
 .channel a { position: relative; color: var(--ink); }
 .channel a::after {
   content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 1px;
-  background: currentColor; transform: scaleX(0); transform-origin: right;
+  background: var(--son); transform: scaleX(0); transform-origin: right;
   transition: transform 0.6s var(--ease);
 }
+.channel a:hover { color: var(--son); }
 .channel a:hover::after { transform: scaleX(1); transform-origin: left; }
 .cta {
   display: inline-flex; align-items: center; gap: 1rem; margin-top: 3.4rem; color: var(--ink);
-  transition: gap var(--dur-fast) var(--ease);
+  transition: gap var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
 }
 .cta__line { display: block; width: 3rem; height: 1px; background: currentColor; transition: width var(--dur-fast) var(--ease); }
-.cta:hover { gap: 1.4rem; }
+.cta:hover { gap: 1.4rem; color: var(--son); }
 .cta:hover .cta__line { width: 4.4rem; }
 
 /* ── The library ────────────────────────────────────────────────────── */
@@ -61,14 +62,62 @@
   display: flex; align-items: baseline; justify-content: space-between; gap: 2rem;
   padding-bottom: 1.2rem; border-bottom: 1px solid var(--line-soft);
 }
-.library__count { color: var(--ash-deep); }
+.library__count { color: var(--ash); }
+.library__back { color: var(--ink-dim); transition: color var(--dur-fast) var(--ease), gap var(--dur-fast); display: inline-flex; gap: 0.7em; }
+.library__back:hover { color: var(--son); }
 
-.series { margin-top: clamp(5rem, 13vh, 9rem); }
-.series__head { max-width: 46ch; margin-bottom: clamp(2.4rem, 6vh, 4rem); }
-.series__num { color: var(--beige); }
-.series__title { font-size: clamp(2.2rem, 6vw, 4.2rem); margin: 0.3rem 0 0.9rem; }
-.series__sub { color: var(--ink-dim); }
-.series__note { margin-top: 1.1rem; color: var(--ash); font-weight: 200; }
+/**
+ * The index: one frame per series, its story beside it, left then right then
+ * left down the page.
+ *
+ * It used to open straight onto all forty-one photographs, which meant the
+ * second series began somewhere below the fold of a very long scroll and
+ * nobody ever met it. A reader should be able to see what is in this house
+ * in one page, and then choose.
+ */
+.leaves { display: grid; gap: clamp(4.5rem, 12vh, 8rem); margin-top: clamp(3.5rem, 9vh, 6rem); }
+.leaf { display: flex; align-items: center; justify-content: center; gap: clamp(2rem, 4.5vw, 5rem); }
+.leaf[data-side='right'] { flex-direction: row-reverse; }
+
+.leaf__plate {
+  position: relative;
+  flex: 0 1 auto; min-width: 0;
+  height: min(76vh, 720px);
+  aspect-ratio: var(--ratio);
+  background-size: cover; background-position: center;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(36, 26, 19, 0.10),
+    0 12px 30px rgba(36, 26, 19, 0.16),
+    0 34px 70px rgba(36, 26, 19, 0.1);
+  transition: transform 0.8s var(--ease), box-shadow 0.8s var(--ease);
+}
+.leaf__plate:hover { transform: translateY(-6px); }
+.leaf__plate img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.9s var(--ease); }
+.leaf__plate img[data-loaded='true'] { opacity: 1; }
+.leaf__plate img[data-instant='true'] { transition: none; }
+
+.leaf__text { flex: 0 1 38ch; min-width: 0; }
+.leaf__num { color: var(--son); letter-spacing: 0.28em; }
+.leaf__title { font-size: clamp(2rem, 4.4vw, 3.4rem); margin: 0.5rem 0 0; }
+.leaf__ornament { margin: 1.1rem 0 1.2rem; }
+.leaf__sub { color: var(--ink-dim); }
+.leaf__note { margin-top: 1rem; color: var(--ink-soft); }
+.leaf__meta { margin-top: 1.4rem; color: var(--ash); }
+.leaf__more {
+  display: inline-flex; align-items: center; gap: 0.8em; margin-top: 1.8rem;
+  color: var(--ink); border-bottom: 1px solid var(--line-gold); padding-bottom: 0.5em;
+  transition: gap var(--dur-fast) var(--ease), border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+.leaf__more:hover { gap: 1.3em; border-color: var(--son); color: var(--son); }
+
+/* One series, whole. */
+.series__head { max-width: 48ch; margin: clamp(3rem, 8vh, 5rem) 0 clamp(2.4rem, 6vh, 4rem); }
+.series__num { color: var(--son); letter-spacing: 0.28em; }
+.series__title { font-size: clamp(2.4rem, 6.5vw, 4.6rem); margin: 0.4rem 0 1.1rem; }
+.series__sub { color: var(--ink-dim); margin-top: 1.1rem; }
+.series__note { margin-top: 1rem; color: var(--ink-soft); }
+.series__meta { margin-top: 1.4rem; color: var(--ash); }
 
 /* One photograph, whole. A landscape takes the full width of the page; a
    portrait takes the full height of the screen. Neither is ever cropped to
@@ -78,6 +127,12 @@
   aspect-ratio: var(--ratio);
   margin: 0 auto clamp(2.4rem, 7vh, 5.5rem);
   background-size: cover; background-position: center;
+  box-shadow: 0 0 0 1px rgba(36, 26, 19, 0.09), 0 16px 40px rgba(36, 26, 19, 0.12);
+  /* Forty-one full-size photographs in one column: telling the browser it may
+     skip the ones nowhere near the viewport is the difference between a
+     scroll that glides and one that catches every few frames. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 70vh;
 }
 .frame[data-orient='wide'] { width: 100%; }
 .frame[data-orient='tall'] { width: min(100%, calc(90vh * var(--ratio))); }
@@ -104,27 +159,20 @@
 .frame:hover .frame__zoom { opacity: 1; }
 
 .library__foot {
-  display: flex; align-items: baseline; justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   margin-top: clamp(5rem, 12vh, 8rem); padding-top: 1.4rem;
   border-top: 1px solid var(--line-soft);
 }
 .library__foot .serif { font-size: 1.4rem; }
-.library__foot .micro { color: var(--ash-deep); }
 
 @media (max-width: 860px) {
   .library { width: 100%; padding-left: var(--edge); padding-right: var(--edge); }
   .frame { width: 100%; }
+  .frame[data-orient='tall'] { width: 100%; }
   .frame__zoom { display: none; }
+
+  .leaf, .leaf[data-side='right'] { flex-direction: column; align-items: stretch; gap: 1.4rem; }
+  .leaf__plate { width: 100%; height: auto; }
+  .leaf__text { max-width: none; }
+  .leaves { gap: clamp(3.5rem, 9vh, 5rem); }
 }
-
-/* ── Flat fallback ──────────────────────────────────────────────────── */
-.flat { position: relative; z-index: 5; padding: 24vh var(--edge) 12vh; }
-.flat__head h1 { font-size: var(--t-title); }
-.flat__head p { margin-top: 1rem; color: var(--ash); }
-.flat__project { margin-top: clamp(6rem, 16vh, 12rem); }
-.flat__project h2 { font-size: var(--t-heading); margin-top: 0.6rem; }
-.flat__desc { margin-top: 1rem; max-width: 52ch; color: var(--ink-dim); }
-.flat__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); gap: clamp(0.6rem, 1.6vw, 1.4rem); margin-top: 3rem; }
-.flat__cell img { width: 100%; background-size: cover; object-fit: cover; }
-
-

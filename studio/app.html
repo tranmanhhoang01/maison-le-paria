@@ -75,9 +75,28 @@
   .cell button {
     position: absolute; inset: auto 6px 6px auto; background: rgba(8,9,10,.82); border: 0;
     border-radius: 5px; padding: 5px 8px; font-size: 10px; letter-spacing: .1em;
-    cursor: pointer; opacity: 0; transition: opacity .2s;
+    cursor: pointer; opacity: 0; transition: opacity .2s; color: var(--ink);
   }
   .cell:hover button { opacity: 1; }
+  /* Ảnh đại diện: bấm vào ảnh để chọn, bấm lại để bỏ. */
+  .cell img { cursor: pointer; transition: opacity .2s; }
+  .cell[data-cover] { outline: 2px solid var(--beige); outline-offset: -2px; }
+  .cell[data-cover] img { opacity: .92; }
+  .badge {
+    position: absolute; inset: 6px auto auto 6px;
+    background: var(--beige); color: #14150f; border-radius: 4px;
+    padding: 3px 7px; font-size: 10px; letter-spacing: .08em; font-weight: 500;
+    pointer-events: none;
+  }
+  .pickers { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 14px; }
+  .pickers .cell img { aspect-ratio: 3/4; }
+  .cell[data-chosen='true'] { outline: 2px solid var(--ok); outline-offset: -2px; }
+  .slider { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
+  .slider input[type=range] { flex: 1; accent-color: var(--beige); }
+  .hero { display: grid; grid-template-columns: 260px 1fr; gap: 18px; margin-top: 16px; align-items: start; }
+  .hero__shot { position: relative; border-radius: 8px; overflow: hidden; background: var(--panel); }
+  .hero__shot img { width: 100%; display: block; }
+  @media (max-width: 820px) { .hero { grid-template-columns: 1fr; } }
 
   .note { margin-top: 14px; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--line); color: var(--dim); font-size: 13px; }
   .note b { color: var(--ink); font-weight: 500; }
@@ -111,6 +130,9 @@
   <div class="mark">MAISON LE PARIA — STUDIO</div>
   <div class="sets" id="sets"></div>
   <button class="ghost" id="newSet">+ Bộ ảnh mới</button>
+  <button class="set-btn" id="homeTab" style="border:1px solid var(--line)">
+    <b>Trang mở đầu</b><span id="homeHint">…</span>
+  </button>
   <button class="set-btn" id="soundTab" style="border:1px solid var(--line)">
     <b>Âm thanh</b><span id="soundHint">…</span>
   </button>
@@ -135,7 +157,7 @@
 const $ = (id) => document.getElementById(id)
 let data = null
 let current = null
-let view = 'sets'      // 'sets' | 'sound'
+let view = 'sets'      // 'sets' | 'home' | 'sound'
 
 /* Chạy trong app Mac hay trong trình duyệt? Trong app, việc chọn và kéo thả
    tệp do macOS lo, và ảnh được nhập theo đường dẫn thay vì truyền byte. */
@@ -166,8 +188,10 @@ function drawSets() {
   $('sets').querySelectorAll('.set-btn').forEach((b) =>
     b.onclick = () => { current = b.dataset.id; view = 'sets'; drawSets(); drawMain() })
   $('soundTab').setAttribute('aria-current', view === 'sound')
+  $('homeTab').setAttribute('aria-current', view === 'home')
   const m = data.sound.music
   $('soundHint').textContent = m ? `nhạc ${m.clock}` : 'chưa có nhạc'
+  $('homeHint').textContent = data.home?.backdrop ? 'đã chọn ảnh nền' : 'ảnh nền: tự chọn'
 }
 
 function drawGit() {
@@ -211,6 +235,7 @@ $('domainBtn').onclick = async () => {
 
 function drawMain() {
   if (view === 'sound') { drawSound(); return }
+  if (view === 'home') { drawHome(); return }
   const set = data.sets.find((s) => s.id === current)
   if (!set) { $('main').innerHTML = '<p>Chưa có bộ ảnh nào. Bấm “Bộ ảnh mới”.</p>'; return }
   const m = set.meta ?? {}
@@ -245,11 +270,20 @@ function drawMain() {
       <div class="micro" style="margin-top:10px">JPG · PNG · TIFF — cứ để nguyên cỡ gốc</div>
     </div>
 
-    <div class="photos">${set.photos.map((p) => `
-      <figure class="cell" style="margin:0">
-        <img src="${p.thumb}" alt="" loading="lazy">
+    <h3 class="micro" style="margin:30px 0 4px; color:var(--beige)">ẢNH ĐẠI DIỆN CỦA BỘ</h3>
+    <div class="note">Bấm vào ảnh để chọn <b>tối đa 3 ảnh đại diện</b>. Đây là những ảnh khách
+      nhìn thấy ở trang Tổng quan trước khi bấm vào xem cả bộ — ảnh số <b>1</b> là ảnh lớn nhất,
+      và cũng là ảnh đại diện cho bộ ở trang Thư viện. Chưa chọn thì web tự lấy 3 ảnh.</div>
+
+    <div class="photos">${set.photos.map((p) => {
+      const rank = (set.covers ?? []).indexOf(p.id)
+      return `
+      <figure class="cell" style="margin:0" ${rank >= 0 ? `data-cover="${rank + 1}"` : ''}>
+        <img src="${p.thumb}" alt="" loading="lazy" data-cover-id="${p.id}">
+        ${rank >= 0 ? `<span class="badge">${rank === 0 ? 'ĐẠI DIỆN 1' : rank + 1}</span>` : ''}
         <button data-file="${p.source}">Bỏ</button>
-      </figure>`).join('')}
+      </figure>`
+    }).join('')}
     </div>
     ${set.photos.length === 0 ? '<p style="color:var(--ash);margin-top:16px">Chưa có ảnh nào được đưa lên web.</p>' : ''}
   `
@@ -283,6 +317,20 @@ function drawMain() {
     e.preventDefault(); drop.dataset.over = 'false'
   }))
   drop.addEventListener('drop', (e) => upload(set.id, [...e.dataTransfer.files]))
+
+  /* Chọn / bỏ ảnh đại diện. Ba ảnh là tối đa; chọn thêm thì ảnh cũ nhất rời đi. */
+  $('main').querySelectorAll('[data-cover-id]').forEach((img) => img.onclick = async () => {
+    const id = img.dataset.coverId
+    const covers = [...(set.covers ?? [])]
+    const at = covers.indexOf(id)
+    if (at >= 0) covers.splice(at, 1)
+    else { covers.push(id); if (covers.length > 3) covers.shift() }
+    await api('/api/covers', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ id: set.id, covers }),
+    })
+    await refresh()
+  })
 
   $('main').querySelectorAll('.cell button').forEach((b) => b.onclick = async () => {
     if (!confirm(`Bỏ ảnh này khỏi bộ?\n\nTệp gốc được chuyển vào thư mục “.đã bỏ”, không bị xoá hẳn.`)) return
@@ -319,7 +367,77 @@ window.__nativeImport = (paths) => {
   // What a dropped file means depends on where you are: a track in the sound
   // section, photographs everywhere else.
   if (view === 'sound' && audio.length) { setMusic(audio[0]); return }
+  if (view === 'sound' || view === 'home') return
   if (current && images.length) importPaths(current, images)
+}
+
+/**
+ * Trang mở đầu: ảnh chìm phía sau cái tên, và ảnh đó chìm sâu bao nhiêu.
+ *
+ * Ảnh được in vào nền giấy (multiply) chứ không phủ lên trên, nên "độ chìm"
+ * là độ đậm của bản in — kéo cao thì ảnh rõ, kéo thấp thì chỉ còn bóng.
+ */
+function drawHome() {
+  const home = data.home ?? {}
+  const all = data.sets.flatMap((s) => s.photos.map((p) => ({ ...p, set: s.meta?.title ?? s.folder })))
+  const chosen = all.find((p) => p.id === home.backdrop) ?? all[0]
+
+  $('main').innerHTML = `
+    <div class="head">
+      <div>
+        <div class="micro">TRANG MỞ ĐẦU</div>
+        <h2 style="margin-top:6px">Ảnh nền phía sau tên</h2>
+      </div>
+      <div class="row"><button class="btn btn--go" id="deploy">Triển khai</button></div>
+    </div>
+
+    <div class="note">Đây là ảnh khách nhìn thấy ngay khi mở website — nó nằm chìm sau chữ
+      MAISON LE PARIA. Chọn một ảnh ở dưới, rồi kéo thanh <b>độ chìm</b> cho vừa mắt.
+      ${home.backdrop ? '' : '<br>Hiện chưa chọn — web đang tạm lấy ảnh đầu tiên.'}</div>
+
+    <div class="hero">
+      <div class="hero__shot">
+        ${chosen ? `<img src="${chosen.thumb}" alt="">` : '<div style="padding:40px" class="micro">Chưa có ảnh nào</div>'}
+      </div>
+      <div>
+        <div class="micro">ĐỘ CHÌM CỦA ẢNH</div>
+        <div class="slider">
+          <input id="veil" type="range" min="0.05" max="0.75" step="0.01" value="${home.veil ?? 0.3}">
+          <span id="veilVal" style="min-width:3.4em; text-align:right">${Math.round((home.veil ?? 0.3) * 100)}%</span>
+        </div>
+        <div class="micro" style="margin-top:8px; line-height:1.8">
+          Thấp — chỉ còn thoáng bóng ảnh<br>Cao — ảnh hiện rõ, chữ khó đọc hơn
+        </div>
+        <div class="row" style="margin-top:16px">
+          <button class="btn" id="saveVeil">Lưu độ chìm</button>
+          <button class="btn btn--bad" id="clearBackdrop">Bỏ chọn ảnh nền</button>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="micro" style="margin:28px 0 0; color:var(--beige)">CHỌN ẢNH NỀN</h3>
+    <div class="pickers">${all.map((p) => `
+      <figure class="cell" style="margin:0" ${p.id === home.backdrop ? 'data-chosen="true"' : ''}>
+        <img src="${p.thumb}" alt="${p.set}" loading="lazy" data-backdrop="${p.id}" title="${p.set}">
+      </figure>`).join('')}
+    </div>
+  `
+
+  const saveHome = async (patch) => {
+    await api('/api/home', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(patch),
+    })
+    await refresh()
+  }
+
+  $('veil').oninput = (e) => { $('veilVal').textContent = `${Math.round(e.target.value * 100)}%` }
+  $('saveVeil').onclick = () => saveHome({ veil: Number($('veil').value) })
+  $('clearBackdrop').onclick = () => saveHome({ backdrop: null })
+  $('main').querySelectorAll('[data-backdrop]').forEach((img) =>
+    img.onclick = () => saveHome({ backdrop: img.dataset.backdrop }))
+
+  $('deploy').onclick = deploy
 }
 
 function drawSound() {
@@ -427,6 +545,7 @@ function deploy() {
 }
 
 $('soundTab').onclick = () => { view = 'sound'; drawSets(); drawMain() }
+$('homeTab').onclick = () => { view = 'home'; drawSets(); drawMain() }
 
 $('newSet').onclick = async () => {
   const title = prompt('Tên bộ ảnh mới (cũng là tên thư mục):')

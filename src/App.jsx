@@ -92,7 +92,9 @@ export default function App() {
 
   return (
     <>
-      <Dust compact={compact} />
+      {/* Motes in the light. Not on a phone: a canvas repainting every frame
+          is the last thing a small device needs while it is scrolling. */}
+      {!compact && <Dust compact={compact} />}
       <Universe sets={sets} compact={compact} active={!Panel && !viewer} />
       <FocusLabel />
 
@@ -103,6 +105,7 @@ export default function App() {
         </div>
       )}
 
+      <div className="fibre" aria-hidden="true" />
       <Nav />
       <Viewer />
       <Curtain />
