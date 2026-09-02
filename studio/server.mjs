@@ -36,12 +36,89 @@ const slugify = (name) =>
     .replace(/đ/g, 'd').replace(/Đ/g, 'D')
     .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 
-const readCatalogue = () => JSON.parse(fs.readFileSync(CATALOGUE, 'utf8'))
-const writeCatalogue = (data) => fs.writeFileSync(CATALOGUE, JSON.stringify(data, null, 2) + '\n')
-const readSound = () => JSON.parse(fs.readFileSync(SOUND, 'utf8'))
-const writeSound = (data) => fs.writeFileSync(SOUND, JSON.stringify(data, null, 2) + '\n')
-const readHome = () => JSON.parse(fs.readFileSync(HOME, 'utf8'))
-const writeHome = (data) => fs.writeFileSync(HOME, JSON.stringify(data, null, 2) + '\n')
+/**
+ * Đọc một tệp trong content/.
+ *
+ * Nếu tệp không còn (ai đó xoá nhầm, hoặc kho vừa được nhân bản thiếu), tạo
+ * lại bằng giá trị mặc định thay vì ném lỗi. Site **import thẳng** mấy tệp
+ * này lúc dựng, nên thiếu một tệp là hỏng cả bản dựng — Studio phải là chỗ
+ * chữa được chuyện đó, không phải chỗ chết theo.
+ */
+const readJson = (file, fallback) => {
+  try {
+    const data = JSON.parse(fs.readFileSync(file, 'utf8'))
+    if (data && typeof data === 'object') return data
+  } catch {}
+  fs.writeFileSync(file, JSON.stringify(fallback, null, 2) + '\n')
+  return structuredClone(fallback)
+}
+const writeJson = (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2) + '\n')
+
+const CATALOGUE_EMPTY = {
+  '//': "Tên và mô tả các bộ ảnh. App quản trị (npm run studio) ghi file này. Khoá = tên thư mục trong 'ảnh web' đã bỏ dấu.",
+  order: [],
+  sets: {},
+}
+const HOME_EMPTY = {
+  '//': 'Trang mở đầu. App quản trị (npm run studio) ghi tệp này — sửa từng khoá, đừng ghi đè cả tệp.',
+  backdrop: null,
+  veil: 0.3,
+}
+const SOUND_EMPTY = {
+  '//': 'Âm thanh. App quản trị ghi tệp này.',
+  ambience: { volume: 0.12 },
+  music: { file: null, volume: 0.5, credit: '' },
+}
+
+const readCatalogue = () => {
+  const data = readJson(CATALOGUE, CATALOGUE_EMPTY)
+  if (!data.sets || typeof data.sets !== 'object') data.sets = {}
+  if (!Array.isArray(data.order)) data.order = []
+  return data
+}
+const writeCatalogue = (data) => writeJson(CATALOGUE, data)
+const readSound = () => {
+  const data = readJson(SOUND, SOUND_EMPTY)
+  data.ambience ??= { ...SOUND_EMPTY.ambience }
+  data.music ??= { ...SOUND_EMPTY.music }
+  return data
+}
+const writeSound = (data) => writeJson(SOUND, data)
+const readHome = () => readJson(HOME, HOME_EMPTY)
+const writeHome = (data) => writeJson(HOME, data)
+
+/** Mọi id ảnh đang thật sự có trên web — dùng để dọn các lựa chọn đã chết. */
+function publishedIds() {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.join(root, cfg.manifest), 'utf8'))
+    return new Set(manifest.sets.flatMap((s) => (s.images ?? []).map((im) => im.id)))
+  } catch { return null }
+}
+
+/**
+ * Bỏ ảnh khỏi web thì cũng phải bỏ nó khỏi mọi nơi đang trỏ tới nó.
+ *
+ * Site tự lọc các id không còn tồn tại, nên site không vỡ — nhưng người dùng
+ * thì thấy bộ ảnh tự đổi ảnh đại diện mà không hiểu vì sao. Dọn ngay lúc xoá
+ * thì Studio và web luôn nói cùng một chuyện.
+ */
+function forgetImages(gone) {
+  if (!gone.size) return
+  const catalogue = readCatalogue()
+  let touched = false
+  for (const meta of Object.values(catalogue.sets)) {
+    if (!Array.isArray(meta.covers)) continue
+    const kept = meta.covers.filter((id) => !gone.has(id))
+    if (kept.length !== meta.covers.length) { meta.covers = kept; touched = true }
+  }
+  if (touched) writeCatalogue(catalogue)
+
+  const home = readHome()
+  if (home.backdrop && gone.has(home.backdrop)) {
+    home.backdrop = null
+    writeHome(home)
+  }
+}
 
 const AUDIO_RE = /\.(m4a|mp3|wav|aiff?|aac|flac|caf|ogg)$/i
 
@@ -297,7 +374,10 @@ const server = createServer(async (req, res) => {
     if (route === '/api/home' && req.method === 'POST') {
       const patch = JSON.parse(await body(req))
       const home = readHome()
-      if ('backdrop' in patch) home.backdrop = patch.backdrop || null
+      if ('backdrop' in patch) {
+        const live = publishedIds()
+        home.backdrop = patch.backdrop && (!live || live.has(patch.backdrop)) ? patch.backdrop : null
+      }
       if ('veil' in patch) {
         const veil = Number(patch.veil)
         if (Number.isFinite(veil)) home.veil = Math.min(0.75, Math.max(0.05, veil))
@@ -310,9 +390,12 @@ const server = createServer(async (req, res) => {
     /** Which frames introduce a set on the overview. At most three. */
     if (route === '/api/covers' && req.method === 'POST') {
       const { id, covers } = JSON.parse(await body(req))
+      const live = publishedIds()
       const catalogue = readCatalogue()
       if (!catalogue.sets[id]) catalogue.sets[id] = {}
-      catalogue.sets[id].covers = (covers ?? []).slice(0, 3)
+      catalogue.sets[id].covers = (covers ?? [])
+        .filter((im) => !live || live.has(im))
+        .slice(0, 3)
       writeCatalogue(catalogue)
       json(res, 200, { ok: true })
       return
@@ -320,8 +403,11 @@ const server = createServer(async (req, res) => {
 
     if (route === '/api/order' && req.method === 'POST') {
       const { order } = JSON.parse(await body(req))
+      const known = new Set(folders().map((f) => f.id))
       const catalogue = readCatalogue()
-      catalogue.order = order
+      const wanted = (order ?? []).filter((id) => known.has(id))
+      // Bộ nào không nằm trong danh sách gửi lên thì xuống cuối, không biến mất.
+      catalogue.order = [...wanted, ...[...known].filter((id) => !wanted.includes(id))]
       writeCatalogue(catalogue)
       json(res, 200, { ok: true })
       return
@@ -393,6 +479,15 @@ const server = createServer(async (req, res) => {
       const bin = path.join(ORIGINALS, target.folder, '.đã bỏ')
       await fsp.mkdir(bin, { recursive: true })
       await fsp.rename(victim, path.join(bin, path.basename(file)))
+
+      // Ảnh này có đang được chọn làm ảnh đại diện hay ảnh nền không?
+      try {
+        const manifest = JSON.parse(fs.readFileSync(path.join(root, cfg.manifest), 'utf8'))
+        const set = manifest.sets.find((s) => s.id === id)
+        const hit = set?.images?.find((im) => im.source === path.basename(file))
+        if (hit) forgetImages(new Set([hit.id]))
+      } catch {}
+
       json(res, 200, { ok: true, movedTo: bin })
       return
     }

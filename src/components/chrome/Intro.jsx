@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { site } from '../../data/site.js'
+import { Seal } from './Seal.jsx'
+import { Nghe, Clouds } from './Ornament.jsx'
 
 /**
  * The name of the house, then it gets out of the way. No button to press —
@@ -24,15 +26,19 @@ export function Intro({ count }) {
   }, [])
 
   return (
-    <div className="intro" data-gone={gone} aria-hidden={gone}>
+    <div className="intro sheet" data-gone={gone} aria-hidden={gone}>
       <div className="intro__inner">
-        <span className="seal intro__seal" aria-hidden="true"><span>M</span></span>
+        <div className="crest intro__seal">
+          <Nghe facing="right" />
+          <Seal />
+          <Nghe facing="left" />
+        </div>
         <h1 className="intro__name serif">
           <span>MAISON</span>
           <span>LE PARIA</span>
         </h1>
         <p className="intro__tag meta">{site.tagline}</p>
-        <div className="meander meander--short intro__ornament" aria-hidden="true" />
+        <Clouds className="clouds--short intro__ornament" />
         <p className="intro__hint micro">{count} ẢNH — CUỘN HOẶC KÉO ĐỂ ĐI · BẤM ĐỂ MỞ</p>
         <p className="intro__sound micro">BẤM ĐỂ VÀO · CÓ ÂM THANH</p>
       </div>

@@ -28,14 +28,28 @@ fs.mkdirSync(resources, { recursive: true })
 
 /* ── The icon ────────────────────────────────────────────────────────── */
 
+/**
+ * Biểu tượng: tờ giấy dó với con triện đỏ đóng lên — cùng dấu hiệu với
+ * website. Bốn ô hoa văn hồi văn xoay bốn hướng, giống Seal.jsx.
+ */
+const KEY = 'M4 28V6h20M24 10v14H10M10 20v-6h8'
+const CORNERS = [
+  'translate(14 14)',
+  'translate(86 14) scale(-1 1)',
+  'translate(14 86) scale(1 -1)',
+  'translate(86 86) scale(-1 -1)',
+]
 const icon = (size) => Buffer.from(`
-<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
-  <rect width="${size}" height="${size}" rx="${size * 0.22}" fill="#0b0c0d"/>
-  <text x="50%" y="50%" dy="${size * 0.115}" text-anchor="middle"
-        font-family="Georgia, 'Times New Roman', serif" font-size="${size * 0.46}"
-        fill="#e9e5de">M</text>
-  <rect x="${size * 0.30}" y="${size * 0.70}" width="${size * 0.40}" height="${size * 0.014}"
-        fill="#c9bda8"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 100 100">
+  <rect width="100" height="100" rx="22" fill="#e5d9c0"/>
+  <g transform="translate(50 50) rotate(-4) translate(-31 -31) scale(0.62)">
+    <rect width="100" height="100" rx="3" fill="#9b2c1c"/>
+    <g fill="none" stroke="#f8f2e7" stroke-linecap="butt">
+      <rect x="6" y="6" width="88" height="88" rx="1" stroke-width="1.8"/>
+      <rect x="10" y="10" width="80" height="80" rx="0.5" stroke-width="0.9" opacity="0.8"/>
+      ${CORNERS.map((t) => `<path d="${KEY}" transform="${t}" stroke-width="2.3"/>`).join('')}
+    </g>
+  </g>
 </svg>`)
 
 const iconset = path.join(root, 'studio/mac/Studio.iconset')

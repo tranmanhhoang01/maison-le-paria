@@ -4,11 +4,15 @@
   overflow: hidden;
   /* A sheet of giấy dó is never one flat colour: it is lighter where the
      light falls on it and warmer at the edges. */
-  background:
-    radial-gradient(120% 90% at 50% 34%, var(--paper-lit) 0%, var(--paper) 52%, var(--paper-deep) 100%);
+  /* Gần như phẳng: vệt sáng chỉ để tờ giấy không chết cứng, không phải để
+     nhìn thấy. */
+  --sheet-wash: radial-gradient(150% 110% at 50% 30%, var(--paper-lit) 0%, var(--paper) 46%, var(--paper-deep) 100%);
+  background-color: var(--paper);
   /* The wheel is ours; a two-finger horizontal swipe must not also take the
-     browser back a page. */
+     browser back a page, and must not hand the tail of the gesture to the
+     page behind. */
   touch-action: pan-y pinch-zoom;
+  overscroll-behavior: none;
 }
 
 .overview__track {
@@ -16,16 +20,33 @@
   height: 100%;
   will-change: transform;
   /* The whole page moves on one transition. No animation loop anywhere. */
-  transition: transform 0.95s var(--ease);
+  transition: transform 0.72s cubic-bezier(0.22, 1, 0.3, 1);
 }
 /* While a finger is down the track follows it directly, so the transition
    has to stand aside or every frame fights the one before it. */
 .overview__track[data-dragging] { transition: none; }
 
+/**
+ * Màn mở đầu tự mang nền của nó và `isolation: isolate`.
+ *
+ * Ảnh nền in vào giấy bằng `mix-blend-mode: multiply`. Nếu không cô lập, phép
+ * nhân đó phải tính lại với **cả trang** ở mỗi khung hình khi cả dải trượt
+ * ngang. Cô lập lại thì nó chỉ nhân với nền của chính màn này, tô một lần rồi
+ * thôi — nhìn y hệt, nhưng không còn kéo theo cả trang.
+ */
+.scene[data-kind='opening'] {
+  isolation: isolate;
+  --sheet-wash: radial-gradient(150% 110% at 50% 30%, var(--paper-lit) 0%, var(--paper) 46%, var(--paper-deep) 100%);
+  background-color: var(--paper);
+}
+
 .scene {
   position: relative;
   flex: 0 0 100vw;
   height: 100%;
+  /* Mỗi màn tự lo phần tô của mình: trình duyệt không phải tính lại màn bên
+     cạnh khi màn này đổi. */
+  contain: layout paint style;
   padding: clamp(5rem, 12vh, 7.5rem) var(--edge) clamp(3.4rem, 8vh, 5rem);
   display: flex; align-items: center;
   /* Each chapter is one screen. A wide frame must not lean into the next one. */
@@ -40,6 +61,24 @@
 .scene[data-here='true'] .lift:nth-child(5) { transition-delay: 0.40s; }
 
 /* ── Opening and closing ────────────────────────────────────────────── */
+/**
+ * Chữ đứng trong một khoảng giấy lặng.
+ *
+ * Ảnh nền in vào giấy vẫn là một bức ảnh: chỗ sáng nhất của nó hút mắt trước
+ * cả cái tên. Một vệt giấy toả rất mềm phía sau khối chữ trả lại sự yên tĩnh
+ * đó mà không cần làm mờ hay tối cả bức ảnh.
+ */
+.scene__centre::before {
+  content: ''; position: absolute; z-index: -1;
+  inset: -14% -18%;
+  background: radial-gradient(58% 52% at 50% 48%,
+    color-mix(in srgb, var(--paper-lit) 72%, transparent) 0%,
+    color-mix(in srgb, var(--paper) 44%, transparent) 52%,
+    transparent 100%);
+  pointer-events: none;
+}
+.scene[data-kind='series'] .scene__centre::before { content: none; }
+
 .scene__centre {
   position: relative; z-index: 1;
   width: min(56ch, 100%);
@@ -73,7 +112,7 @@
 }
 .scene[data-kind='closing'] .scene__name { display: block; font-size: clamp(1.9rem, 5vw, 3.6rem); margin-top: 0; }
 .scene__tagline { margin-top: 1.3rem; color: var(--ink-dim); }
-.scene__ornament { margin-top: 1.8rem; }
+.scene__ornament { margin-top: 1.6rem; }
 .scene__line {
   margin: 1.8rem auto 0;
   max-width: 44ch;
@@ -97,12 +136,17 @@
 
 /* ── A series chapter ───────────────────────────────────────────────── */
 .series-scene {
+  position: relative;
+  /* Vành giấy của khung nằm trong chiều cao của màn hình, nên cụm ảnh phải
+     trừ nó ra — không thì trên màn hình thấp khung tràn xuống dưới đáy. */
+  --frame-pad: clamp(18px, 2.6vw, 40px);
   display: grid;
   grid-template-columns: minmax(0, 27fr) minmax(0, 73fr);
   gap: clamp(1.6rem, 3.6vw, 4rem);
   align-items: center;
   width: 100%;
 }
+.series-scene__text { position: relative; }
 .series-scene__num { color: var(--son); letter-spacing: 0.28em; }
 .series-scene__title {
   font-size: clamp(2.2rem, 5vw, 4.2rem);
@@ -114,62 +158,62 @@
 .series-scene__meta { margin-top: 1.4rem; color: var(--ash); }
 
 /**
- * Three frames, hung.
+ * Three frames, hung — and the mount drawn around them.
  *
- * A column-wrapping flex row does the whole arrangement with no wrapper
- * elements and no arithmetic: the lead frame fills the height, the next two
- * overflow into a second column beside it, and each frame's width comes from
- * its own aspect ratio. Nothing overlaps, nothing is stranded in a corner of
- * its own, and the two supporting frames are half the lead rather than a
- * quarter of it — which is what made the old hang read as an afterthought.
+ * The arrangement itself is worked out in PlateCluster.jsx and arrives here
+ * as exact pixels. Everything below is only how it looks: the mount, the two
+ * rules, the shadow under a print. Nothing here decides how big a photograph
+ * is, which is the whole point — the CSS version of that decision fitted in
+ * one browser and not in another.
  */
-.series-scene__plates {
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-  align-content: center;
-  gap: clamp(0.5rem, 0.9vw, 1rem);
-  height: min(78vh, 820px);
+.plate-area {
+  position: relative;
   width: 100%;
+  height: min(78vh, 820px);
+  display: flex; align-items: center; justify-content: center;
+  min-width: 0;
 }
+.plate-frame {
+  position: relative;
+  max-width: 100%;
+  padding: var(--frame-pad);
+  /* Vành giấy sáng hơn nền một chút, để cả cụm ảnh nổi khỏi trang. */
+  background:
+    linear-gradient(158deg,
+      color-mix(in srgb, var(--paper-lit) 80%, transparent) 0%,
+      color-mix(in srgb, var(--paper) 62%, transparent) 100%);
+  /* Bóng mờ là thứ đắt nhất khi tô: bán kính càng lớn, vùng phải tính càng
+     rộng. Ở đây một lớp vừa phải đủ nhấc cụm ảnh khỏi trang, mà không bắt
+     trình duyệt tô lại một vùng mờ 50px mỗi lần ô hình mới lọt vào màn. */
+  box-shadow: 0 10px 28px rgba(36, 26, 19, 0.10);
+}
+/* Cho tới khi đo xong thì chưa vẽ: một cái khung sập lại trong một khung hình
+   còn khó coi hơn là chờ thêm một khung hình. */
+.plate-frame[data-ready='false'] { visibility: hidden; }
+.plate-cluster { position: relative; }
+
 .plate {
   position: relative;
-  flex: 0 1 auto;
-  min-width: 0;
   padding: 0; border: 0;
-  aspect-ratio: var(--ratio);
   background-size: cover; background-position: center;
   cursor: pointer;
   overflow: hidden;
-  /* A print on paper has an edge and a shadow, not a glow. */
+  /* A print on paper has an edge and a shadow, not a glow — and two layers
+     of it, not three: see the note on the mount's shadow above. */
   box-shadow:
     0 0 0 1px rgba(36, 26, 19, 0.10),
-    0 10px 26px rgba(36, 26, 19, 0.16),
-    0 30px 60px rgba(36, 26, 19, 0.10);
+    0 8px 20px rgba(36, 26, 19, 0.16);
   transition: transform 0.7s var(--ease), box-shadow 0.7s var(--ease);
 }
 .plate:hover {
   transform: translateY(-5px);
   box-shadow:
     0 0 0 1px rgba(36, 26, 19, 0.16),
-    0 16px 34px rgba(36, 26, 19, 0.2),
-    0 40px 80px rgba(36, 26, 19, 0.13);
+    0 14px 28px rgba(36, 26, 19, 0.2);
 }
 .plate img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: opacity 0.9s var(--ease); }
 .plate[data-loaded='true'] img { opacity: 1; }
 .plate[data-instant='true'] img { transition: none; }
-
-/* The lead frame, and the two that give it context. */
-.series-scene[data-hang='portrait'] .plate[data-slot='0'] { height: 100%; }
-.series-scene[data-hang='portrait'] .plate[data-slot='1'],
-.series-scene[data-hang='portrait'] .plate[data-slot='2'] { height: 48.5%; }
-/* A lying frame cannot be full height without becoming half the room wide. */
-.series-scene[data-hang='landscape'] .plate[data-slot='0'] { height: 68%; }
-.series-scene[data-hang='landscape'] .plate[data-slot='1'],
-.series-scene[data-hang='landscape'] .plate[data-slot='2'] { height: 33%; }
-/* Fewer than three: the room is shared out again rather than left empty. */
-.series-scene__plates[data-count='1'] .plate[data-slot='0'] { height: 100%; }
-.series-scene__plates[data-count='2'] .plate[data-slot='1'] { height: 74%; }
 
 /* ── Where you are ──────────────────────────────────────────────────── */
 .overview__marks {
@@ -186,6 +230,7 @@
 @media (max-width: 860px) {
   .scene { padding-top: clamp(4.5rem, 11vh, 6rem); padding-bottom: 2.6rem; }
   .series-scene {
+    --frame-pad: clamp(9px, 3vw, 14px);
     grid-template-columns: 1fr;
     /* Text first, then everything left over goes to the photographs. The
        rows must be allowed to stretch: centring them lets the second row
@@ -209,22 +254,21 @@
    * frames take the whole width as a block instead — a gentle crop is worth
    * more than the extra margin.
    */
-  .series-scene__plates {
+  .plate-area { height: 100%; }
+  .plate-frame { width: 100%; height: 100%; }
+  .plate-cluster--grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1.8fr 1fr;
     gap: 6px;
-    height: auto;
-    min-height: 0;
-    align-self: stretch;
+    width: 100%; height: 100%;
   }
-  .plate { aspect-ratio: auto; width: 100%; height: 100%; }
+  .plate-cluster--grid .plate[data-slot='0'] { grid-column: 1 / -1; }
+  .plate-cluster--grid[data-count='1'] .plate[data-slot='0'] { grid-row: 1 / -1; }
+  .plate-cluster--grid[data-count='2'] .plate[data-slot='1'] { grid-column: 1 / -1; }
   /* A standing photograph cropped to a landscape cell should keep the head
      and shoulders, not the middle of the dress. */
   .plate img { object-position: 50% 32%; }
-  .series-scene__plates .plate[data-slot='0'] { grid-column: 1 / -1; height: 100%; }
-  .series-scene__plates[data-count='1'] .plate[data-slot='0'] { grid-row: 1 / -1; }
-  .series-scene__plates[data-count='2'] .plate[data-slot='1'] { grid-column: 1 / -1; height: 100%; }
   .plate:hover { transform: none; }
 
   .closing__channels li { flex-direction: column; gap: 0.2rem; align-items: center; }
@@ -264,7 +308,8 @@
 .intro {
   position: fixed; inset: 0; z-index: 55;
   display: grid; place-items: center;
-  background: radial-gradient(120% 90% at 50% 40%, var(--paper-lit) 0%, var(--paper) 55%, var(--paper-deep) 100%);
+  --sheet-wash: radial-gradient(150% 110% at 50% 36%, var(--paper-lit) 0%, var(--paper) 48%, var(--paper-deep) 100%);
+  background-color: var(--paper);
   text-align: center; padding: 0 var(--edge);
   transition: opacity 1.5s var(--ease), visibility 1.5s;
 }
@@ -297,7 +342,7 @@
   position: fixed; inset: 0; z-index: 58;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 1.2rem; text-align: center; padding: 0 var(--edge);
-  background: var(--paper);
+  background-color: var(--paper);
 }
 /* While it is up it also swallows clicks — a button you cannot see is not a
    button you should be able to press. */

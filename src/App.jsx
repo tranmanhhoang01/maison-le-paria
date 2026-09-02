@@ -9,7 +9,6 @@ import { startSound, soundAllowed } from './audio/sound.js'
 import { Universe } from './components/universe/Universe.jsx'
 import { FocusLabel } from './components/universe/FocusLabel.jsx'
 import { Nav } from './components/chrome/Nav.jsx'
-import { Dust } from './components/chrome/Dust.jsx'
 import { Intro } from './components/chrome/Intro.jsx'
 import { Curtain } from './components/chrome/Curtain.jsx'
 import { AboutPanel } from './components/screens/AboutPanel.jsx'
@@ -92,20 +91,20 @@ export default function App() {
 
   return (
     <>
-      {/* Motes in the light. Not on a phone: a canvas repainting every frame
-          is the last thing a small device needs while it is scrolling. */}
-      {!compact && <Dust compact={compact} />}
+      {/* Ở đây từng có một lớp bụi vẽ trên canvas mỗi khung hình. Nó tốn
+          đúng thứ mà màn 120Hz không có nhiều: thời gian trong mỗi khung
+          hình. Vân giấy đã đủ không khí — xem chrome/Dust.jsx nếu muốn
+          mang lại. */}
       <Universe sets={sets} compact={compact} active={!Panel && !viewer} />
       <FocusLabel />
 
       {Panel && (
         <div className="panel-layer">
-          <div className="panel-layer__scrim" />
+          <div className="panel-layer__scrim sheet" />
           <Panel sets={openSets} />
         </div>
       )}
 
-      <div className="fibre" aria-hidden="true" />
       <Nav />
       <Viewer />
       <Curtain />

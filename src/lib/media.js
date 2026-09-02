@@ -23,3 +23,21 @@ export const mediaUrl = (relativePath) => `${BASE}/${relativePath}`
  * a no-op; a provider like Cloudinary would return `.../w_${width}/${path}`.
  */
 export const mediaUrlAt = (relativePath, _width) => mediaUrl(relativePath)
+
+/**
+ * Which of the three renders to ask for, when the exact drawn size is known.
+ *
+ * `srcset` is the right tool when the layout is fluid and the browser has to
+ * guess. The overview is not fluid: PlateCluster works out every photograph's
+ * box in pixels, so it can name the file outright — and a file the code asked
+ * for by name is a file that can be warmed in advance, which `srcset` makes
+ * awkward. The 5% slack keeps a photograph from jumping to the next size up
+ * over a rounding error.
+ */
+export function sourceFor(image, cssWidth, dpr = 1) {
+  const need = cssWidth * Math.min(dpr || 1, 2)
+  const at = (longest) => (image.ratio >= 1 ? longest : longest * image.ratio)
+  if (need <= at(1000) * 1.05) return image.tile
+  if (need <= at(1600) * 1.05) return image.wide
+  return image.full
+}

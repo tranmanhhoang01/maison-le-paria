@@ -9,11 +9,14 @@
    warm wall for the same reason: paper flatters skin, silk and lacquer, and
    it never competes with the photograph the way a black field does. */
 :root {
-  /* Ground — giấy dó */
-  --paper:       #f0e7d7;
-  --paper-lit:   #f8f2e7;   /* the lit part of the sheet */
-  --paper-deep:  #e2d6c0;   /* a fold in it */
-  --paper-edge:  #d6c8ae;
+  /* Ground — giấy dó, ngả màu theo tuổi.
+     Bản đầu quá sáng: một tờ giấy trắng phát sáng ngay giữa màn hình thì mắt
+     đi tới nó trước khi đi tới bức ảnh. Tường phòng tranh không bao giờ sáng
+     hơn tác phẩm treo trên đó. */
+  --paper:       #e5d9c0;
+  --paper-lit:   #ece1cb;   /* the lit part of the sheet — barely lighter */
+  --paper-deep:  #d9cbaf;   /* a fold in it */
+  --paper-edge:  #c8b795;
 
   /* Ink — mực nho */
   --ink:         #241a13;
@@ -32,9 +35,10 @@
   --lacquer:     #1a1410;
   --lacquer-lit: #241c16;
 
-  --line:        rgba(36, 26, 19, 0.18);
-  --line-soft:   rgba(36, 26, 19, 0.09);
-  --line-gold:   rgba(169, 132, 66, 0.42);
+  --line:        rgba(36, 26, 19, 0.2);
+  --line-soft:   rgba(36, 26, 19, 0.1);
+  --line-gold:   rgba(169, 132, 66, 0.5);
+  --ink-thread:  rgba(36, 26, 19, 0.42);   /* hoa văn vẽ bằng nét, không bằng mảng */
 
   /* Type */
   --serif: 'Playfair Display', 'Times New Roman', serif;
@@ -67,9 +71,24 @@
      otherwise be a plain line. */
   --meander: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='12' viewBox='0 0 48 12'%3E%3Cpath d='M0 9h6V3h12v6h6V3h12v6h6V3h6' fill='none' stroke='%23a98442' stroke-width='1' stroke-opacity='.55'/%3E%3C/svg%3E");
 
-  /* The fibre in the sheet. Very low, and multiplied so it darkens rather
-     than fogs. */
-  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23f)'/%3E%3C/svg%3E");
+  /* Vân mây — the lobed cloud with a trailing tail, carved along a beam or
+     painted on a lacquer panel. The drawn version lives in Ornament.jsx; this
+     is the same shape flattened into an image, for the watermark that sits
+     under a page. */
+  --cloud-mark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 250 100'%3E%3Cg fill='%23241a13'%3E%3Ccircle cx='46' cy='60' r='20'/%3E%3Ccircle cx='76' cy='46' r='24'/%3E%3Ccircle cx='110' cy='54' r='18'/%3E%3Ccircle cx='134' cy='62' r='12'/%3E%3Cpath d='M26 74c-12 0-20-9-18-19 2-8 11-12 18-8'/%3E%3Cpath d='M132 72c30 4 62-8 92-38 6-6 15-2 12 6-12 28-56 52-104 44Z'/%3E%3Cpath d='M226 30c7-7 18-4 17 5-1 8-10 11-15 6'/%3E%3C/g%3E%3Cg fill='none' stroke='%23e5d9c0' stroke-width='3.4' stroke-linecap='round'%3E%3Cpath d='M34 66c9-3 14-11 14-21'/%3E%3Cpath d='M62 58c11-3 17-12 17-24'/%3E%3Cpath d='M98 62c10-2 16-9 17-19'/%3E%3Cpath d='M136 76c34 2 66-12 92-40'/%3E%3Cpath d='M232 36c4-3 4-8 0-9'/%3E%3Cpath d='M20 66c-5-2-6-8-2-11'/%3E%3C/g%3E%3C/svg%3E");
+
+  /**
+   * The fibre in the sheet.
+   *
+   * The faintness is baked into the image (`opacity` inside the SVG) rather
+   * than applied to a layer over the page. It used to be a fixed, full-screen
+   * element with `mix-blend-mode: multiply`, which means the browser re-blends
+   * the whole viewport on every frame that anything moves under it — the
+   * single most expensive thing on the page, and at 120Hz there are only 8ms
+   * to spend. As a background layer with `background-blend-mode` it is
+   * blended once, when the surface is rasterised.
+   */
+  --fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23f)' opacity='0.05'/%3E%3C/svg%3E");
 }
 
 @media (prefers-reduced-motion: reduce) {

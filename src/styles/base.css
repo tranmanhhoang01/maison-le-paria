@@ -51,6 +51,79 @@ img { display: block; max-width: 100%; }
 }
 [data-in='true'] .rule { transform: scaleX(1); }
 
+/* Vân mây — a pair of clouds meeting, standing in for a rule. Drawn in
+   Ornament.jsx; see --cloud-mark in tokens.css for the flattened version that
+   sits under a page as a watermark. */
+.clouds { display: flex; align-items: center; justify-content: center; gap: clamp(0.6rem, 2vw, 1.4rem); }
+.cloud {
+  display: block; width: clamp(84px, 12vw, 128px);
+  aspect-ratio: 250 / 100;
+  background: var(--cloud-mark) no-repeat center / contain;
+}
+.cloud[data-facing='left'] { transform: scaleX(-1); }
+.clouds .cloud { opacity: 0.42; }
+.clouds--short .cloud { width: clamp(70px, 9vw, 104px); }
+
+/* Con nghê — a small stone guardian. See Ornament.jsx. */
+.nghe { display: block; width: 3rem; height: 3.6rem; }
+.nghe svg { display: block; width: 100%; height: 100%; }
+.nghe[data-facing='left'] svg { transform: scaleX(-1); }
+.nghe__ink { fill: var(--ink-thread); }
+
+/* Đôi nghê chầu con triện — the pair at a gate, with the seal between them.
+   The same group opens the site and closes every page of it. */
+.crest { display: flex; align-items: flex-end; justify-content: center; gap: clamp(1.4rem, 3.4vw, 2.8rem); }
+.crest .seal { margin-bottom: 0.5rem; }
+.crest .nghe { width: 4.2rem; height: 5rem; }
+
+/* Vân chìm — clouds sunk into the paper of a page.
+   Two ways of placing them. Scattered, by CloudField, which never repeats a
+   sky; and deliberately, behind a set's name and its story, which is where a
+   printer would have put one. Nothing above 12%: this is the paper, not the
+   picture. The cover carries none at all — the photograph behind the name is
+   already the ornament there. */
+.cloud-field {
+  position: absolute; inset: 0; z-index: -1;
+  overflow: hidden; pointer-events: none;
+}
+.cloud-field--page { position: fixed; }
+.cloud-field--wide { inset: -20% -10%; }
+.cloud-field__one { position: absolute; display: block; }
+.cloud-field__one .cloud { width: 100%; }
+
+.cloud--sunk {
+  position: absolute; z-index: -1;
+  left: -8%; top: -14%;
+  width: min(360px, 118%);
+  opacity: 0.055;
+  pointer-events: none;
+}
+
+/* ── Khung — the frame around a chapter's photographs ─────────────────
+   Two rules with a hair's gap between them, the way a carved panel is
+   bordered, and a hồi văn key cut into each corner. */
+.ornframe { position: absolute; inset: 0; pointer-events: none; }
+.ornframe::before {
+  content: ''; position: absolute; inset: 0;
+  border: 1px solid var(--line-gold);
+}
+.ornframe::after {
+  content: ''; position: absolute; inset: 6px;
+  border: 1px solid var(--line-soft);
+}
+.ornframe__corner {
+  position: absolute; width: clamp(18px, 2.2vw, 34px); aspect-ratio: 1;
+}
+.ornframe__corner svg { display: block; width: 100%; height: 100%; }
+.ornframe__corner svg path {
+  fill: none; stroke: var(--gold); stroke-width: 1.3; stroke-opacity: 0.85;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.ornframe__corner[data-at='tl'] { left: -1px; top: -1px; }
+.ornframe__corner[data-at='tr'] { right: -1px; top: -1px; }
+.ornframe__corner[data-at='bl'] { left: -1px; bottom: -1px; }
+.ornframe__corner[data-at='br'] { right: -1px; bottom: -1px; }
+
 /* Hồi văn: the same job as .rule, but where the page can afford an ornament
    rather than a line. */
 .meander {
@@ -61,22 +134,25 @@ img { display: block; max-width: 100%; }
 }
 .meander--short { width: 96px; }
 
-/* Triện — the seal a Vietnamese painter or calligrapher presses into the
-   corner of a finished sheet. It is the only saturated colour on the page,
-   and it is never bigger than a thumbnail. */
+/* Triện — the seal, pressed into the corner of a finished sheet the way a
+   court document or a painting carries one. It is the only saturated colour
+   on the page, and it is never bigger than a thumbnail. Drawn in Seal.jsx. */
 .seal {
-  display: inline-grid; place-items: center;
-  width: 2.6rem; height: 2.6rem;
-  background: var(--son);
-  color: var(--paper-lit);
-  font-family: var(--serif); font-weight: 500;
-  font-size: 1.15rem; line-height: 1;
-  border-radius: 2px;
+  display: inline-block;
+  width: 2.9rem; height: 2.9rem;
   transform: rotate(-4deg);
-  box-shadow: 0 1px 0 rgba(36, 26, 19, 0.14);
+  filter: drop-shadow(0 1px 0 rgba(36, 26, 19, 0.12));
   user-select: none;
 }
-.seal span { display: block; transform: translateY(0.04em); }
+.seal svg { display: block; width: 100%; height: 100%; }
+.seal__field { fill: var(--son); }
+/* The paper showing through where the seal was cut away. */
+.seal__cut {
+  fill: none;
+  stroke: var(--paper-lit);
+  stroke-linecap: butt;
+  stroke-linejoin: miter;
+}
 
 /* Entrance primitive: children lift once their section is marked in. */
 .lift { opacity: 0; transform: translateY(1.1em); transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease); }
@@ -86,22 +162,14 @@ img { display: block; max-width: 100%; }
 [data-in='true'] .lift:nth-child(4) { transition-delay: 0.24s; }
 [data-in='true'] .lift:nth-child(5) { transition-delay: 0.32s; }
 
-/* The fibre of the sheet, over everything and under nothing that matters.
-   Multiply, so it reads as texture in the paper rather than fog on the
-   screen — and it is switched off over photographs, which have their own. */
-.fibre {
-  /* Above the panels, below the navigation and the viewer: the sheet is the
-     same sheet on every page, but the room the photographs are looked at in
-     has no paper in it. */
-  position: fixed; inset: 0; z-index: 34;
-  pointer-events: none;
-  background-image: var(--fibre);
-  opacity: 0.04;
-  mix-blend-mode: multiply;
+/* Mặt giấy — dùng cho mọi nền của site. Vân giấy là một lớp nền, không phải
+   một lớp phủ: xem chú thích ở --fibre trong tokens.css. */
+.sheet {
+  background-image: var(--fibre), var(--sheet-wash, none);
+  background-blend-mode: multiply, normal;
+  background-repeat: repeat, no-repeat;
+  background-size: 260px 260px, cover;
 }
-/* A full-screen blended layer is composited on every frame. On a phone that
-   is a tax on the one thing that matters more than texture: the scroll. */
-@media (max-width: 860px) { .fibre { display: none; } }
 
 /* The universe is a fixed layer and never adds height, so the page only
    scrolls when a panel puts something in normal flow. The one thing that must

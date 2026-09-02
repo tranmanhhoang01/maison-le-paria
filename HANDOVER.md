@@ -62,10 +62,13 @@ maison-le-paria/
 │   │   ├── transition.js          màn chờ khi chuyển tab
 │   │   └── math.js
 │   ├── components/
-│   │   ├── universe/  Universe.jsx (Tổng quan) · Plate.jsx · Photo.jsx · FocusLabel.jsx
+│   │   ├── universe/  Universe.jsx (Tổng quan) · PlateCluster.jsx (đo & xếp ảnh)
+│   │   │               Plate.jsx · Photo.jsx · FocusLabel.jsx
 │   │   ├── screens/   LibraryPanel · AboutPanel · ContactPanel
 │   │   ├── viewer/    Viewer.jsx (xem ảnh full màn hình)
-│   │   └── chrome/    Nav · Intro · Curtain · Dust · SoundToggle
+│   │   └── chrome/    Nav · Intro · Curtain · SoundToggle
+│   │                   Seal.jsx (triện) · Ornament.jsx (vân mây, nghê, khung)
+│   │                   Dust.jsx — KHÔNG còn dùng, xem mục 6
 │   ├── hooks/useImageReady.js     ⚠️ đọc kỹ trước khi sửa — xem mục 6
 │   ├── store/experience.js        useSyncExternalStore
 │   ├── audio/sound.js             nhạc nền
@@ -118,14 +121,14 @@ nó không nói gì về nơi những tấm ảnh này được chụp. Bản m�
 
 | | |
 |---|---|
-| Nền | Ngà ấm `#f0e7d7`, có vân giấy rất nhẹ (`--fibre`, nhân multiply 4%) |
+| Nền | Ngà ngả tuổi `#e5d9c0`, có vân giấy rất nhẹ (`--fibre`, nhân multiply 4%). Bản đầu sáng hơn (`#f0e7d7`) và **hút mắt trước cả bức ảnh** — tường phòng tranh không bao giờ sáng hơn tác phẩm |
 | Chữ | Mực nho `#241a13` |
 | Điểm nhấn | **Đỏ son** `#9b2c1c` — chỉ dùng cho con triện, số chương, gạch chân đang chọn |
 | Chỉ vàng | `#a98442` — gạch dưới tiêu đề, hoa văn hồi văn |
 | Trang xem ảnh | Vẫn tối, nhưng là **sơn mài ấm** `#1a1410`, không phải đen |
 | Chữ tiêu đề | **Playfair Display** (đủ dấu tiếng Việt, đã kiểm bằng máy) |
 | Chữ nội dung | Be Vietnam Pro 300 |
-| Hoa văn | **Hồi văn** (`--meander`, SVG lặp) và **con triện** đỏ chữ M (`.seal`) |
+| Hoa văn | **Hồi văn** (`--meander`) dưới tiêu đề bộ ảnh · **vân mây** (`Ornament.jsx`) thay cho đường kẻ ở màn mở đầu, màn kết, Giới thiệu, Liên hệ và giữa các bộ trong Thư viện · **vân chìm** (`--cloud-mark`, `.watermark`, 7%) ở góc mọi trang · **con triện** vua (`Seal.jsx`) có đôi **nghê** chầu hai bên (`.crest`) — đóng lại mọi trang |
 
 Ảnh nền trang mở đầu **nhân (multiply) vào giấy** chứ không phủ mờ lên trên: trên nền
 sáng, hạ opacity chỉ làm ảnh bợt màu, còn multiply để giấy giữ vùng sáng và ảnh giữ
@@ -141,7 +144,37 @@ vùng tối — đọc ra như ảnh in trên giấy.
   Chưa chọn thì web tự lấy (ảnh bìa + 2 ảnh rải đều). Bố cục: ảnh lớn cao hết khung,
   hai ảnh phụ **bằng nửa** ảnh lớn xếp cạnh — không chồng nhau, không rời rạc. Trên
   điện thoại ba ảnh chiếm trọn bề ngang.
-- **Ảnh nền trang mở đầu** — chọn trong Studio, kèm thanh "độ chìm".
+- **Ảnh nền trang mở đầu** — chọn trong Studio, kèm thanh "độ chìm". Dùng bản `full`,
+  vì nó phủ cả màn hình và là thứ đầu tiên người ta nhìn thấy.
+- **Bấm tên nhà (hoặc "Tổng quan") luôn về màn mở đầu** — Tổng quan không bao giờ bị
+  gỡ khỏi cây React nên nó vẫn đứng ở chương bạn rời đi; nút đó phát tín hiệu `atDoor`
+  trong `store/experience.js` để kéo về màn 1.
+- **Hoa văn kiến trúc cổ** (`components/chrome/Ornament.jsx`):
+  - **Vân mây** — mây ba múi có cuộn xoáy ở đầu và đuôi thon dần kết bằng móc, dựng
+    bằng cách chồng mấy hình tròn rồi khoét nét trong bằng mask. Bản đầu vẽ bằng cung
+    zíc-zắc trông như sóng đồ hoạ, không phải mây chạm.
+  - **Con nghê** — bóng đặc, chi tiết **khoét lõm bằng mask** chứ không phải nét vẽ
+    chồng lên: sau nó là một bức ảnh, một nét tô màu giấy sẽ thành vết xước ngang bức
+    ảnh đó. Vẽ nét mảnh đã thử hai lần và ra hình que; bóng đặc ở cỡ 50–70px mới ra
+    dáng tượng đá.
+  - **Vân chìm** — vẫn con mây đó, đặt hai kiểu: **có chủ đích** ngay sau tên bộ ảnh và
+    câu chuyện của nó (`.cloud--sunk`, 12%), và **rải ngẫu nhiên** quanh trang bằng
+    `CloudField` — vị trí, cỡ, độ nghiêng lấy từ một bộ sinh số có hạt giống, nên mỗi
+    chương một bầu trời khác nhau nhưng lần tải nào cũng y hệt lần trước.
+    **Trang bìa không có mây**: ở đó bức ảnh sau cái tên đã là trang trí rồi.
+  - **Khung ảnh** (`OrnFrame` + `.plate-frame`) — hai đường viền có khe hở mảnh ở giữa,
+    kiểu viền một tấm ván chạm, cộng một ô hồi văn khoét ở mỗi góc, và **một vành giấy
+    sáng hơn nền** bao quanh cả cụm ảnh (như tấm bo trong nghề đóng khung). Cụm ảnh phải
+    `width: fit-content` thì khung mới ôm sát ảnh thay vì ôm cả cột. Vành giấy hẹp
+    (~18px) chỉ trông như một đường kẻ dính vào mép ảnh — phải đủ rộng thì mới ra khung.
+    Bề rộng vành nằm ở `--frame-pad` và **cụm ảnh phải trừ nó ra khỏi chiều cao**, không
+    thì trên màn hình thấp (720p) khung tràn xuống dưới đáy.
+  - Khối chữ ở màn mở đầu có thêm một vệt giấy toả rất mềm phía sau
+    (`.scene__centre::before`) để chữ có chỗ đứng yên mà không phải làm mờ bức ảnh.
+- **Con triện** (`components/chrome/Seal.jsx`) — hình con dấu vua: vuông, son, viền kép,
+  bốn ô hoa văn hồi văn xoay bốn hướng. **Không phải chữ**: bản đầu vẽ đúng bốn chữ Hán
+  (王 日 井 山) ghép lại chẳng nghĩa gì, còn chữ trên ấn triện thật là cổ vật quốc gia,
+  không phải logo của một hiệu ảnh.
 - **Thư viện hai tầng** — tầng dưới là mục lục **zíc-zắc**: mỗi bộ một ảnh đại diện,
   câu chuyện nằm bên cạnh, trái–phải–trái. Bấm vào mới mở cả bộ ở `/thu-vien/<bộ>`
   (địa chỉ thật, nút Back của trình duyệt chạy đúng). Ảnh ngang và ảnh dọc đều giữ
@@ -166,11 +199,24 @@ Quy tắc: **một thư mục = một bộ ảnh, không đệ quy xuống thư 
 ### Studio (app macOS)
 
 Thêm / thay / xóa ảnh · **chọn ảnh đại diện của bộ** · **chọn ảnh nền trang mở đầu +
-độ chìm** · đổi nhạc · xem trước · **một nút deploy lên GitHub**.
+độ chìm** · **sắp xếp thứ tự các bộ** (mũi tên ▲▼ ở cột trái) · đổi nhạc ·
+**mở trang thật** · **một nút deploy lên GitHub**.
 Xác thực bằng **SSH** (`~/.ssh/id_ed25519`, không mật khẩu).
 
-> App `.app` đã build **không cần build lại**: nó chỉ mở `studio/server.mjs` và
-> `studio/app.html` từ thư mục dự án, nên sửa giao diện Studio là có hiệu lực ngay.
+Giao diện Studio mặc **cùng bộ đồ với website**: giấy dó, mực nho, đỏ son, chỉ vàng.
+Biểu tượng app cũng là con triện đỏ trên nền giấy.
+
+**Ba lớp phòng thủ để cập nhật về sau không vỡ:**
+
+| Chuyện có thể xảy ra | Studio xử lý thế nào |
+|---|---|
+| Một tệp trong `content/` bị xoá hoặc hỏng | `readJson()` dựng lại bằng giá trị mặc định rồi ghi xuống đĩa. Site **import thẳng** mấy tệp này lúc dựng, thiếu một tệp là hỏng cả bản dựng — nên Studio phải chữa được, không được chết theo |
+| Bỏ một ảnh đang được chọn làm ảnh đại diện / ảnh nền | `forgetImages()` gỡ id đó khỏi `covers` và `home.backdrop` ngay lúc xoá. Site vốn tự lọc id chết nên không vỡ, nhưng người dùng sẽ thấy bộ ảnh tự đổi ảnh đại diện mà không hiểu vì sao |
+| Gửi lên id ảnh hoặc bộ không có thật | `/api/covers`, `/api/home`, `/api/order` đều lọc theo danh sách đang thật sự có; bộ nào không được nhắc tới thì xuống cuối chứ không biến mất |
+
+> App `.app` đã build **không cần build lại khi sửa `studio/app.html` hay `server.mjs`**:
+> nó đọc thẳng từ thư mục dự án. Chỉ khi sửa `Studio.swift` hoặc biểu tượng mới cần
+> `npm run app`.
 
 ### Xuất bản
 
@@ -210,6 +256,12 @@ Muốn biết trang có chạy thật không, hãy mở trên trình duyệt th�
 |---|---|
 | "Ảnh chất lượng kém" trên GitHub Pages | Không phải ảnh xấu — ảnh 404, cái nhìn thấy là LQIP. `media.js` ghi cứng `/images` thay vì `import.meta.env.BASE_URL` |
 | Trang treo cứng khi mở ảnh | Vòng lặp render vô hạn: `ref` inline tạo mảng mới mỗi lần render |
+| Ảnh đại diện ở Tổng quan bị vỡ nhoè | Dùng bản `tile`. `tile` là **cạnh dài** 1000px, nên ảnh dọc chỉ rộng 667px — trong khi ảnh lớn vẽ ~450px CSS × 2 (màn retina) = 900px thật. Đã sửa: mỗi ảnh mang sẵn `srcSet` với **bề rộng thật** (`widthAt` trong `projects.js`), trình duyệt tự chọn. Ghi sai con số `w` còn tệ hơn không ghi |
+| Khung không bao hết ảnh, **tuỳ trình duyệt** | Cụm ảnh từng là flex quấn theo cột, khung dựa vào `width: fit-content` của nó. Bề rộng nội tại của một flex quấn cột **mỗi engine tính một kiểu**, lại thêm `flex-shrink` không tác dụng theo trục ngang — nên khung vừa khít trong khung xem trước mà lại nhỏ hơn cụm ảnh trên trình duyệt thật. Đã bỏ hẳn: nay `PlateCluster.jsx` tự tính bằng số (xem mục 7.10) |
+| Ảnh phụ trên điện thoại chỉ cao bằng nửa ô lưới | Luật treo của máy tính (`.series-scene[data-hang] .plate[data-slot='1'] { height: 48.5% }`) có **độ ưu tiên cao hơn** `.plate { height: 100% }` trong khối điện thoại, nên nó vẫn thắng. Muốn ghi đè phải viết lại đủ độ ưu tiên |
+| **Vuốt tới bộ mới thì đứng im ~2 giây rồi mới bật sang** | Không phải chuyện vẽ, mà là logic. Trackpad macOS **gửi tiếp sự kiện quán tính 1–2 giây sau khi nhấc tay**. Bản cũ chờ 110ms im lặng rồi mới quyết định — mà suốt lúc quán tính chạy thì không bao giờ có 110ms im lặng, nên khung hình đứng ở mép chặn cho tới khi hết đà. Nay **cú đẩy đầu tiên lật trang ngay** (24px, đo được 1ms từ lúc vuốt tới lúc bắt đầu trượt), phần còn lại của cử chỉ và toàn bộ quán tính bị nuốt |
+| Vẫn khựng khi vuốt trackpad, dù đã bỏ các lớp trộn màu | Năm thứ nhỏ cộng lại, tất cả đều rơi đúng vào khung hình bắt đầu trượt: **(1)** đổi chương làm React vẽ lại **cả năm màn** — sửa bằng `SceneView` bọc `memo`; **(2)** `transform` ghi bằng `calc(-Nvw + Xpx)`, trình duyệt phải phân giải calc 120 lần/giây — nay ghi thẳng bằng pixel; **(3)** `setAttribute('data-dragging')` gọi ở **mỗi** sự kiện con lăn, mỗi lần là một lần vô hiệu hoá style cả cây con — nay chỉ gọi một lần mỗi cử chỉ; **(4)** ảnh chương kế bên giải mã **giữa chừng** cử chỉ — nay `loading="eager"` trên máy tính và chọn sẵn đúng tệp bằng `sourceFor()` thay cho `srcset`; **(5)** bóng đổ mờ 60–80px phải tô lại mỗi khi ô hình mới lọt vào màn — nay tối đa 28px |
+| Chuyển động giật ở màn 120Hz | Ba thứ, tất cả đều là **việc phải làm lại mỗi khung hình**: một lớp `mix-blend-mode: multiply` phủ kín màn hình (vân giấy), một lớp `multiply` nữa cho ảnh nền màn mở đầu, và một canvas bụi vẽ lại 120 lần/giây. Ở 120Hz mỗi khung hình chỉ có 8ms. Đã sửa: vân giấy thành **lớp nền** (`background-blend-mode`, trộn một lần lúc tô), ảnh nền được `isolation: isolate` để phép nhân chỉ tính trong màn đó, và bụi thì bỏ hẳn |
 | Ảnh đã cache không bao giờ hiện | `onLoad` không bắn cho ảnh trong cache → phải kiểm `img.complete`, đó là lý do có `useImageReady.js` |
 | Điện thoại hoá trên cửa sổ 1280px | `pointer: coarse` và `innerWidth === 0` lúc chưa đo được |
 | Menu nhảy ra ngoài site | Router đọc `location.pathname` thô, quên base path |
@@ -259,11 +311,39 @@ Mỗi bộ chỉ khoe **ba tấm**: ảnh bìa giữ mắt, cộng hai tấm r�
 trên `.overview__track`. Bố cục ba tấm do CSS lo, không phải script tính. Điều này xoá
 luôn cả một họ lỗi: lệch pha, số đo sai, hiệu ứng bắt gặp lúc còn dở dang.
 
-Ngoại lệ duy nhất: **trong lúc ngón tay đang kéo**, `Universe.jsx` ghi thẳng
-`transform` lên phần tử track (và bật `data-dragging` để tắt transition). Đó vẫn không
-phải vòng lặp — chỉ là một phép ghi trong mỗi sự kiện `pointermove`. Cũng vì thế
+Ngoại lệ duy nhất: **trong lúc cử chỉ đang diễn ra** — ngón tay kéo, hoặc con lăn đang
+chạy — `Universe.jsx` ghi thẳng `transform` lên phần tử track (và bật `data-dragging`
+để tắt transition). Đó vẫn không phải vòng lặp: mỗi khung hình đúng **một** phép ghi,
+gom lại bằng `requestAnimationFrame` (trackpad và màn 120Hz gửi sự kiện dày hơn số
+khung hình vẽ được, mỗi phép ghi thừa là một lần tính lại style vứt đi). Cũng vì thế
 `transform` **không** được truyền qua prop `style` của React: hai chủ sở hữu cho cùng
 một thuộc tính là cách nhanh nhất để trang bắt đầu giật.
+
+**Mỗi màn là một `memo` riêng.** Đổi chương chỉ đổi một con số, nhưng nếu không bọc
+`memo` thì React vẽ lại cả năm màn — mọi tấm ảnh, mọi đám mây, mọi cụm đã đo — ngay
+trong khung hình bắt đầu trượt. Vài mili-giây rơi đúng chỗ không còn mili-giây nào để
+tiêu, và người dùng cảm thấy nó như một cái vấp ở đầu mỗi lần lật trang.
+
+**Con lăn không bám tay; nó lật trang ngay.** Đây là chỗ tôi sai hai lần liền, ghi lại
+cho người sau:
+
+1. Bản đầu tích delta tới ngưỡng rồi nhảy một màn, khoá 700ms → "đẩy, không thấy gì,
+   rồi giật một cái".
+2. Bản sau cho khung hình **bám tay** và đợi 110ms im lặng mới quyết định → tệ hơn:
+   trackpad macOS gửi tiếp quán tính 1–2 giây sau khi nhấc tay, nên không bao giờ có
+   110ms im lặng, và trang **đứng chết ở mép chặn** suốt chừng ấy thời gian.
+
+Bài học: **con lăn không phải ngón tay đặt lên chính vật đó** — dưới tay không có gì để
+bám theo. Nên nó không bám. Cú đẩy đầu tiên của một cử chỉ (24px) lật trang **ngay**
+(đo được 1ms), transition lo phần chuyển động, và mọi sự kiện sau đó — phần còn lại của
+cú đẩy lẫn toàn bộ quán tính — bị nuốt cho tới khi con lăn im được 90ms.
+
+Ngón tay kéo (chuột, cảm ứng) thì **vẫn bám tay**: ở đó có vật thật dưới ngón tay, và
+buông giữa chừng phải trả về chỗ cũ được.
+
+Hai mốc thời gian (`quiet`, `settled`) giữ trạng thái nuốt đà, **không dùng `setTimeout`**:
+effect này chạy lại mỗi lần đổi chương, cleanup của nó xoá timer, và một bản vá bằng
+timer đã làm con lăn **chết hẳn** sau lần lật đầu tiên.
 
 **3. Xử lý ảnh lúc build, không phải lúc chạy.** Người xem chỉ nhận WebP đã tối ưu.
 Không có thư viện xử lý ảnh nào lọt vào bundle.
@@ -290,7 +370,22 @@ cao hết khung sẽ rộng bằng nửa căn phòng.
 đâu đó dưới một cuộn rất dài và không ai gặp nó. Mục lục zíc-zắc cho thấy cả nhà trong
 một trang, rồi mới chọn.
 
-**9. `content/*.json` là dữ liệu của người dùng.** Tôi từng ghi đè cả tệp
+**10. Chỗ duy nhất trong site có đo đạc: cụm ảnh đại diện.** `PlateCluster.jsx` nhận
+bề ngang và bề cao còn trống (ResizeObserver), rồi tính ra **toạ độ và kích thước bằng
+pixel** cho từng ảnh, dựng cả cụm thành một **hình chữ nhật khít**: hai ảnh phụ dùng
+chung một bề rộng, chiều cao suy từ tỉ lệ của chính chúng, cộng lại đúng bằng chiều cao
+ảnh lớn. Khung bao ngoài vì thế không thể sai.
+
+Bản đầu làm bằng CSS thuần — flex quấn theo cột, mỗi ảnh lấy bề rộng từ chiều cao và tỉ
+lệ của nó. Đẹp về nguyên tắc nhưng **không đáng tin**: bề rộng nội tại của flex quấn cột
+mỗi engine tính một khác, và `flex-shrink` không có tác dụng theo trục ngang. Kết quả là
+khung vừa khít ở máy này, nhỏ hơn cụm ảnh ở máy khác. Một cái khung không bao nổi bức
+ảnh còn tệ hơn không có khung.
+
+Đây **không** phải vòng lặp animation: nó chạy khi bố cục đổi (đổi cỡ cửa sổ), không
+chạy mỗi khung hình. Quy tắc "không có vòng lặp" ở mục 2 vẫn nguyên vẹn.
+
+**11. `content/*.json` là dữ liệu của người dùng.** Tôi từng ghi đè cả tệp
 `sound.json` và xoá mất lựa chọn nhạc của chủ nhân. **Luôn sửa từng khóa.**
 
 ---

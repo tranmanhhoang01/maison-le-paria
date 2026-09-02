@@ -383,6 +383,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate, WKUIDelegate, WKNaviga
         case "revealOriginals":
             NSWorkspace.shared.selectFile(nil, inFileViewerRootedAtPath: projectRoot)
             replyHandler(nil, nil)
+        /// Mở một địa chỉ ngoài bằng trình duyệt mặc định. Trong WKWebView,
+        /// target="_blank" không làm gì cả, nên nút "Xem trang thật" phải nhờ
+        /// tới đây.
+        case "openUrl":
+            if let raw = dict?["url"] as? String,
+               let url = URL(string: raw),
+               url.scheme == "https" || url.scheme == "http" {
+                NSWorkspace.shared.open(url)
+            }
+            replyHandler(nil, nil)
         default:
             replyHandler(nil, nil)
         }

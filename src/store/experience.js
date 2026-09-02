@@ -10,6 +10,13 @@ const initial = {
   viewer: null,          // { index } into the flat photo list
   sound: false,          // đang phát hay không (khác với 'được phép phát')
   curtain: null,         // null | 'cover' | 'reveal' — the between-pages screen
+  /**
+   * Bumped whenever someone asks for the front door — the name in the corner,
+   * or Tổng quan in the menu. The overview is never unmounted, so without a
+   * signal it would still be standing wherever you left it three chapters ago,
+   * and clicking the name of the house would appear to do nothing at all.
+   */
+  atDoor: 0,
 }
 
 let state = initial
@@ -40,3 +47,4 @@ export const openViewer = (photo) => set({ viewer: { photo } })
 export const closeViewer = () => set({ viewer: null })
 export const setCurtain = (curtain) => set({ curtain })
 export const setSound = (sound) => set({ sound })
+export const goToDoor = () => set((s) => ({ atDoor: s.atDoor + 1 }))

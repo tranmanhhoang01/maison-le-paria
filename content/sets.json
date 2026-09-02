@@ -11,7 +11,12 @@
       "subtitle": "Áo dài / Sen / Ánh sáng trong nhà",
       "description": "Một buổi chiều đứng yên. Tà áo, nhành sen và thứ ánh sáng chỉ đi qua khung cửa một lần trong ngày — được giữ lại đúng lúc nó sắp tan.",
       "year": "2025",
-      "location": "Việt Nam"
+      "location": "Việt Nam",
+      "covers": [
+        "fn-01",
+        "fn-02",
+        "fn-08"
+      ]
     },
     "jpeg": {
       "title": "HỒI",

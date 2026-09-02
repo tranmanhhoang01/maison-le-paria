@@ -6,7 +6,7 @@
 .panel-layer:focus { outline: none; }
 .panel-layer__scrim {
   position: fixed; inset: 0; z-index: -1;
-  background: var(--paper);
+  background-color: var(--paper);
   animation: fade 1s var(--ease) both;
 }
 @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
@@ -20,6 +20,10 @@
 .panel__eyebrow { color: var(--son); }
 .panel__title { font-size: var(--t-title); margin-top: 0.8rem; }
 .panel .rule { margin: 2rem 0; }
+.panel__clouds { margin: 1.6rem 0 2rem; justify-content: flex-start; }
+.panel__foot { margin-top: clamp(3rem, 8vh, 4.5rem); justify-content: flex-start; }
+.library__foot .crest { gap: 1.2rem; }
+.library__foot .crest .nghe { width: 3rem; height: 3.6rem; }
 .panel__lead { font-size: clamp(1.05rem, 1.5vw, 1.4rem); font-weight: 300; line-height: 1.6; color: var(--ink); }
 .panel__body { margin-top: 1.4rem; color: var(--ink-soft); }
 .panel__roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1.8rem; margin-top: 3.4rem; }
@@ -76,6 +80,7 @@
  * in one page, and then choose.
  */
 .leaves { display: grid; gap: clamp(4.5rem, 12vh, 8rem); margin-top: clamp(3.5rem, 9vh, 6rem); }
+.leaves__break { margin-bottom: clamp(4.5rem, 12vh, 8rem); opacity: 0.55; }
 .leaf { display: flex; align-items: center; justify-content: center; gap: clamp(2rem, 4.5vw, 5rem); }
 .leaf[data-side='right'] { flex-direction: row-reverse; }
 
@@ -88,8 +93,7 @@
   overflow: hidden;
   box-shadow:
     0 0 0 1px rgba(36, 26, 19, 0.10),
-    0 12px 30px rgba(36, 26, 19, 0.16),
-    0 34px 70px rgba(36, 26, 19, 0.1);
+    0 10px 26px rgba(36, 26, 19, 0.16);
   transition: transform 0.8s var(--ease), box-shadow 0.8s var(--ease);
 }
 .leaf__plate:hover { transform: translateY(-6px); }
@@ -127,7 +131,7 @@
   aspect-ratio: var(--ratio);
   margin: 0 auto clamp(2.4rem, 7vh, 5.5rem);
   background-size: cover; background-position: center;
-  box-shadow: 0 0 0 1px rgba(36, 26, 19, 0.09), 0 16px 40px rgba(36, 26, 19, 0.12);
+  box-shadow: 0 0 0 1px rgba(36, 26, 19, 0.09), 0 10px 24px rgba(36, 26, 19, 0.12);
   /* Forty-one full-size photographs in one column: telling the browser it may
      skip the ones nowhere near the viewport is the difference between a
      scroll that glides and one that catches every few frames. */

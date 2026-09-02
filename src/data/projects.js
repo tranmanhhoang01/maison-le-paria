@@ -21,6 +21,16 @@ const fallback = (folder) => ({
   location: '',
 })
 
+/**
+ * Bề rộng thật của một bản dựng.
+ *
+ * Đường ống thu ảnh theo `fit: inside`, nghĩa là **cạnh dài** bằng 1000/1600/2400
+ * — một ảnh dọc 2:3 có bản "tile" rộng 667px, không phải 1000px. Ghi sai con số
+ * này trong srcSet là bảo trình duyệt rằng tệp lớn gấp rưỡi thực tế, và nó sẽ
+ * yên tâm chọn một tệp quá nhỏ rồi phóng to lên — đúng cái làm ảnh vỡ nhoè.
+ */
+const widthAt = (ratio, longest) => Math.round(ratio >= 1 ? longest : longest * ratio)
+
 const rank = (id) => {
   const at = catalogue.order?.indexOf(id) ?? -1
   return at === -1 ? Number.MAX_SAFE_INTEGER : at
@@ -40,6 +50,11 @@ export const sets = manifest.sets
       setId: set.id,
       setTitle: meta.title,
       setSubtitle: meta.subtitle,
+      srcSet: [
+        `${mediaUrl(image.tile)} ${widthAt(image.ratio, 1000)}w`,
+        `${mediaUrl(image.wide)} ${widthAt(image.ratio, 1600)}w`,
+        `${mediaUrl(image.full)} ${widthAt(image.ratio, 2400)}w`,
+      ].join(', '),
     }))
 
     return {

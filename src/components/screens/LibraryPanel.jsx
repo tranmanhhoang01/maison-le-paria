@@ -3,6 +3,8 @@ import { useEffect } from 'react'
 import { openViewer } from '../../store/experience.js'
 import { navigate, useRoute, hrefFor } from '../../lib/router.js'
 import { useImageReady } from '../../hooks/useImageReady.js'
+import { Seal } from '../chrome/Seal.jsx'
+import { Clouds, Nghe, Cloud, CloudField } from '../chrome/Ornament.jsx'
 
 /**
  * The library, in two storeys.
@@ -32,7 +34,7 @@ function Leaf({ set, at }) {
       >
         <img
           src={cover.wide}
-          srcSet={`${cover.tile} 1000w, ${cover.wide} 1600w`}
+          srcSet={cover.srcSet}
           sizes="(max-width: 860px) 100vw, 46vw"
           alt={`${set.title} — ${set.subtitle}`}
           data-loaded={image.ready}
@@ -45,6 +47,8 @@ function Leaf({ set, at }) {
       </a>
 
       <div className="leaf__text">
+        {/* Vân chìm sau tên bộ và câu chuyện. */}
+        <Cloud className="cloud--sunk" facing={at % 2 ? 'left' : 'right'} />
         <span className="leaf__num micro">CHƯƠNG {set.number}</span>
         <h2 className="leaf__title serif">{set.title}</h2>
         <div className="meander meander--short leaf__ornament" aria-hidden="true" />
@@ -83,8 +87,8 @@ function Frame({ image, set }) {
         aria-label={`Mở toàn màn hình — ${set.title}, ảnh ${image.number}`}
       >
         <img
-          src={image.full}
-          srcSet={`${image.wide} 1600w, ${image.full} 2400w`}
+          src={image.wide}
+          srcSet={image.srcSet}
           sizes="(max-width: 860px) 100vw, 1240px"
           alt={`${set.title} — ${set.subtitle}`}
           loading="lazy"
@@ -119,6 +123,7 @@ function SetView({ set }) {
       </header>
 
       <header className="series__head">
+        <Cloud className="cloud--sunk" facing="right" />
         <span className="series__num micro lift">CHƯƠNG {set.number}</span>
         <h1 className="series__title serif lift">{set.title}</h1>
         <div className="meander meander--short lift" aria-hidden="true" />
@@ -135,7 +140,11 @@ function SetView({ set }) {
         <a className="library__back micro" href={hrefFor('/thu-vien')} onClick={back}>
           <span aria-hidden="true">←</span> VỀ THƯ VIỆN
         </a>
-        <span className="seal" aria-hidden="true"><span>M</span></span>
+        <div className="crest">
+          <Nghe facing="right" />
+          <Seal />
+          <Nghe facing="left" />
+        </div>
       </footer>
     </div>
   )
@@ -151,6 +160,7 @@ export function LibraryPanel({ sets }) {
 
   return (
     <article className="panel panel--library" data-in="true">
+      <CloudField seed={route.slug ? 41 : 17} count={5} className="cloud-field--page" />
       {open ? (
         <SetView set={open} />
       ) : (
@@ -164,13 +174,20 @@ export function LibraryPanel({ sets }) {
 
           <div className="leaves">
             {sets.map((set, i) => (
-              <Leaf key={set.id} set={set} at={i} />
+              <div key={set.id}>
+                {i > 0 && <Clouds className="clouds--short leaves__break" />}
+                <Leaf set={set} at={i} />
+              </div>
             ))}
           </div>
 
           <footer className="library__foot">
             <p className="serif">MAISON LE PARIA</p>
-            <span className="seal" aria-hidden="true"><span>M</span></span>
+            <div className="crest">
+              <Nghe facing="right" />
+              <Seal />
+              <Nghe facing="left" />
+            </div>
           </footer>
         </div>
       )}

@@ -5,106 +5,129 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Studio — Maison Le Paria</title>
 <style>
+  /* Studio mặc cùng bộ đồ với website: giấy dó, mực nho, đỏ son, chỉ vàng.
+     Trước đây nó còn là nền đen của bản web cũ — hai thứ nhìn như hai dự án
+     khác nhau, và người dùng thì chỉ có một. */
   :root {
-    --void: #0b0c0d; --panel: #141517; --line: rgba(233,229,222,.12);
-    --ink: #e9e5de; --dim: #9d9890; --ash: #6b6862; --beige: #c9bda8;
-    --ok: #7fb08a; --warn: #d2a05a; --bad: #c47a72;
+    --paper: #e5d9c0; --panel: #efe6d3; --panel-2: #f4ecdd;
+    --line: rgba(36,26,19,.18); --line-soft: rgba(36,26,19,.09);
+    --ink: #241a13; --dim: #5f4e40; --ash: #857260;
+    --son: #9b2c1c; --gold: #a98442;
+    --ok: #4a7a52; --warn: #9a6a1e; --bad: #9b2c1c;
     --ease: cubic-bezier(.16,1,.3,1);
   }
   * { box-sizing: border-box; }
   body {
-    margin: 0; background: var(--void); color: var(--ink);
-    font: 400 14px/1.55 'Be Vietnam Pro', -apple-system, system-ui, sans-serif;
-    display: grid; grid-template-columns: 290px 1fr; min-height: 100vh;
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 14px/1.6 'Be Vietnam Pro', -apple-system, system-ui, sans-serif;
+    display: grid; grid-template-columns: 300px 1fr; min-height: 100vh;
   }
-  h1, h2, h3 { margin: 0; font-weight: 400; }
+  h1, h2, h3 { margin: 0; font-weight: 500; letter-spacing: -.01em; }
   button, input, textarea { font: inherit; color: inherit; }
   .micro { font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--ash); }
 
-  /* ── Sidebar ── */
-  aside { background: var(--panel); border-right: 1px solid var(--line); padding: 22px 18px; display: flex; flex-direction: column; gap: 18px; }
-  .mark { font-size: 11px; letter-spacing: .24em; }
-  .sets { display: flex; flex-direction: column; gap: 4px; }
-  .set-btn {
-    text-align: left; background: none; border: 0; padding: 11px 12px; border-radius: 7px;
-    cursor: pointer; display: grid; gap: 3px; transition: background .2s;
+  /* ── Cột trái ── */
+  aside {
+    background: var(--panel); border-right: 1px solid var(--line);
+    padding: 22px 18px; display: flex; flex-direction: column; gap: 16px;
   }
-  .set-btn:hover { background: rgba(255,255,255,.04); }
-  .set-btn[aria-current='true'] { background: rgba(255,255,255,.08); }
+  .mark { font-size: 11px; letter-spacing: .24em; color: var(--son); font-weight: 500; }
+  .sets { display: flex; flex-direction: column; gap: 3px; }
+  .set-row { display: flex; align-items: stretch; gap: 4px; }
+  /* `flex: 1` chỉ dành cho nút nằm trong .set-row. Đặt lên .set-btn trơn thì
+     hai nút "Trang mở đầu"/"Âm thanh" — con trực tiếp của cột dọc — sẽ giãn
+     cao ra hết chỗ trống. */
+  .set-row .set-btn { flex: 1; }
+  .set-btn {
+    text-align: left; background: none; border: 0; padding: 10px 12px; border-radius: 6px;
+    cursor: pointer; display: grid; gap: 3px; transition: background .2s var(--ease);
+  }
+  .set-btn:hover { background: rgba(36,26,19,.05); }
+  .set-btn[aria-current='true'] { background: rgba(155,44,28,.10); box-shadow: inset 2px 0 0 var(--son); }
   .set-btn b { font-weight: 500; }
   .set-btn span { font-size: 11px; color: var(--ash); }
+  .set-move { display: flex; flex-direction: column; justify-content: center; gap: 2px; opacity: 0; transition: opacity .2s; }
+  .set-row:hover .set-move { opacity: 1; }
+  .set-move button {
+    width: 22px; height: 18px; line-height: 1; border: 1px solid var(--line-soft);
+    background: none; border-radius: 4px; cursor: pointer; color: var(--ash); font-size: 10px;
+  }
+  .set-move button:hover:not(:disabled) { border-color: var(--gold); color: var(--ink); }
+  .set-move button:disabled { opacity: .25; cursor: default; }
   .dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--warn); margin-left: 6px; vertical-align: middle; }
   .ghost {
-    background: none; border: 1px dashed var(--line); border-radius: 7px; padding: 11px;
+    background: none; border: 1px dashed var(--line); border-radius: 6px; padding: 10px;
     cursor: pointer; color: var(--dim); transition: border-color .2s, color .2s;
   }
-  .ghost:hover { border-color: var(--beige); color: var(--ink); }
+  .ghost:hover { border-color: var(--gold); color: var(--ink); }
 
-  /* ── Main ── */
-  main { padding: 26px 30px 60px; max-width: 1100px; }
+  /* ── Cột phải ── */
+  main { padding: 26px 30px 70px; max-width: 1100px; }
   .head { display: flex; align-items: flex-start; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-  .head h2 { font-size: 26px; letter-spacing: -.01em; }
+  .head h2 { font-size: 26px; }
   .row { display: flex; gap: 9px; flex-wrap: wrap; }
   .btn {
-    background: none; border: 1px solid var(--line); border-radius: 7px; padding: 9px 16px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px; padding: 9px 16px;
     cursor: pointer; transition: border-color .2s, background .2s; white-space: nowrap;
   }
-  .btn:hover:not(:disabled) { border-color: var(--beige); background: rgba(255,255,255,.04); }
+  .btn:hover:not(:disabled) { border-color: var(--gold); background: #fff8ea; }
   .btn:disabled { opacity: .4; cursor: default; }
-  .btn--go { border-color: var(--beige); color: var(--beige); }
-  .btn--bad { border-color: rgba(196,122,114,.4); color: var(--bad); }
+  .btn--go { border-color: var(--son); color: var(--son); font-weight: 500; }
+  .btn--go:hover:not(:disabled) { background: rgba(155,44,28,.08); border-color: var(--son); }
+  .btn--bad { border-color: rgba(155,44,28,.35); color: var(--bad); }
 
   .grid-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
   label { display: grid; gap: 5px; }
   input, textarea {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 7px;
+    background: var(--panel-2); border: 1px solid var(--line); border-radius: 6px;
     padding: 9px 11px; width: 100%; resize: vertical;
   }
-  input:focus, textarea:focus { outline: none; border-color: var(--beige); }
+  input:focus, textarea:focus { outline: none; border-color: var(--son); }
   .wide { grid-column: 1 / -1; }
 
   .drop {
     margin-top: 22px; border: 1px dashed var(--line); border-radius: 10px;
     padding: 34px; text-align: center; color: var(--dim); transition: border-color .2s, background .2s;
   }
-  .drop[data-over='true'] { border-color: var(--beige); background: rgba(201,189,168,.06); }
+  .drop[data-over='true'] { border-color: var(--son); background: rgba(155,44,28,.05); }
 
-  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)); gap: 10px; margin-top: 20px; }
-  .cell { position: relative; border-radius: 7px; overflow: hidden; background: var(--panel); }
-  .cell img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+  .photos { display: grid; grid-template-columns: repeat(auto-fill, minmax(126px, 1fr)); gap: 10px; margin-top: 16px; }
+  .cell { position: relative; border-radius: 6px; overflow: hidden; background: var(--panel); }
+  .cell img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; cursor: pointer; transition: opacity .2s; }
   .cell button {
-    position: absolute; inset: auto 6px 6px auto; background: rgba(8,9,10,.82); border: 0;
-    border-radius: 5px; padding: 5px 8px; font-size: 10px; letter-spacing: .1em;
+    position: absolute; inset: auto 6px 6px auto; background: rgba(245,238,225,.92); border: 1px solid var(--line);
+    border-radius: 5px; padding: 4px 8px; font-size: 10px; letter-spacing: .1em;
     cursor: pointer; opacity: 0; transition: opacity .2s; color: var(--ink);
   }
   .cell:hover button { opacity: 1; }
-  /* Ảnh đại diện: bấm vào ảnh để chọn, bấm lại để bỏ. */
-  .cell img { cursor: pointer; transition: opacity .2s; }
-  .cell[data-cover] { outline: 2px solid var(--beige); outline-offset: -2px; }
-  .cell[data-cover] img { opacity: .92; }
+  .cell[data-cover] { outline: 2px solid var(--son); outline-offset: -2px; }
+  .cell[data-cover] img { opacity: .95; }
   .badge {
     position: absolute; inset: 6px auto auto 6px;
-    background: var(--beige); color: #14150f; border-radius: 4px;
+    background: var(--son); color: #f8f2e7; border-radius: 4px;
     padding: 3px 7px; font-size: 10px; letter-spacing: .08em; font-weight: 500;
     pointer-events: none;
   }
+  .cell[data-chosen='true'] { outline: 2px solid var(--gold); outline-offset: -2px; }
   .pickers { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 8px; margin-top: 14px; }
   .pickers .cell img { aspect-ratio: 3/4; }
-  .cell[data-chosen='true'] { outline: 2px solid var(--ok); outline-offset: -2px; }
   .slider { display: flex; align-items: center; gap: 12px; margin-top: 14px; }
-  .slider input[type=range] { flex: 1; accent-color: var(--beige); }
+  .slider input[type=range] { flex: 1; accent-color: var(--son); }
   .hero { display: grid; grid-template-columns: 260px 1fr; gap: 18px; margin-top: 16px; align-items: start; }
-  .hero__shot { position: relative; border-radius: 8px; overflow: hidden; background: var(--panel); }
+  .hero__shot { position: relative; border-radius: 8px; overflow: hidden; background: var(--panel); border: 1px solid var(--line-soft); }
   .hero__shot img { width: 100%; display: block; }
-  @media (max-width: 820px) { .hero { grid-template-columns: 1fr; } }
 
-  .note { margin-top: 14px; padding: 12px 14px; border-radius: 8px; border: 1px solid var(--line); color: var(--dim); font-size: 13px; }
+  .note {
+    margin-top: 14px; padding: 12px 14px; border-radius: 8px;
+    border: 1px solid var(--line-soft); background: var(--panel-2);
+    color: var(--dim); font-size: 13px;
+  }
   .note b { color: var(--ink); font-weight: 500; }
-  .note--warn { border-color: rgba(210,160,90,.35); }
+  .note--warn { border-color: rgba(154,106,30,.4); background: rgba(154,106,30,.07); }
 
-  /* ── Console ── */
+  /* ── Nhật ký ── */
   .console {
-    position: fixed; inset: auto 0 0 290px; background: #0e0f10; border-top: 1px solid var(--line);
+    position: fixed; inset: auto 0 0 300px; background: var(--panel-2); border-top: 1px solid var(--line);
     max-height: 46vh; display: none; flex-direction: column;
   }
   .console[data-open='true'] { display: flex; }
@@ -121,7 +144,7 @@
   @media (max-width: 820px) {
     body { grid-template-columns: 1fr; }
     .console { left: 0; }
-    .grid-form { grid-template-columns: 1fr; }
+    .grid-form, .hero { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -137,6 +160,7 @@
     <b>Âm thanh</b><span id="soundHint">…</span>
   </button>
   <div style="margin-top:auto; display:grid; gap:8px">
+    <button class="ghost" id="liveBtn" style="padding:9px; font-size:11px">Xem trang thật</button>
     <button class="ghost" id="domainBtn" style="padding:9px; font-size:11px">Tên miền</button>
     <button class="ghost" id="repoBtn" style="padding:9px; font-size:11px">Kho GitHub</button>
     <div class="micro" id="gitState">…</div>
@@ -180,13 +204,34 @@ async function refresh() {
 }
 
 function drawSets() {
-  $('sets').innerHTML = data.sets.map((s) => `
-    <button class="set-btn" aria-current="${s.id === current}" data-id="${s.id}">
-      <b>${s.meta?.title ?? s.folder}</b>
-      <span>${s.published} ảnh${s.pending ? `<i class="dot" title="${s.pending} tệp mới chưa cập nhật"></i>` : ''}</span>
-    </button>`).join('')
+  const last = data.sets.length - 1
+  $('sets').innerHTML = data.sets.map((s, i) => `
+    <div class="set-row">
+      <button class="set-btn" aria-current="${s.id === current}" data-id="${s.id}">
+        <b>${s.meta?.title ?? s.folder}</b>
+        <span>${s.published} ảnh${s.pending ? `<i class="dot" title="${s.pending} tệp mới chưa cập nhật"></i>` : ''}</span>
+      </button>
+      <div class="set-move">
+        <button data-move="${s.id}" data-dir="-1" title="Lên trước" ${i === 0 ? 'disabled' : ''}>▲</button>
+        <button data-move="${s.id}" data-dir="1" title="Xuống sau" ${i === last ? 'disabled' : ''}>▼</button>
+      </div>
+    </div>`).join('')
   $('sets').querySelectorAll('.set-btn').forEach((b) =>
     b.onclick = () => { current = b.dataset.id; view = 'sets'; drawSets(); drawMain() })
+
+  /* Thứ tự này chính là thứ tự các chương ở trang Tổng quan và Thư viện. */
+  $('sets').querySelectorAll('[data-move]').forEach((b) => b.onclick = async () => {
+    const order = data.sets.map((s) => s.id)
+    const from = order.indexOf(b.dataset.move)
+    const to = from + Number(b.dataset.dir)
+    if (to < 0 || to >= order.length) return
+    order.splice(to, 0, ...order.splice(from, 1))
+    await api('/api/order', {
+      method: 'POST', headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ order }),
+    })
+    await refresh()
+  })
   $('soundTab').setAttribute('aria-current', view === 'sound')
   $('homeTab').setAttribute('aria-current', view === 'home')
   const m = data.sound.music
@@ -194,13 +239,28 @@ function drawSets() {
   $('homeHint').textContent = data.home?.backdrop ? 'đã chọn ảnh nền' : 'ảnh nền: tự chọn'
 }
 
+/** Địa chỉ trang đã xuất bản, suy từ tên miền hoặc từ kho GitHub. */
+function liveUrl() {
+  if (data.domain) return `https://${data.domain}`
+  const remote = data.git?.remote ?? ''
+  const m = remote.match(/github\.com[:/]([^/]+)\/([^/.]+)/)
+  return m ? `https://${m[1]}.github.io/${m[2]}/` : null
+}
+
+const openOut = (url) => { if (native) ask({ action: 'openUrl', url }); else window.open(url, '_blank') }
+
 function drawGit() {
   const g = data.git
   $('gitState').innerHTML = !g.isRepo
     ? 'Chưa nối GitHub'
     : `${g.remote ? g.remote.replace(/^https:\/\/github\.com\//, '').replace(/\.git$/, '') : 'chưa có remote'}<br>nhánh ${g.branch ?? '—'} · ${g.dirty} thay đổi`
   $('domainBtn').textContent = data.domain ?? 'Chưa gán tên miền'
+  const live = liveUrl()
+  $('liveBtn').disabled = !live
+  $('liveBtn').textContent = live ? 'Xem trang thật' : 'Chưa xuất bản'
 }
+
+$('liveBtn').onclick = () => { const url = liveUrl(); if (url) openOut(url) }
 
 $('repoBtn').onclick = async () => {
   const remote = prompt(

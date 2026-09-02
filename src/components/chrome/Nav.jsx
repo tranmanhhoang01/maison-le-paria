@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { site } from '../../data/site.js'
 import { useRoute, hrefFor } from '../../lib/router.js'
 import { travelTo } from '../../lib/transition.js'
-import { useExperience } from '../../store/experience.js'
+import { useExperience, goToDoor } from '../../store/experience.js'
 import { SoundToggle } from './SoundToggle.jsx'
 
 /**
@@ -20,7 +20,13 @@ export function Nav() {
     return () => { document.body.style.overflow = '' }
   }, [open])
 
-  const go = (e, path) => { e.preventDefault(); travelTo(path) }
+  const go = (e, path) => {
+    e.preventDefault()
+    // Going home means the opening screen, not whichever chapter of the house
+    // you happened to be standing in when you left it.
+    if (path === '/') goToDoor()
+    travelTo(path)
+  }
   const isCurrent = (path) => (path === '/' ? route.name === 'universe' : route.path === path)
 
   return (
