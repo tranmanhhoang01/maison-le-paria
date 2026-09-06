@@ -183,7 +183,9 @@ vùng tối — đọc ra như ảnh in trên giấy.
 - **Giới thiệu · Liên hệ** — nội dung thật của chủ nhân đã điền.
 - **Màn chờ** khi chuyển tab.
 - **Nhạc nền** bật/tắt bằng nút ở góc.
-- **Bố cục hẹp** cho điện thoại. Trên điện thoại tắt lớp vân giấy và lớp bụi
+- **Bố cục hẹp** cho điện thoại: ảnh **không bị cắt**. Ảnh lớn ăn trọn bề ngang theo
+  đúng tỉ lệ thật; hai ảnh phụ chỉ ở lại nếu còn đủ chỗ bên dưới (ảnh lớn nằm ngang thì
+  còn, nằm dọc thì thôi). Một tấm ảnh dọc nguyên vẹn hơn ba tấm bị xén ngang. Trên điện thoại tắt lớp vân giấy và lớp bụi
   (canvas chạy mỗi khung hình) — đổi chút không khí lấy cuộn mượt.
 
 ### Đường ống ảnh (`npm run images`)
@@ -258,6 +260,8 @@ Muốn biết trang có chạy thật không, hãy mở trên trình duyệt th�
 | Trang treo cứng khi mở ảnh | Vòng lặp render vô hạn: `ref` inline tạo mảng mới mỗi lần render |
 | Ảnh đại diện ở Tổng quan bị vỡ nhoè | Dùng bản `tile`. `tile` là **cạnh dài** 1000px, nên ảnh dọc chỉ rộng 667px — trong khi ảnh lớn vẽ ~450px CSS × 2 (màn retina) = 900px thật. Đã sửa: mỗi ảnh mang sẵn `srcSet` với **bề rộng thật** (`widthAt` trong `projects.js`), trình duyệt tự chọn. Ghi sai con số `w` còn tệ hơn không ghi |
 | Khung không bao hết ảnh, **tuỳ trình duyệt** | Cụm ảnh từng là flex quấn theo cột, khung dựa vào `width: fit-content` của nó. Bề rộng nội tại của một flex quấn cột **mỗi engine tính một kiểu**, lại thêm `flex-shrink` không tác dụng theo trục ngang — nên khung vừa khít trong khung xem trước mà lại nhỏ hơn cụm ảnh trên trình duyệt thật. Đã bỏ hẳn: nay `PlateCluster.jsx` tự tính bằng số (xem mục 7.10) |
+| Ảnh dọc trên điện thoại bị xén thành ảnh ngang | Bản cũ ép ba ảnh vào một khối lấp kín bề ngang rồi cắt theo ô lưới. Với ảnh áo dài thì đó là xén mất tà áo. Nay `stack()` trong `PlateCluster.jsx` xếp dọc, giữ nguyên tỉ lệ, và **bỏ bớt ảnh** nếu không đủ chỗ |
+| Cụm ảnh tính theo một số đo cũ, sai hẳn (750px thay vì 448px) | ResizeObserver đo thẳng `.plate-area` — mà cụm ảnh lại nằm trong đó, nên có lúc số đo đọc được **chính là chiều cao do cụm ảnh vừa dựng ra**. Nay đo `.plate-probe`, một phần tử tuyệt đối rỗng trùng khít vùng trống: nội dung không thể làm nó sai |
 | Ảnh phụ trên điện thoại chỉ cao bằng nửa ô lưới | Luật treo của máy tính (`.series-scene[data-hang] .plate[data-slot='1'] { height: 48.5% }`) có **độ ưu tiên cao hơn** `.plate { height: 100% }` trong khối điện thoại, nên nó vẫn thắng. Muốn ghi đè phải viết lại đủ độ ưu tiên |
 | **Vuốt tới bộ mới thì đứng im ~2 giây rồi mới bật sang** | Không phải chuyện vẽ, mà là logic. Trackpad macOS **gửi tiếp sự kiện quán tính 1–2 giây sau khi nhấc tay**. Bản cũ chờ 110ms im lặng rồi mới quyết định — mà suốt lúc quán tính chạy thì không bao giờ có 110ms im lặng, nên khung hình đứng ở mép chặn cho tới khi hết đà. Nay **cú đẩy đầu tiên lật trang ngay** (24px, đo được 1ms từ lúc vuốt tới lúc bắt đầu trượt), phần còn lại của cử chỉ và toàn bộ quán tính bị nuốt |
 | Vẫn khựng khi vuốt trackpad, dù đã bỏ các lớp trộn màu | Năm thứ nhỏ cộng lại, tất cả đều rơi đúng vào khung hình bắt đầu trượt: **(1)** đổi chương làm React vẽ lại **cả năm màn** — sửa bằng `SceneView` bọc `memo`; **(2)** `transform` ghi bằng `calc(-Nvw + Xpx)`, trình duyệt phải phân giải calc 120 lần/giây — nay ghi thẳng bằng pixel; **(3)** `setAttribute('data-dragging')` gọi ở **mỗi** sự kiện con lăn, mỗi lần là một lần vô hiệu hoá style cả cây con — nay chỉ gọi một lần mỗi cử chỉ; **(4)** ảnh chương kế bên giải mã **giữa chừng** cử chỉ — nay `loading="eager"` trên máy tính và chọn sẵn đúng tệp bằng `sourceFor()` thay cho `srcset`; **(5)** bóng đổ mờ 60–80px phải tô lại mỗi khi ô hình mới lọt vào màn — nay tối đa 28px |
@@ -337,6 +341,11 @@ Bài học: **con lăn không phải ngón tay đặt lên chính vật đó** �
 bám theo. Nên nó không bám. Cú đẩy đầu tiên của một cử chỉ (24px) lật trang **ngay**
 (đo được 1ms), transition lo phần chuyển động, và mọi sự kiện sau đó — phần còn lại của
 cú đẩy lẫn toàn bộ quán tính — bị nuốt cho tới khi con lăn im được 90ms.
+
+**Chỉ có khoảng im lặng tách hai cử chỉ, không có khoá thời gian nào khác.** 90ms là đủ:
+quán tính trackpad bắn liên tục mỗi ~10ms nên không bao giờ giành được lượt thứ hai, còn
+một nấc lăn chuột rời rạc thì luôn được tính. Đo được: 1 nấc chuột → 1 trang; 3 nấc cách
+nhau 250ms → 3 trang; 1 cú vuốt trackpad kèm 60 sự kiện quán tính → **đúng 1 trang**.
 
 Ngón tay kéo (chuột, cảm ứng) thì **vẫn bám tay**: ở đó có vật thật dưới ngón tay, và
 buông giữa chừng phải trả về chỗ cũ được.

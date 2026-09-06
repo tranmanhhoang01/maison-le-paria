@@ -40,11 +40,14 @@ const FLICK_MIN = 40       // ...but a twitch is not a swipe
  * page immediately, the transition does the moving, and every event after that
  * — the rest of the push, and all of the inertia — is swallowed until the
  * wheel has been quiet long enough to count as a new gesture.
+ *
+ * Quiet is the only thing that separates one gesture from the next, and 90ms
+ * of it is enough. Trackpad inertia arrives every ten milliseconds or so, so
+ * it never earns a second turn; a notch of a mouse wheel, rolled deliberately,
+ * always does. One push, one chapter — whichever kind of hardware pushed.
  */
 const WHEEL_TRIGGER = 24   // px of a gesture before it counts — one push, no more
-const WHEEL_GAP = 140      // ms of quiet that starts a new gesture's reckoning
-const WHEEL_TAIL = 90      // ms of quiet demanded before a new gesture counts
-const WHEEL_SETTLE = 360   // ms to let the house arrive before listening again
+const WHEEL_TAIL = 90      // ms of quiet that separates one gesture from the next
 const EDGE_PULL = 0.28     // resistance at the two ends of a drag
 
 /**
@@ -143,7 +146,7 @@ export function Universe({ sets, compact = false, active = true }) {
   const pending = useRef(0)
   const span = useRef(typeof window === 'undefined' ? 0 : window.innerWidth)
   const atDoor = useExperience((s) => s.atDoor)
-  const wheel = useRef({ sum: 0, last: 0, quiet: 0, settled: 0 })
+  const wheel = useRef({ sum: 0, last: 0, quiet: 0 })
   const drag = useRef(null)
 
   const go = useCallback(
@@ -208,13 +211,13 @@ export function Universe({ sets, compact = false, active = true }) {
       /* The tail of the last gesture — the rest of the push, and the inertia
          the trackpad keeps sending after the fingers left. Swallow it, and
          keep pushing the quiet period out, until the wheel really stops. */
-      if (now < w.quiet || now < w.settled) {
+      if (now < w.quiet) {
         w.quiet = now + WHEEL_TAIL
         return
       }
 
       // A long enough silence means this is a new gesture, not the same one.
-      if (now - w.last > WHEEL_GAP) w.sum = 0
+      if (now - w.last > WHEEL_TAIL) w.sum = 0
       w.last = now
       w.sum += Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY
       // Small enough to fire on the first real push; large enough that a
@@ -225,7 +228,6 @@ export function Universe({ sets, compact = false, active = true }) {
       w.sum = 0
       if ((at === 0 && dir < 0) || (at === scenes.length - 1 && dir > 0)) return
       w.quiet = now + WHEEL_TAIL
-      w.settled = now + WHEEL_SETTLE
       go((c) => c + dir)
     }
 

@@ -92,10 +92,61 @@ function arrange(ratios, H) {
   }
 }
 
+/**
+ * Trên màn hẹp thì xếp dọc, và **không cắt ảnh**.
+ *
+ * Bản trước ép ba ảnh vào một khối lấp kín bề ngang, cắt theo tỉ lệ ô lưới —
+ * nghĩa là một tấm ảnh dọc bị xén thành ảnh ngang. Với ảnh áo dài thì đó là
+ * xén mất tà áo, tức là xén mất bức ảnh. Thà ít ảnh mà nguyên vẹn.
+ *
+ * Ảnh lớn ăn trọn bề ngang. Hai ảnh phụ chỉ ở lại nếu còn đủ chỗ cho chúng
+ * bên dưới — ảnh lớn nằm ngang thì còn, nằm dọc thì thôi, và đường "XEM CẢ
+ * BỘ" ngay bên trên đã là lối vào đủ rộng cho phần còn lại.
+ */
+function stack(ratios, room) {
+  const [r0, r1, r2] = ratios
+  const W = room.w
+  const heroH = W / r0
+
+  if (ratios.length > 2) {
+    const rowH = (W - GAP) / (r1 + r2)
+    if (heroH + GAP + rowH <= room.h) {
+      return {
+        width: W,
+        height: heroH + GAP + rowH,
+        items: [
+          { x: 0, y: 0, w: W, h: heroH },
+          { x: 0, y: heroH + GAP, w: rowH * r1, h: rowH },
+          { x: rowH * r1 + GAP, y: heroH + GAP, w: rowH * r2, h: rowH },
+        ],
+      }
+    }
+  }
+  if (ratios.length === 2) {
+    const h2 = W / r1
+    if (heroH + GAP + h2 <= room.h) {
+      return {
+        width: W,
+        height: heroH + GAP + h2,
+        items: [
+          { x: 0, y: 0, w: W, h: heroH },
+          { x: 0, y: heroH + GAP, w: W, h: h2 },
+        ],
+      }
+    }
+  }
+
+  // Chỉ còn ảnh lớn: rộng hết bề ngang nếu cao vừa, không thì cao hết chỗ.
+  if (heroH <= room.h) return { width: W, height: heroH, items: [{ x: 0, y: 0, w: W, h: heroH }] }
+  const w = room.h * r0
+  return { width: w, height: room.h, items: [{ x: 0, y: 0, w, h: room.h }] }
+}
+
 /** Take the room available, give back a group that fits inside it. */
-function layoutFor(plates, room) {
+function layoutFor(plates, room, compact) {
   if (!room || room.w < 60 || room.h < 60) return null
   const ratios = plates.map((p) => p.ratio || 0.667)
+  if (compact) return stack(ratios, room)
   let H = Math.min(room.h, TALLEST)
   let out = arrange(ratios, H)
   // Too wide for the room: bring the whole group down together, so every
@@ -109,16 +160,27 @@ function layoutFor(plates, room) {
 
 export function PlateCluster({ plates, compact, onOpen }) {
   const area = useRef(null)
+  const probe = useRef(null)
   const frame = useRef(null)
   const [room, setRoom] = useState(null)
 
   useEffect(() => {
-    if (compact) return
-    const el = area.current
+    /**
+     * Đo **cái thước**, không đo cái hộp.
+     *
+     * `.plate-probe` nằm tuyệt đối, trùng khít vùng trống dành cho cụm ảnh, và
+     * quan trọng nhất: nó **không bị nội dung ảnh hưởng**. Bản trước đo thẳng
+     * `.plate-area` — mà cụm ảnh lại nằm trong đó, nên có lúc số đo đọc được
+     * chính là chiều cao do cụm ảnh vừa dựng ra (750px thay vì 448px), rồi
+     * bố cục cứ giữ nguyên con số sai ấy. Đo một phần tử không chứa gì thì
+     * không có vòng lặp đó.
+     */
+    const el = probe.current
     if (!el || typeof ResizeObserver === 'undefined') return
 
     const read = () => {
       const box = el.getBoundingClientRect()
+      if (box.width < 1 || box.height < 1) return
       // The mount's own margin comes out of the room the photographs get.
       const pad = frame.current ? parseFloat(getComputedStyle(frame.current).paddingLeft) || 0 : 0
       const next = { w: box.width - pad * 2, h: box.height - pad * 2 }
@@ -127,37 +189,28 @@ export function PlateCluster({ plates, compact, onOpen }) {
     }
 
     read()
+    // Lần đo đầu có thể rơi vào lúc kiểu dáng chưa áp xong — đo lại một nhịp.
+    const again = setTimeout(read, 0)
     const ro = new ResizeObserver(read)
     ro.observe(el)
     window.addEventListener('resize', read)
-    return () => { ro.disconnect(); window.removeEventListener('resize', read) }
+    return () => {
+      clearTimeout(again)
+      ro.disconnect()
+      window.removeEventListener('resize', read)
+    }
   }, [compact])
 
   const layout = useMemo(
-    () => (compact ? null : layoutFor(plates, room)),
+    () => layoutFor(plates, room, compact),
     [compact, plates, room],
   )
 
-  /* On a phone the ratio-honest hang leaves slivers of paper down both sides,
-     and a photograph 100px wide is not a photograph. There the three take the
-     whole width as a block, and CSS is enough. */
-  if (compact) {
-    return (
-      <div className="plate-area" ref={area}>
-        <div className="plate-frame" ref={frame}>
-          <OrnFrame />
-          <div className="plate-cluster plate-cluster--grid" data-count={plates.length}>
-            {plates.map((image, n) => (
-              <Plate key={image.id} image={image} slot={n} onOpen={() => onOpen(image)} />
-            ))}
-          </div>
-        </div>
-      </div>
-    )
-  }
+  const shown = layout ? layout.items.length : plates.length
 
   return (
     <div className="plate-area" ref={area}>
+      <span className="plate-probe" ref={probe} aria-hidden="true" />
       <div
         className="plate-frame"
         ref={frame}
@@ -167,10 +220,10 @@ export function PlateCluster({ plates, compact, onOpen }) {
         <OrnFrame />
         <div
           className="plate-cluster"
-          data-count={plates.length}
+          data-count={shown}
           style={layout ? { width: `${layout.width}px`, height: `${layout.height}px` } : undefined}
         >
-          {plates.map((image, n) => (
+          {plates.slice(0, shown).map((image, n) => (
             <Plate
               key={image.id}
               image={image}
