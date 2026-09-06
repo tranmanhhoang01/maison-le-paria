@@ -1,13 +1,16 @@
 {
   "//": "Tên và mô tả các bộ ảnh. App quản trị (npm run studio) ghi file này. Khoá = tên thư mục trong 'ảnh web' đã bỏ dấu.",
   "order": [
-    "fn",
+    "cuoi-ha",
+    "chom-thu",
     "jpeg",
-    "fn-buoi-1"
+    "hoa",
+    "fn-buoi-1",
+    "fn"
   ],
   "sets": {
     "fn": {
-      "title": "TỊNH",
+      "title": "NHẸ",
       "subtitle": "Áo dài / Sen / Ánh sáng trong nhà",
       "description": "Một buổi chiều đứng yên. Tà áo, nhành sen và thứ ánh sáng chỉ đi qua khung cửa một lần trong ngày — được giữ lại đúng lúc nó sắp tan.",
       "year": "2025",
@@ -23,7 +26,12 @@
       "subtitle": "Áo dài / Yên Tử / Kiến trúc cổ",
       "description": "Nước chảy qua đá, rêu bám lên tường, sương chưa kịp rời vai áo. Một câu chuyện thị giác về ký ức, kiến trúc và những gì còn ở lại.",
       "year": "2025",
-      "location": "Yên Tử, Quảng Ninh"
+      "location": "Yên Tử, Quảng Ninh",
+      "covers": [
+        "jpeg-04",
+        "jpeg-13",
+        "jpeg-07"
+      ]
     },
     "fn-buoi-1": {
       "title": "MẶT NƯỚC",
@@ -31,6 +39,42 @@
       "description": "Chân dung dựng trên mặt hồ. Một sắc hồng duy nhất đặt giữa nước xanh và nắng ngược, đến khi ranh giới giữa người và phản chiếu bị xoá đi.",
       "year": "2025",
       "location": "Việt Nam"
+    },
+    "cuoi-ha": {
+      "title": "CUỐI HẠ",
+      "subtitle": "Áo dài/Ngoại cảnh",
+      "description": "Có những ngày cuối hè thật mát mẻ, nhưng những vệt nắng vẫn đọng lại trên má",
+      "year": "2026",
+      "location": "VIỆT NAM",
+      "covers": [
+        "cuoi-ha-17",
+        "cuoi-ha-12",
+        "cuoi-ha-14"
+      ]
+    },
+    "chom-thu": {
+      "title": "CHỚM THU",
+      "subtitle": "Áo dài/ Ngoại cảnh",
+      "description": "Mùa thu sang làm cho ta cảm thấy nhẹ nhàng, trong những khu vườn cỏ cây nhưng muốn nói với nhau về mùa xuân",
+      "year": "2026",
+      "location": "VIỆT NAM",
+      "covers": [
+        "chom-thu-03",
+        "chom-thu-04",
+        "chom-thu-09"
+      ]
+    },
+    "hoa": {
+      "title": "HÒA",
+      "subtitle": "Áo dài/Ngoại cảnh",
+      "description": "",
+      "year": "2026",
+      "location": "VIỆT NAM",
+      "covers": [
+        "hoa-03",
+        "hoa-02",
+        "hoa-01"
+      ]
     }
   }
 }

@@ -1,6 +1,411 @@
 {
   "sets": [
     {
+      "id": "chom-thu",
+      "folder": "CHỚM THU",
+      "images": [
+        {
+          "id": "chom-thu-01",
+          "tile": "chom-thu/chom-thu-01-tile.webp",
+          "wide": "chom-thu/chom-thu-01-wide.webp",
+          "full": "chom-thu/chom-thu-01-full.webp",
+          "lqip": "data:image/webp;base64,UklGRnYBAABXRUJQVlA4IGoBAACQCACdASobACgAPslgp0+npSMiJWmY8BkJQBg2JBMH/V1hVgXpSmkkIvMJ72twnFHRcAtcjNPKl+BP9p7eOtbeoqUzJaN+pOzDPooRAAD++gu6wSTbXWeD6XkveH+7ij6H/H9Fa3yx49M53rBORT0V3vfvJdcMH/yZaABvIH1h/8SKAtIa+kytkxFfyNTGNvSQfH7hIvKEeypNes8C64HVqU70smRiBU/WTiciKWEyyk4BStstK++mTpkYae614HWfybvadEjHmdlRlePGigeDJnfXbKnStJXHV99uInH3iyP9GAHg6bgAS9KweTsZ0eyf/Pq6WpOXulY8H0Kl70lBQ7t4P3Mg9SD5Rk2/AsY7qUDNdsLs0XkKiJCg9w2qgA1INKMO7PCcAnY5+cAsW02nHLbRFKpppq9zAAOU4pKTIEevcceCjGuX5DVdTvDGeeGxwFS8+StJx1UMSx37kPjabdpy6F6GQAAAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 7.jpg"
+        },
+        {
+          "id": "chom-thu-02",
+          "tile": "chom-thu/chom-thu-02-tile.webp",
+          "wide": "chom-thu/chom-thu-02-wide.webp",
+          "full": "chom-thu/chom-thu-02-full.webp",
+          "lqip": "data:image/webp;base64,UklGRnABAABXRUJQVlA4IGQBAAAQCACdASobACgAPslcpk8npKMiJWsw8BkJQBWGZEcLCUT3z53AEnZKlaookbtlB9R42ULzcCay79h0m3w+4Il4utR9MHQ3ONOAAP78DXoLBq0P1B/f9MbQim7yVnWJl6TtcdE7iBWpJys6/wc9xCZpUDdv7SUj9fqRUGWwjcP5NjAej1RB1hE5RWBS4VdOPc2m86rPm/kewTWivMpUBCZkkJNDB2oW/OF511QEB/B1M6NQgdlbZ1FVO6cv1+NrlbRM1xAUJQ+8DaYYV39+gxBEoTLYD0BRxQwcwz01TnsN7gst0iv/NHVeCcAQSUCgQ7U/xSvFAvKxHZgu8B2pWEgZQh2if8qrB+sO3LQ+TIHb/QOJOqiAIdVD4Mw3bJScYVxJCXWNSCX5f0duP5AjQ+AleYwKUlYBUU7Zv4lYevIckGWeM/P80RVs+dEds8JtDcF7Bc6hOgKI4mgMg0bfmJwNaMPAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 8.jpg"
+        },
+        {
+          "id": "chom-thu-03",
+          "tile": "chom-thu/chom-thu-03-tile.webp",
+          "wide": "chom-thu/chom-thu-03-wide.webp",
+          "full": "chom-thu/chom-thu-03-full.webp",
+          "lqip": "data:image/webp;base64,UklGRoABAABXRUJQVlA4IHQBAADwBwCdASobACgAPrlSnUsnJSKhtVgMAOAXCUAXZChXUCxC2sEhet2hn3ryxIdXXgtok8b0Ma/FZo+SvZQaQ3sKh6RAfaOYLeAA/Z1qNszZW5gPtyrrtWKoJILeaGCnFw+mwP+6XmH9rLNdOhBHD2baSSqTgSvVGnoT+3rF4j6OlwqjnMpmX+1K1HmnTxJ+NSTWy9M4WXJyf8APBLaTo8OznFgGV534adG3KKZ1kXccR9lzEe0yumsP1CSm/ZzJ7NPf5jPRhER9v5YC8JXX9ekhQYACqo4eABdgHy3ggWStavGmqTcv1XCYyHsFZ1pMJHQJR2QvkFzh5jdef6o1l9Bu8+cxs+te2Lzvs5IWgRr2t5s1KGgs1ekp9dFxhPK33m0XNI6edOuLsoVpiqwrO8KvfebuYy9RenuogTG6HxHiVQ707kS9xybk93BrtfOGrT0EOxhcO/QmNOAl8SyjiGraCC0nVt75RaPkwpAdw6Tv3kqlAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 21.jpg"
+        },
+        {
+          "id": "chom-thu-04",
+          "tile": "chom-thu/chom-thu-04-tile.webp",
+          "wide": "chom-thu/chom-thu-04-wide.webp",
+          "full": "chom-thu/chom-thu-04-full.webp",
+          "lqip": "data:image/webp;base64,UklGRnQBAABXRUJQVlA4IGgBAACQBwCdASobACgAPslWpkynpKOiKqoA8BkJYgDAKd2vgOPaU2edUoZBsvulY5tjvlSLYWEGFu0+TiaJ/8icu+CE8WcGykAA/ftJ2D51t/zzLOP7xx5ik2B07hKRMgosZ1TtcZvCVWqB9v1A6QQDPgBefwSi1jMPCd51xGpcJJKYV+ztBZfMnZHQnDGyhMoeWBIk7XU6OdWGDDAjy6K18M/lbYckcXfygn8zko+VuIs6fu/3rnQZuoZcEJTzdtQ1igkgKhrAMalIXA/ZWNKtL9WaYYZf7ZODTHWWdEoYzuwphVIcCb3EG1I8fLU/4hT8OtnXJbZ8H9I/UzXxeOTPgvj4ALPRa0WX6Tgw3DL78k5wVFilq7TuwE8PdFLfAz7KKxEj4f7/QipwhCCtTRXrjNx1W9vjRuz7ifaSQ/xdFhS0PDAV8xrQTWVe/D0c7zc+xsXNNxPaQJtxmuQxqyKVoQEIm1//UniqKAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            40,
+            40,
+            40
+          ],
+          "source": "EmptyName 22.jpg"
+        },
+        {
+          "id": "chom-thu-05",
+          "tile": "chom-thu/chom-thu-05-tile.webp",
+          "wide": "chom-thu/chom-thu-05-wide.webp",
+          "full": "chom-thu/chom-thu-05-full.webp",
+          "lqip": "data:image/webp;base64,UklGRmgBAABXRUJQVlA4IFwBAADQBwCdASobACgAPslSokynpCMiMBqoAPAZCWMArYk73CM9GJXrf3LXrjV0T30DYkyoheWmoJtFG4st/bVpzFgMx2RqUwlTeADwUdE4wjGl1yyYATUpKvZ5Y6Js7viIX1oSrhNUdL2AsdtgI/sGgrSIfSJuw8U8tTH7yphuyOtKdWIstb0D6pGx2boW2Dz+bLi3c5elhqqcarKlR46YoE7pBEm4DQpk70yK/ilkbTvS/EW3SpwM+7Ln2s9z+ZIslMegzQ/iEjK4A27sGqyLujA/p55Gq2Laiq5O/I2+P7li7r+ogOGlx6yWj5AHpr9EsRLoognMxbk0w69jbd9mxRk769mgX+DbIPpNhIZ2Js7FGP16aY5Bl87BfOAS7tWRo1k2pcO10vxLklPLM1oWQRTgMukAyJYpxEgp3fBi5pOdDJenMnAwvJDYUjHFauwxL8L7+ORdRqpiUkuWQAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            248,
+            248,
+            248
+          ],
+          "source": "EmptyName 24.jpg"
+        },
+        {
+          "id": "chom-thu-06",
+          "tile": "chom-thu/chom-thu-06-tile.webp",
+          "wide": "chom-thu/chom-thu-06-wide.webp",
+          "full": "chom-thu/chom-thu-06-full.webp",
+          "lqip": "data:image/webp;base64,UklGRt4BAABXRUJQVlA4INIBAADwCACdASobACgAPslMoksno6MhsBqqqPAZCUAYH65jCBo5Mim0ywNKIzYH0tu8FT2QmpVJDzY7h5JJV/gjQt05aYJTk+o+eO5mdII/CM3yAAD+3UGkHKH3YyEg68JS4n37R04UjNGyFvcz7fSDNOvjk63r9cl1tafpKu0jQ75jfUPaqT9jVZmXvXOBBR8PLFNtbNqFOEPXOFFDE+HVvsH8cVU3Wlphu9rYetBLxfUe8N+DpDrVNqGhJTtGzXlTbVB7jXHutYhcenNgmU1/52+5mnzvLu9XFgMyWF4/Sun4TjUYwTmsX12me0CgV0DDPy4QJanOLpv1iYc5F9mRkXAFIefgv0myqWap6hWGM5u+hSAgpaH5zpIPYtthps8DC9d/7uiGjGzDcVxfvzzDlOcyz1syhMk3eD02AMHpirlJI7phFCfe63BO31/LbNaF1JpkEl5PlDmJtlwOro7AOYEF96jMo6/s53QnQBLEw4X7LpTodCpeOwV/gK3HBcXSc/aorRvImcjZbPcVgy8nsWD0ZOH+/fQu20Rqf9XXTiEd0OX4bmrx/rULXJ80FCbZ2lw1ocLUewAurRZf+yYQn1dfA/MXvqLYdeT5fQfdjeyagAAA",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 41.jpg"
+        },
+        {
+          "id": "chom-thu-07",
+          "tile": "chom-thu/chom-thu-07-tile.webp",
+          "wide": "chom-thu/chom-thu-07-wide.webp",
+          "full": "chom-thu/chom-thu-07-full.webp",
+          "lqip": "data:image/webp;base64,UklGRvABAABXRUJQVlA4IOQBAACwCACdASobACgAPslQpkynpCOiKrgMAPAZCUAXz2I3DtbNabOY3nmBmkvZsBo6XyFbKGNnckigpTYK8jvCfXIzhWhI2muNaP0hjeVlg+AA/B7kedredNOpDd4t7TO+clRgxmY8yDZ9fSFGhOZZ7DXXMhH6SJGI/NoFmZSTgQEtefPpvFA9rJtIPSVrJeFswYQ+u9Uv3uTcVT6H+A9tN5jw8657Nh4JSA7Lp/b9xjYHiikU/pNXPfgoiS9DpQ5FDBXnRoInxRzyD8NEj66Z+KfHhCfGO+IbOFh1IsbHyI7aqW0DkIJjZDQi+F7gabq4Da6hJjKi/rAfEHNjwkYosd46IRdQrXlrNy8t1VGLObO/tj/9+2zUcqS3Zyw2pDIykHnw3bXJeKs+Dux5iLU/zu6N4HV3suQxX/bMhr7TAfJmOipuJE+IdjE9i5oA1TmM7cQ0euWtGHrNjW2HyfDq1HmpLJ4JsikRxughykvjgIzpK010nNeYWQY1bqJGRHq2JVO4/3muaIXI/JJ07xg+LI7M/Z31xTgVB+AC8Jw72EmHVylNrSBoxge/JsoeCvivxRXgXJRcH3UfjVO5gyXOYrNUjTdbI1dc1/voHbpeBB7+uEn544eNH8wSLhNSYu50BDaCWTAA",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 44.jpg"
+        },
+        {
+          "id": "chom-thu-08",
+          "tile": "chom-thu/chom-thu-08-tile.webp",
+          "wide": "chom-thu/chom-thu-08-wide.webp",
+          "full": "chom-thu/chom-thu-08-full.webp",
+          "lqip": "data:image/webp;base64,UklGRvgBAABXRUJQVlA4IOwBAAAQCQCdASobACgAPslYpUynpSOiKrgMAPAZCUAXZlBnuNZNXt4R0gTPoPUhfL6E1T/WJNUXTd48bpJqjUHNtoN0QVDO1d4YHWlPSndyRmMMd3oA/CFG7fL9v1M0rWsVwMQ6nO28887ETfPSw2n5fEAyLRpsbQuk/9xM+fzprM+fPQJVC09mtWpInsRVrGf//QhJlRxD67fEyNKhZvAtLob8smcxSXP8h5gI/1575AsDOtxOsFjZ57OPkrHm+b/1jYK6wSCTK/7q+YStcIdjr/5NwWGb+75IRj5FtfcTjI/Xef1+9dGiyo7qDpS1aQ+38NBtsLf22XWlfYv/44BdvWTCjOlj3loSZDNebsQSp5fXejpxI4t/w2dg63nNI+sHVzHe8kxPLASYh9I5aj+WopdiTVEDU/k+/7Sehk+BAcZj9613oeWF2scO5SZ8NTQRM+GAljm4wdoIj/dj9rpsN6ePau+rZXDHPnaxaqrttQ+Lxcu14KtQZ1F5yTRoF+4qnEVC8oyiQlbLbol9e6AN+dKFJ8OuEseh67oCLEWT2EPsidCXuwYC/BD4CiKj99XfxM0E27JEKGcPolWN8heXjP4Ci0H12bJh8L+DuiMAw2upKbl6J/8A5f4UL+lCMtj2C3JEA8w9o88RL906AAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 45.jpg"
+        },
+        {
+          "id": "chom-thu-09",
+          "tile": "chom-thu/chom-thu-09-tile.webp",
+          "wide": "chom-thu/chom-thu-09-wide.webp",
+          "full": "chom-thu/chom-thu-09-full.webp",
+          "lqip": "data:image/webp;base64,UklGRtoBAABXRUJQVlA4IM4BAABQCQCdASobACgAPslUo0wnpKMiMBVaqPAZCUAWne+X+q+BJ+CcluO1TDdWIBbO3sM6i8Goy56n+UlXEacjFwnn4QKs7jyYlYClGN/KiRHezMHdAAD+6Qq6tnAAyPijEOLLZxNdOwBrEAWp/V9Nc+ZNqGIuYmuTbhZbLB3BbDxV3dvtp6oZ4n77cG/gPVYeTgGimgTMJpvT5iJSjhaHh2Ge8ikWOErpvtWV+NpCSx5YWgaeYWSOUTr19F2xIUJ3S1g6CzOWx9KsIWxlki38Y4/KnrBT4LzISmHHnSJE40KUL5DLGbzRyXtvmxRSSAwMfpf6vAI6PFFFnb6cGs6Lp3LeokDPVcURxrD6qpEJhOLKGV7szB+/upGD5nR3yOiaGkF+wd0qThtksdAmT7+QOHjSjl+gQ3LgSxkgpijNZpUW+Psu98h5CDpGAYUwExRjTnrkT3BFqCR3n3rEiBFk465/eB8uBcxHqkPAwEp2EpEQaLaudB7Y33OODHcze+P/vlT5aQLriUq0tvi2I2Xsg6xEDkK9fWQjjnpvgdKlG3SU/Omdm1xwRf3x3xG+Gi/XYsqy2CO/JnB3At7ST401WrPwwne3bKaGAgEASDHgAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 46.jpg"
+        }
+      ],
+      "skipped": [],
+      "rgb": [
+        8,
+        24,
+        24
+      ]
+    },
+    {
+      "id": "cuoi-ha",
+      "folder": "Cuối Hạ",
+      "images": [
+        {
+          "id": "cuoi-ha-01",
+          "tile": "cuoi-ha/cuoi-ha-01-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-01-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-01-full.webp",
+          "lqip": "data:image/webp;base64,UklGRmIBAABXRUJQVlA4IFYBAABQBwCdASobACgAPslco04npSMiKrgKAPAZCUAWHbvFsQLepjSsUnDQLsbtO7BEWL7cMYz9carDhOjTCgB/MSTIJzAAAP7slssa/XVRsqiJ4LhTUF4HK+wGl9SxkkAnht+qRa3ulTSBr0kVODI/5NwjlaUOVafT52Ak5/ORdbQzquf6T1gqovYQnYwaSmEciP//FkduwoyFi0zaKjdlpssnDZPEpYVDyDYBLXkjh8AaP3ze1RLALsd2AqPtgp53ATqdbNU2V/GkLhn5qbM9w51GczVPPqLQA/okm8Tbq4f8v5s3n6fG6nf4ebX/aPSnS1OCoiAUrONqqp8lzz5FMF+3CSwWE43qz0qPnoCKSLO40EhORxvuJUK1C4D2pt7ZYRzDWMK7nTXtXPhaKW8bYxebDu8Da7iE3QN7hW8fKaaktmO3HvDhiOkFXVQkBGbbcd3rLQEAAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 4.jpg"
+        },
+        {
+          "id": "cuoi-ha-02",
+          "tile": "cuoi-ha/cuoi-ha-02-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-02-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-02-full.webp",
+          "lqip": "data:image/webp;base64,UklGRoYBAABXRUJQVlA4IHoBAACQCACdASobACgAPslapk4npSOiKrgKAPAZCUAYciHf/zjn8IEkbSwxj1U4hb7nGLXhlWlolUO/Tr5QSdA6GgWPof3H26bf+tdlsfhCgAD+8tU006KlwBQHX8seiZ7usnminlXyeW43pcp8EG+iMLDDJX3TVNHWXmvOzLmojUq0H8M9F4y3qod0Mr7E2Rv/FqZISZjMONcJ0JqyqTYa/j3iWtzAQHRDGW4km08Uj24gFAuR62D0paYGHSpbUdb9ODNsrF4DRSPIlupdnmDYSJlhwzbFw6fWMBW2s9LAa5VkuVgNREmcCy5gPze9VjBFgHxtZKqtIpZLwxfQuUDtAkRf2+o98IhzoQKIcw2opP4iQWeelVOxuR2p/qzx+mfK5iNDHoGx4vG9gwFz8A21eluQdm6K52vyIZZzMh0AIjF+LV46BZTFXcGc6LV/RN+SbL06s5DxDbxpw/DF6tg1CTsTUZ2So9QT0/z+wCdt3Hz/BIhpYiDiF9zZAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 5-1.jpg"
+        },
+        {
+          "id": "cuoi-ha-03",
+          "tile": "cuoi-ha/cuoi-ha-03-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-03-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-03-full.webp",
+          "lqip": "data:image/webp;base64,UklGRrABAABXRUJQVlA4IKQBAACwCACdASobACgAPsleqk+npKQiJWmY8BkJYwC4USI9LbUZeN3wNLi0GMElZIKpwMAbrLvpr1XbuisulUkh/aBBHTZbxI94j9oyL0dbjsAA/qNz9yyKX25cAVbtNY9OJPHhuwUyEO9OPr2ytlHdbbjvCgtNp9PqORVqXrVn2wy68cb1km17Od6xuDan+u6HMQYZC4AO8h/ZJX8sN3lKfJRxqrUrgX0NNTTaFh4tcggbQSZ12+cUIAqvMvyZJFZm9Hp4o2mgS12qvRNRvPBg0EwtGsXJXMDdEgMcfnr3alaHV42Cjwn5EcMoRXHi3CKCP/ttq2aGd2hf8wvRVfxf9x0eyriDj8j3npvXYc0W6zAPNODqMnJdf3kiByNzs8P/aJf7MGsvgkJoEsqNX14h0squ7qAP9dqALFSqB086W8Nu/+EbxTC4F33ojt1H+MblcXBZaoSymbv+geFEZyevPLAgHzM6M1WuOR9odtEnIRPy2XlvII333ecKlL2/s52rJZoBuIYOBtjFVz6zuhkzYRt2UN7xlhTYspE3QITlzKSPhg8AAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 9-1.jpg"
+        },
+        {
+          "id": "cuoi-ha-04",
+          "tile": "cuoi-ha/cuoi-ha-04-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-04-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-04-full.webp",
+          "lqip": "data:image/webp;base64,UklGRowBAABXRUJQVlA4IIABAAAwCACdASobACgAPsVMoUsnpCMhsAqo8BiJYwC1Gzx83dR/6DyAlEyw3v8OmKrW+lMgGCm1fCxivX8TklU11WIs/ITa2Q4qTM9QwADOJzKl+HG2kdmT/NFHwi1hA70+b/+gmkwyre5e8SXYXxpRxgq/yaVVyYj7/mbyxisDLOHEmjwY1jjj0WpHgYgpzSWb+xQNbvMVK3X22ZP/UuvA3k0RnPUhJjJRkvond0L1XTk68xSC+eGs3uTsNN+dytwzCaVGejraGY0z+U7F2fNGuBVaMUX79+RX5npcz9R844eITANizSlxsxs+bSDST4uqQ2CNnDyWRBhTuOBz//+Hv/7ZxhEg75YotGvUujdWFZ1OQHhgN845k5D0qiTqvNHZKcLHirtbf/GpwggwkxZieJ/2inpGYmsCU1AEoUsy4SvbA0XbhQCUnDdRKFdsiT/jruc3OZfrUkAiwlN2F8AEpwDpKYYFyCJBKR952zZZj5b7AHzmEGLae5qkNAVsX4jJQAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 10.jpg"
+        },
+        {
+          "id": "cuoi-ha-05",
+          "tile": "cuoi-ha/cuoi-ha-05-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-05-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-05-full.webp",
+          "lqip": "data:image/webp;base64,UklGRlwBAABXRUJQVlA4IFABAAAwBwCdASobACgAPslepU8npSMiJWsw8BkJQBdgMZPi2mTsd81UI/AnSCfTfCeJM8QoYaw8Bp3YD8CO6AAO52in2YAA/ni/lomLMH0KULkTVMBVctM+w2Zwq2J52C9WRmy5u4u2fCKnUXZnw0FLR55CwWsdgiObZ9gu4o2z2zT0uwjFqv5KX/vUHNWJhP6iOgK9qiGO+fgCnr+uY57mTM3LLvR3S8ss9HutbBe8SnkyXDx1FV3DI8e/A+W0v/cA2vWP6/eoK7UFpwPtUQG5zr6BCaDO7ksghuCRUzyP3H9cDQLvBfYyQJhGQWDQS2XS+yHOepccHeOXHfzDDFj/BWDe0gsgzqYCAujSDDu2ggPWFrYlIrt9V+jkJTyP6FQHtLl0h7CcSiTMG8qUHyCKzR50lJPPsJJbT0eLQtZ/xJflE6AZAVbUmyrGYM/PAAD+AAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 11.jpg"
+        },
+        {
+          "id": "cuoi-ha-06",
+          "tile": "cuoi-ha/cuoi-ha-06-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-06-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-06-full.webp",
+          "lqip": "data:image/webp;base64,UklGRlYBAABXRUJQVlA4IEoBAAAwBwCdASobACgAPsliqlCnpaOipWgA8BkJYgC1GBg4VTRLsBUn/uTydCRuT1rJcHVBM9EngRXG96Nd0IRRTebf7oAA/vZa8Fglpx3b6Ve4OgVPLp9Y2fQ97zs3zSFLQKHKW6XXYB0b8peG+NlBPMtCdD4yxslzlX2/f/HjtXZyuqL8QxjZ8a78pMNt21O/UU3LPvC+0aTkx6vEd4WUCistecN25NQo+rRz0M9kXnMnOckQ69S0ogma6wc9RX1Nf0MqDsNF4mz3CmMQDpDwspP+wLFBymmV8aK7R4YO3rY2NRQc3w9x+eipYxrROo/DR9vVEmHFFZ5lTWYUOBfUjzYiczKV3jhTb+qLfsIkevZEg7Uu5BNe0SXQ+nuHK9eS+7g75hj6iRhyKjZJ06VkfTF2vDW0Wb4B5ZkQNTZCOPYX6oGSV7h7KdhgAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            232,
+            232,
+            248
+          ],
+          "source": "EmptyName 23.jpg"
+        },
+        {
+          "id": "cuoi-ha-07",
+          "tile": "cuoi-ha/cuoi-ha-07-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-07-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-07-full.webp",
+          "lqip": "data:image/webp;base64,UklGRqABAABXRUJQVlA4IJQBAACwCACdASobACgAPslYpk0npSOiJWzI8BkJZACuT3LpNNH3NCB2qa7sQ5ZG7tGWZnXagoRaP8WnqeZRg8y6gABlLyBbpb1xzEjprZdmdUAA/tF0LhrdQvMBujtpk41i8rQM8A9bbWAm+J2a25iX4c0g/BBwXa6nzcUwm7EOmdfjbTEA8DX6wkUn7VyRaMftQat9CfnN8ozF/jHKPjjy5n75wVWCVeThuYe40ItQTqJRVLTPdJuX98hPnNzNMo0AuffVnIBqjBySXKCeOW9QbK/EmVEyAQnsuuhHVL6Ss7LlrNqHl496wOWsi2LEA9DbFfD93xzMOWRtz8rknWZNoPOlXyNDTa3A3gsWJB9+lKSpkOBg8AKCDUzAJsBRCQm8/lVodbaEmpgrOjg2BBfFV2lXeuPB2MEla6fL9TxsfsyhB9JX8gmWQ7++smgn1WsQ/zd5bZMlgXqpZAkJk9+StXksP9DSIE8gnYGYMMkRXDA6OPapZDeAkOuYzA+7Mlo2OUJWeGLQSod99lwoW6yQEvCeXwAAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 28.jpg"
+        },
+        {
+          "id": "cuoi-ha-08",
+          "tile": "cuoi-ha/cuoi-ha-08-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-08-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-08-full.webp",
+          "lqip": "data:image/webp;base64,UklGRsQBAABXRUJQVlA4ILgBAACQCACdASobACgAPslQpkynpCOiMBVaqPAZCWQAtvsM/ca0LoCV893QddmWgnv4GY1W+DDm62wE4pAaQz3a/4X5w0dTStJkE34U1Gd2AAD+umbTd13ZJWNuWAsz9ueY25tt7HwZcRbHUa3l4A5xPmjb1k0gYiNcF86xziEBlZNwkfgq15lfQvG9etGkUVl7JNrJHEtEVsYM3clt405CLp9aWStRC4yfokgDujkLqD3YSwSJ42nWficv35isJwmDJXEQkf935aFfCsWHJXGDbRGNMN4gwHrclbQn8MWyM6nlNz3MduyLVoVkmkgokrbNv7pTmAn9+z8+MNIDDMBHdzqTn/D6+/Nck4SgBZ8puwhyM2z5SZWEm2E1dWXic9YUmtrUnEZLqJHAdR+VKhztvVM0uhntmDIqW17GHG8XubEL+AjU2HeYkfYk2999IcWZTL8qTcuiOaudszsFCkDP+2hPZj9QwnO0eZPXF4N0DIe4RebH9xiOogam7krIlAKAsCJmHCrZbiuqTN6IPxWKd0ePboA9E8lFyaAxj8SFNWnMSnSzAwVfQcK5w9/YCFXkcMH+C7y8oi2AAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 29.jpg"
+        },
+        {
+          "id": "cuoi-ha-09",
+          "tile": "cuoi-ha/cuoi-ha-09-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-09-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-09-full.webp",
+          "lqip": "data:image/webp;base64,UklGRsIBAABXRUJQVlA4ILYBAABQCACdASobACgAPslWn0snpKKhsBqqqPAZCWIAtvtWRpNcUInZ5B6BKB5cjzdvMTz/Y4lplRBlYWMrEWcXZuYPzo5RCnLHtB9wJgAA/sBp3X5c3OVNJ9EIkCR367SmYue516+0sadDgGKOayibQLUq3ulgaLspS8NtivECO40JhPyd3R+6bXvr5FM9WEbeUQrtsO7xD3FniwCxXKlczxai+fT95KymlWfu3wLyeVudXnI2yqOn/STy7GZjUfi7DUWMqQv62BtjhHuZ30Vn1C/XS428ct2sevCD7C+0JA8FQsIAqJ3FKlGXdMg1tYHREAAFVyXBYzc+5akzlMbsuNoE9allhP4aTGmH+MHCbEvXWpdpwyGK9CEAiotn2nOX2o2gjhIB14Z1TsTjBVBQxN+xsTuAkZivJYaVIGAmK9WCHCts0/1PoVSaUessTlukuQLwMb9XicyR9VjhAV5lmHpGizqGgL2fAzfc2u1170y9kBDvNKq546aQJ1gJerz+Gj6ETxwN1/qgzHzB2jPS7sG2OOW710Vi2/d3sYVeDkZlmkHCaifTLUYuqBlCoCpZHoR0cOopAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 30.jpg"
+        },
+        {
+          "id": "cuoi-ha-10",
+          "tile": "cuoi-ha/cuoi-ha-10-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-10-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-10-full.webp",
+          "lqip": "data:image/webp;base64,UklGRtQBAABXRUJQVlA4IMgBAABQCACdASobACgAPslSpUunpKOhqqwA8BkJQBbfeC/J1snwR2g4CVP9zJLfS2Iee0tk9oI/SK203K4E47PQwFHAfdhRDbcesn+4nAAA/u6ulFdgiWPtaq90mPbZqwnzofqyHUKYvjIcHqLxr4FJyqQhl2Ujb/olYW0rQJc4jzseiWYH7FnqhOe4exLjTP3F8GhNaZiczWXgLyJLzoNAcdtRxIGgLuLu+51sYLbm83FVwBVTP9YKfE4hjRigAMkGr8YOvpzl489A4bsHAnAPIuIQgfIeLR4iuixWX2+puH5U1s+yirS6bzFDwjyve71YVaaBsZEU6LbGsBvZart/qB9zN8MB5op/nK8NNUN3IenXXYJS082U2hInryOJT6Umzxf3WpBRFMYGwO6LiBghuCxyI8oUr4Neh9o4qb3cbkwhBGIPtqtpP2h/oXO1iIDnPt2dGNLXZIGokuPa69t/q/7foqEcvVHpeY/lqjVI9Ne/Ho0V1w9Qh/OFVQ6CLXvBDaFscBgsrGTxbQ9XpdEoj73/NqdwKTR/8/EXJ/yYsU/wITcxK0Hc7g0kCGCr3cryPvg4Jn9tcp3mmVp3+pVAf4L4gfJ7JSwAAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 31.jpg"
+        },
+        {
+          "id": "cuoi-ha-11",
+          "tile": "cuoi-ha/cuoi-ha-11-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-11-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-11-full.webp",
+          "lqip": "data:image/webp;base64,UklGRnIBAABXRUJQVlA4IGYBAADwBwCdASobACgAPslepk8npSMiJWsw8BkJZACxDVOJueChpKySnfT/CD4WYSZUXSpOhjxFfjZlO8nZTLedxxpJThAq7jZuwgAA/rYDP71eqcZGAu/5+ztPW6GHKv1mlAwUJRulo+qJYhKhV0tu2tiriAcjRiadwC+T+tjb5bug+9Rfg1sf4N65UPeoSc1CAhlu6/4k3UEXB8FpwmLm18hFH148gus7/GESgAwPSTxQVUhdJhje26mfkKBSuPQQtqDPwqX3WqKQl9aFFTUkMmZ0FE0et2oRxLJ6/cnDb/rcOty+NC3DA5CD+m8K89i2y1RJWXcuoh3HMy8aXqZiCKcY7WGw+RQWFRTLj3WIN5ho9KypETiviIHzTSjivvtEjR5X2BP1/t/tS0y1cixiUr8Ai53o0W1Nsn0Y3qN+6jsYwDxhimfBk0Plr3m09Cln7BC/3B3aRrcRMEVRC5MTeJ70MdkRAAAA",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 32.jpg"
+        },
+        {
+          "id": "cuoi-ha-12",
+          "tile": "cuoi-ha/cuoi-ha-12-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-12-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-12-full.webp",
+          "lqip": "data:image/webp;base64,UklGRqABAABXRUJQVlA4IJQBAAAQCACdASobACgAPslapk6npKMiJWsw8BkJQBWGYZ/ag/W5VoQICm2+9saIHks0gpT76P91nOmOGpd3/ZU6Ezf6cbSRAw4cgaAAAP7c9KJbS3vj+04pdsji+WnlWb8TXBK3L6ODip738MVQQSL5TrQQpoFi8wAGfWMyUExouGzlKWXyuasbUA2f2VcqT+shN2ct/G9smuaCESfMw4s40Fy6Q+2Cxf2EzkGzrPoS6nnaSnuFlo+YpXhdtmHdWijYnIG/a06DwmXBOYQru+9VDJ8/Ow/nZId6ITG3D7nQpT13aFuIIo2MlupOVMflf1l7wjKOP4lC5fnKSNaDS+E+hM1PVn+75h7MzvWmbCljt+wg1oV5m/HOULIQ8TNi3+MFLEsKX7lp6imJb5OheDn+hn3UygwaSPajyP9l5NCRM4pKfsfPjt2+0PYYAxJPJ1uLmYRqyXJ+0T0d7MxkbxEMFVg5N2AxLG/hggsBWUlfcwwwvuG/H/3zTwCyN3qiPKq27FoJfARX0LsjYHvgWPGpMiWNAgwAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            8,
+            8
+          ],
+          "source": "EmptyName 35.jpg"
+        },
+        {
+          "id": "cuoi-ha-13",
+          "tile": "cuoi-ha/cuoi-ha-13-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-13-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-13-full.webp",
+          "lqip": "data:image/webp;base64,UklGRr4BAABXRUJQVlA4ILIBAACQCQCdASobACgAPslWoUynpKMiMBVaqPAZCWIAwP1dGCvv0xOsdjAlYDdWKdmAjj/6dbu5JskitdJHDo0I0DeXry3KL2nHQhYLyHiQHKVbNfBF67LwAP7PbqY8xpNN9+mZTmrLyNd0ZMgBadlbOprflUFwfs65u1pLV1AYopAuM4PGqpWIXIGyeUrDSGLNpk4MACAXV/XRyvK0n3wqbC/maYjekSSnxa+fwNRMaVnetj9PgNfs/s9m+jO2MLn2v/TK2yOOuTIS2DssUI6rOLEs34evsH8KNTZHFi8qTcA0HwyLjp6iqkhWbJET1oVz3iu35XoMd/KjiH8y7vl7E3bYalA7Jgxkh0rmorO+5T1ZmCFPKsuXFHdJMnIsumfyb+Z+R535cMi4L+IuPrKx+hmtuIkP4unTBhUaIEqt++I7QtzIvzrBk7ofoUcY4VFPz4PmDXSAzx/kfrKcn02WjyNbtJYKZ1eH0E20BwX5dBjJ+aJAWR8mxifnSos0gazL27i5efxIXF1wNWVvKJmfp8K5fZLcp4pk5o11MPE2cvINEGg49hOG9rX0FBqvdmRrvIAAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 36.jpg"
+        },
+        {
+          "id": "cuoi-ha-14",
+          "tile": "cuoi-ha/cuoi-ha-14-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-14-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-14-full.webp",
+          "lqip": "data:image/webp;base64,UklGRsoBAABXRUJQVlA4IL4BAADQCACdASobACgAPslWp0ynpKOiJWzI8BkJYgC7ISCmAjgRjjZsmfK1u3gRdznMgMju206qeRXEg1v6vLFVCwvg1js3D0CDSTNum3mg+yIAAPwvOprNQFd5Slxg/gYi9KpnxKjoTVhlDxx+aT0Wo7uZ9+6B+jXv+5pfuO1j+1Bh8XO6ar9qkf+toAS+czakuy601gDvAZ8/Y03G9XZr+4pYB9B4wQVh6VGsAcnXNcVnLILgPIfQK1SkGtDqXT6dEh+z/v0z41Hec7CEQzo7I4Uy1t6TTkj0ONyPwiJKW/EeXslXGxsKudC9HJsoJo5JfSy3eJRXOQQpv7DTpmuPfBZZLOB5Deg064i8JOZE31SAq9C9210NK+hhjuw2K2FE7JAyH5tZb2gK7mJV+Ftyl2TdqUXu1AX+fCNiI0wsNW7AlMpf3vyXRjOM7SyJsLztbW51cZm44ApEx9gMsulrfXbKxarMzPdiXKzMZlDonKwuJU6ygvtfxsfqRGJi6RTHRSVdvNTJ0/2ZDzgfZ28SgR/KQxewC5FL3NqbAE66Lh/X1WsEUYiYFXnmri5pHkcaAOK9cZpytwUYW6sjM4AAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 37.jpg"
+        },
+        {
+          "id": "cuoi-ha-15",
+          "tile": "cuoi-ha/cuoi-ha-15-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-15-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-15-full.webp",
+          "lqip": "data:image/webp;base64,UklGRtQBAABXRUJQVlA4IMgBAABQCQCdASobACgAPslSp0ynpKOiKrgMAPAZCUAXZmsfp4T5SmcBSQWSKaT5FhYCm8YTDTLtUYGzxp4/TczM8eeI5xZZ5wV+5aI3Az2CVsVjRqqA2AD+2+jMplOxG8yNcubxatDOSr0be/ZccyDVy6vZkQxDzxRh9wIUnglcn1GGPuHhmJze/sVT2vfRrkY6ojb/mHvYrQxFbBn57DhIiGjOVSJ0DWFfRpSrAKCd6Kp5RJCUkvb7X2khMH1uOxud7ydcSyBOmC0w2VfT0w8CLODd/J6yXUSQXDLsml4j62nWqH08QT1aWmlilZ2Oy4Gyt3UoDxxPVnLtOW1yk5kQ+KbkRx/B+o3J0ucsj+mzj/bDChMKwBtUpqBHT/YK318ODR/XQSBhj41f3XTvT11fs7+AsCzzk2Bf5P+gaQdh+knWGLr82kbSpzKXO4jPpnNXcZrbsc9XafMJq/5DfBK2uf/amfmMsCp4O5M9/jLPQCL+2+Id8aFvTeLhGM8G3LVty6wbmRNyvlLAFjADe2VOZZEgrrhZRFZvT3glz7ox7W7vGo0kR1ZDzvHU3WRtfwxS48rFdjE1fmxQOPS8qCJiOneS8E7oDE4BIAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 38.jpg"
+        },
+        {
+          "id": "cuoi-ha-16",
+          "tile": "cuoi-ha/cuoi-ha-16-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-16-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-16-full.webp",
+          "lqip": "data:image/webp;base64,UklGRtoBAABXRUJQVlA4IM4BAADQCQCdASobACgAPslOoksnpCMhtVgIAPAZCWIAsR+wqU3LXYDKnYAcV/fJGUc/moAI/aVSCEF+XqtIIhwbJmaKgeTaETfmhOJIUoiK9O+mW4av6VmAqgAA/tf+QbSbIFw8Mdc30b/sXtgjV/aAzUMPKNTjHxpW8AFp1LY57mhugGH3FZdqTnT6tpgbbY9zrnIVbUm58uKVY/m0xr4CvNP6TUcSy6mVw0H8KwNxy6GQ7HMU6R+zYkLNudCHoSMl+r3/ZudF3yfG6NdKHoRoF8vQYilDcshW7hkhR64KmmF1Qhjh8OMKPsrRsdeDU8s5HObe0v1a3vcl2CuHyUTjyh/mT4V+QYuE9f2GAsWA0b2Taju8PssNK/bXt0+or145uLo88b/Yj4Rwa1XJcO9kgvw6uW7zyCDGEgARtVPBHiGUBb1uIVQA2D11NON+WBk0/8uhcqqikxq9/GxAoCW4HAqdaRDFTswbOVRwgGmtDr1Uql5z4LKJFfTzOWyC/t9lsFsOvt1RsTnpuarv1Edz+a/yUCWL6VA/dkwHGXDlthqjxALkDzaPp2IDm0NTU4Cffa2bur0+M+2kS1itiWy/b/FWlYlUhstkAY7PqpkgAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 39.jpg"
+        },
+        {
+          "id": "cuoi-ha-17",
+          "tile": "cuoi-ha/cuoi-ha-17-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-17-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-17-full.webp",
+          "lqip": "data:image/webp;base64,UklGRtwBAABXRUJQVlA4INABAAAwCQCdASobACgAPsVOoEsnpCMhtVgIAPAYiWIAuzM8fk62awpp8cbLA0tDO4YiAc/BHIx4aJZje9yfcsId0+QhQGzvs/TUNzFutFhGWcMWnpigAP7m8j+6g1vT1wzgUcVdzO4wAcH6zXKe1dy3wy+wUJErVqedVZimrbDlUns1KTDsnYPJPenmpoI7BYR5cNnrFSK+GzLgIhc7cjFQzh+gSuvBSaEe62WQ4l7iB+ROcue93ZwdxwtR2IRJ+D4CoGF8gNHmacOppn/jUieXGGk7nXpMi2xuztRF/bDUUrTgFlS3v67doZkfsld4guH8EQbnnbXF1/SEshGac2yje0cACem3P2I9Pyanidl7EOLF2WlJ3NbTO1mHe8FQGUgUhqo8nsjIBih8EuGp5kk4IB/7UWvM//18am7ByPbi+RxOqr2qHSEmRCQXdlslvAdpDmMrJhBxpAkR2ZGK1YLREiqLB64dWQE5qEjIwrFNvUCsbSbU5x0tqilzKgTH8JX8pNEa6sv4ztNL7uUwkznKC7iNxRFYLUj3me1ypR3Vt1+A6iX1EUphfa02LmV/ufT+9A9pb1pVkxU9gZETD9lnoFcKQeLsDRjaotnZ86pR4mgAAA==",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName 40.jpg"
+        },
+        {
+          "id": "cuoi-ha-18",
+          "tile": "cuoi-ha/cuoi-ha-18-tile.webp",
+          "wide": "cuoi-ha/cuoi-ha-18-wide.webp",
+          "full": "cuoi-ha/cuoi-ha-18-full.webp",
+          "lqip": "data:image/webp;base64,UklGRrwBAABXRUJQVlA4ILABAABQCACdASobACgAPslcpk8npSMiJWsw8BkJQBer1tTdzVHegGlE+FbM8P4LVJ4Opas+289Z9s8zt+WKXgTZteq58/gsFfsXGqhGJsAA/s3wQUlQXZBKEfoCCXdw43MOgS0zHA2Q4OGf9P5jAI702DKw5BYMOL1fFCMI2ntxUExtr/znz+n4S0uVTO8V8BdosdLjBE3jqnwBvhkuCgZxwU2OsU3u2focgtKwiky3TkNbSg8mqF/plnO/ctV4ks8xZpQxIrXgB3S2sMan5AialUdKR6u6x6rrf5j7LvpTXO61zY3/lYbn+xvFQTq95KgeW19tD8aXrYfCvdd1TaPkkB03EDHdRmGVLpIY9iqgv4u/lcytniHHU67RPlMenlkFoozJPdD8qjZMAnratr8zKCVcggWzJI3zAUq1MN6hIAo71ogKAu/ENCjteB+HZfHw+N5aJn7N3hDr8HRLSEHnx8KR2eXsaztjaluyyYXoq8AOim2R7cazdavedu4+DYGPnsEEIQoBDIAnJZrfFk49/qccD0tuM9j2xp+EGJj44nakVr7xQRNZu0k1AAGCXDbqAAA=",
+          "ratio": 0.6667,
+          "rgb": [
+            8,
+            24,
+            24
+          ],
+          "source": "EmptyName.jpg"
+        }
+      ],
+      "skipped": [
+        "EmptyName 5.jpg",
+        "EmptyName 9.jpg"
+      ],
+      "rgb": [
+        8,
+        24,
+        24
+      ]
+    },
+    {
       "id": "fn",
       "folder": "FN",
       "images": [
@@ -268,15 +673,15 @@
       ]
     },
     {
-      "id": "jpeg",
-      "folder": "JPEG",
+      "id": "hoa",
+      "folder": "HÒA",
       "images": [
         {
-          "id": "jpeg-01",
-          "tile": "jpeg/jpeg-01-tile.webp",
-          "wide": "jpeg/jpeg-01-wide.webp",
-          "full": "jpeg/jpeg-01-full.webp",
-          "lqip": "data:image/webp;base64,UklGRrIBAABXRUJQVlA4IKYBAABwCACdASogACgAPrlKnUsnJCKhtUgA4BcJQBhu73sV8oCuSlV3cOkBnW6HecLnd4Z89F53FY+u6iZc7Tbeik3t6TI2Xa2a24U7xrAAAP6sQrgRuN+Thjk3nxF9OO8kGCDZblbIogdfa3pt+AsUq3tTNolYMXqDcA7lmoq553yq2wsJt69SFq/OxWCg98Rhejk7gXm83Km/Y8etQxSoEhtvMSbAasQMSTB1ky1jM5ay27+JC3o0HjvsCeVz+5YRAYipd1EigUjZhjdHi0NWOXWbm5wYeL+ZelFRHCso1FT9YLJn1OF42lAHDifnBNXyIvS2kqCuRLyMXl6vXwBwnbIfV8Vyb23cKDpHgZzaP5cs4fqIhC7wTrXtOV5eKpkOk5rJRSHDQW+U6Apm3Cy5H53W53EOuzTL3iwecZ/ogDv4hrh/PMAVPS440JgYJRc8Kl26WByb8SKM0hmXyNT8+93umM0hQbiGs6b4k4jBQVgTax57wx99i71VG0hGBjZkytaAfwOXe8QZslmMS6vgGW+4w0Ld/td/se/a/0qwdpmnsZ0Bx+HwAA==",
+          "id": "hoa-01",
+          "tile": "hoa/hoa-01-tile.webp",
+          "wide": "hoa/hoa-01-wide.webp",
+          "full": "hoa/hoa-01-full.webp",
+          "lqip": "data:image/webp;base64,UklGRrABAABXRUJQVlA4IKQBAAAQCACdASogACgAPrlKnUsnJCKhtUgA4BcJYwDE337f2bohVtlgQZeqdbjTpLE6drhcyb0ruxHBoT3H18poN6nvUoX8mnr5GnNAAP6sQr/Ko/4Vh7gbQIYcnOdcJd+7rpeNkqUvcZzAkkrigsOAj7Z/TRA4eiRkccr2h+w7vPzhTEZY3Z+jkaHQFb3cn4yng9WK1r1BmDrQ1VipQQux2zvDsEkZuFx3QP6rQBd6xosImSJFQdPk3OBn9X7GwTGain5u77nKJXhV8SiGzsHF8ODf0P+2Bp6r8VliBdNXJLyKB3185KA9pZC9UAldbkRYjycBNN3gXYka/T8xvUam9fSHUKQBbta1hQWuuaB/9cB5LMNcGA1Kcry6tf7mUb2YptVGvv9BtthzPYueV9z9SStRM5b5tVqArkhCcAXv3NZHS3oDi17Xivq+1KsCvklWGfTuygLjE0Pq3oH35fh7nUjqhnlK18TVlTyPjWiZOiWBo3y5XAhDWw0+AjCxjQoStaMAhegEA1iENHBH8vBj0l7vCrAiO/6XgjtoNVobZV/gIp241AA=",
           "ratio": 0.8,
           "rgb": [
             24,
@@ -286,11 +691,11 @@
           "source": "EmptyName 1.jpg"
         },
         {
-          "id": "jpeg-02",
-          "tile": "jpeg/jpeg-02-tile.webp",
-          "wide": "jpeg/jpeg-02-wide.webp",
-          "full": "jpeg/jpeg-02-full.webp",
-          "lqip": "data:image/webp;base64,UklGRpoBAABXRUJQVlA4II4BAACwBwCdASobACgAPslSpEunpKOhqqwA8BkJYwC85AsVuTa7wTn/d4QklmPmJ8eKq4FVKcHMOos9UTG2XuRGxz/7Rup11o6AAP6nqg6GhqabKlfw5GrcihdJ0XkjBGzv1IoAevoUO5ndoGLj6+qoqE/8kRfgGTc/ArQYar5eIM0iC8qq0Cew0jeHVC139xbDMtJ3m7hq6E2PzQ4bqyYeQtC1nYecHP4eraOGDvXXoOTUYWRVaub47AWM/GnZhEjYFXFAoX8Gp/UK4b36ImW7BYvV7NNfBshLFcOqK9wPns4UOpTUzxVnEi78DYv3KUewLB2cnUpo0EIXVnyCaA3leolMKIGjKpWbK+R5W78CgnPf0Xay07hH6wLUxwhRRFKQFJBfUClxeZstHOTNVLuD5rC9hfq/x3RVcemp6YxM3VrtO4pNaJa6+sVp7g0aNgwoZ7RSExNCZXUwFzkmpfrGRY7PlGlYnniRHpLu3HCsQel731yVNm7ea2zPtP9HlsL897GDG/sHP2REMtf/pAAAAA==",
+          "id": "hoa-02",
+          "tile": "hoa/hoa-02-tile.webp",
+          "wide": "hoa/hoa-02-wide.webp",
+          "full": "hoa/hoa-02-full.webp",
+          "lqip": "data:image/webp;base64,UklGRpoBAABXRUJQVlA4II4BAABQCACdASobACgAPslUo0unpKMhqqwA8BkJYwCtbvMdrQYErC7qyWw50JUAu+OSVkkUfKVwRb6rLuAjeyPFuHf5rlgLphi0vqtYpgAA/qjAwnpWlYFrD43LC9+udMjxd8IWJF/B3++2QK8r4ldLoOiFV62MMuFI1gQ5gxDIPxZXASGeAyn7a68YIsNSySNIVKGimOcZzSGNs/Z1zAKlzzpSO0XqqFDDVpVW6FcZgD8EPJ0oyv0edPlY3x2AKbHYp9gbmj+crBhqsALNcNhviAmupXqbyQW+VBMZHWVctCwOPnhkH8KeU2bmSE55AaK98smtRXURALE8pF1B4/4IjXnZvTfbZtsOU2ldn6Chipj4kX55tZadsTba49QyHXaoia8CJwJWXf1P+5rwHbvDrry70XrMn0Rsot+SqirNYoQsEWMASNbUWxmUvnDHQVZyOheyLpcLW1/8AuJSkyl7S3UPnQvcdd/MkgD6U3LXIL1J6eeuMY+BpMTd+id2yvxIzj/Jb0RommOkeRIwLGgAAA==",
           "ratio": 0.6667,
           "rgb": [
             24,
@@ -300,11 +705,11 @@
           "source": "EmptyName 2.jpg"
         },
         {
-          "id": "jpeg-03",
-          "tile": "jpeg/jpeg-03-tile.webp",
-          "wide": "jpeg/jpeg-03-wide.webp",
-          "full": "jpeg/jpeg-03-full.webp",
-          "lqip": "data:image/webp;base64,UklGRsQBAABXRUJQVlA4ILgBAABQCACdASobACgAPslMokuno6MhsBqqqPAZCWQAt9kw+QBnuJdsvttvZS7rlqmFdMD/CP6lldD70ghuxsjJtWC/TkFlXG1WrQdXfgAA/tt/T+F9GOzryQZJLIpGdd6uxPG+Zspv322zV6rvQQeqJUXHNNivnaQUMaY97M/jaYakiJuUM+at9adB5MptphLw74+wSxkyfS3vv8bhKXv2rXUBG5mUGHLz0C4EuTcQ1BCZXdFruudCkNzE+HiB0j/DLvzL/Bj3sROhYV8BsxPnW/wPzLNBiFaUQl7gd1hugpkD0KgTgvdBHUWPpqzmfncZEyRbp5YhbwGp63QQ+70Qzl6arKOz9aY/gHDKe4CrDERKLIBreFQDdlC1xvG1URzOTvdARIAPX0U8eD7nTimZ9M+NyZVLoFz80fZSMaslEmo3JGTavfzIK2Wl/hCWOAJb7z4gY1juN26HAHvAE+BtRmXrSxvWo3inUbdxM1789VTOY5zBI0UxODzCVDCytof2phHgvdiTtMsm6dszOcSV33oqUoTTniKBRlCESSCz47xxR6hF7zSCumUYStfmQDBeUFU+sdtDQV1AAA==",
+          "id": "hoa-03",
+          "tile": "hoa/hoa-03-tile.webp",
+          "wide": "hoa/hoa-03-wide.webp",
+          "full": "hoa/hoa-03-full.webp",
+          "lqip": "data:image/webp;base64,UklGRsQBAABXRUJQVlA4ILgBAAAwCQCdASobACgAPslMokuno6MhsBqqqPAZCWIAtvrUALAgY285FBR7iiygh4HskyB5jV00Dekae5T/2dXnIqU/kII1cuoBk/VUTmuL/xwzHycAAP7bMuiycwyfp7CexI2ZRzuIePUgOwgf4PJen410nxQqLHMYGNgWA0LHSBnfzchepknPkgR0yT/yTgeG8cgsWYJ8gVpmCgfkmMdi7wp1nEi6pt47bdrfMQLCZ0GWU6hdzVd1zpWI4hmE2S+9vGTM3I4Hhoqf3J2ccKAuxoE9sE8SQzxNN117DGeaNhJzo7/acTh4/m/XthZ98x0h/SuXWQ/zVO60ZV8bj6J6hDZqUyXlnMSwqh+/yWSWg5MscSUwf4nbP+R5T6MmvqMSZY+H1H7sV6uvD5ZPEmgQaNhg1CdK/C+2w0ZANkN1DSA9GANEJ2xRiqORgFpMWHZaNS07FARUAKjjgU5yLrHNrgIxBLgv2dPaFRgArXKTSLJtVJuSdUvlSJzo0E+JT9oBez625wZK0ZhXtQiEWeLg2mk9t6ttQq1eRG6n/Y72ibkkjhKspeTW7H0hYgiYOizgW3ngvEPM2IAAAA==",
           "ratio": 0.6667,
           "rgb": [
             24,
@@ -314,11 +719,11 @@
           "source": "EmptyName 3.jpg"
         },
         {
-          "id": "jpeg-04",
-          "tile": "jpeg/jpeg-04-tile.webp",
-          "wide": "jpeg/jpeg-04-wide.webp",
-          "full": "jpeg/jpeg-04-full.webp",
-          "lqip": "data:image/webp;base64,UklGRswBAABXRUJQVlA4IMABAADwCACdASooAB0APslWo0unpKMhqqwA8BkJYgC3vqKsg3yCgRq9O88sNrBKedZ9Foz0acftvYHg/GmRaxRHSIQzAPkKWthoAUfKDZI6sU4LwAD+9KU5BbhcqJBmfozTbtU9XWAC4/ScvkmdjJrrCHjYWOu5RdKwTVAKXp+hWRyQ9QjTCV8N8cHCOX/c3AmiH/H4ozSpgaq+3DO4icKI+eEiUzHBFgZXCXH/1MPh3rt/HqAa1k6tHT94rawFGbfc5L2B87PBf04nHFeiYwlfK3wTqcss6rQ8HYyy8UlezKIOA0OGYVhDliaM3xmGc5XfT+7CSt0aFry6eCv+UKPvUBV8u8gx/BPXjzzPX9jbBxByFzuGrFTztLF3D74KKNvSYer+Q4BJafPK1h3q6h/sgb8NR8eejokQgE92gnZZqW+hPQvHUzzp1NY7BRpxfKTTqIzz0v8tjuA7b4kFEexACXcPTyLDnlLG+NEYUgpBEVDmHJWbbX/HrOFCfl0CAknep8eoJKP8+rEQLcCoCKf1yPivTMuebJ8AkuExyK3Z1XmYA2XaFd3EaKb9RsAuHxrZR6708EAGWApPqZGQGG2GIwAA",
+          "id": "hoa-04",
+          "tile": "hoa/hoa-04-tile.webp",
+          "wide": "hoa/hoa-04-wide.webp",
+          "full": "hoa/hoa-04-full.webp",
+          "lqip": "data:image/webp;base64,UklGRswBAABXRUJQVlA4IMABAADQCACdASooAB0APslWo0unpKMhqqwA8BkJZACzhrg/jPdLLRh7mhA+8+6vL5fk04UsctN0lsE8EQKsZBazovcwe7d0BPGWVeByFq5Mvqv0AP70pThMTIgxVDxFF4UkUuQ7iXzXFJZCccHXVa8zNgpiOmn5tHYrCM7KasRpIcSA50DIXphK/ONOUkKPZD+ZjBFv9g7llGb2TjhhescQtnGpS+g98vUMq3h3ZOgSLmDGHpbhBqH0ft0RsOfMJ3aebfxcHJ0xxDxY004SKjGeWdrqE+QJmBTPnVaP6JIbk1/o3uwRqvHxAVSFJgt4/fvn8WwmrGhgfDRZtAhvp2mH+4btzJl0GwJa2BXc6ruwgxesAz+xvCtqetN6CtQrT331T6uf9YZZB7o0stPYKCFVf2rKVUg5LB2thmLwBk6LRj3el2PmYPn2sClL2pWBODqu8Wn1wG/fqm8B0tgiMKkwm1G5mZi4HjaJGKrz4NC5nRZSmKBSC4z08LHBjAp94WQCtt0XR4o/oM0ZCJNwu/R32S/ccPW2M6eSV7pfirfbLLIPNlIui5AB5KOdnm4vI9D50T6gpafYKCtoqYmBPYaMlgAA",
           "ratio": 1.4,
           "rgb": [
             8,
@@ -328,11 +733,11 @@
           "source": "EmptyName 4.jpg"
         },
         {
-          "id": "jpeg-05",
-          "tile": "jpeg/jpeg-05-tile.webp",
-          "wide": "jpeg/jpeg-05-wide.webp",
-          "full": "jpeg/jpeg-05-full.webp",
-          "lqip": "data:image/webp;base64,UklGRngBAABXRUJQVlA4IGwBAACwBwCdASobACgAPslWo0unpSMhsAgA8BkJZACxH0dCwEArhhkyd2CUCyLYq9zHMlh2h2kfVJyGxDBisfitokYyMx2iDkTgAM4p4T8M1aRbx9T9jk10lWP5W1GoVCLvkotGyMl5GFHwKat7/panlOBRf+LQHbE4gRbZsudKI0UOZIyFnVTfpJr/ylGP4nlY0BoN4VgpuEPM/KYwtizHAZhlA4tXWev0zApfEGbeVjG2RSkVsruNB9GCcH/sWo0Tb1yle/CZ6UstBCz1ndd2ZZ7u0mFgSn2KCvTXbem12SL+Q2uCnV0bLgjrYno2oDgtEHVjN8Z4aax+QvGwTxNH6XqoXJyfKif3yjcMwYBbCueBnxD/y64uIfIY8Aeff/uv2mFj6E3jG4SfldL/A83MJcOjUDsXdJDYDqcTiRGt9DjYT9c+yHN3B/LGHL+mVQSuQCBWxrpgyDWGEB4d3I88tBWUtz6FFh5WUPhZ4XAA",
+          "id": "hoa-05",
+          "tile": "hoa/hoa-05-tile.webp",
+          "wide": "hoa/hoa-05-wide.webp",
+          "full": "hoa/hoa-05-full.webp",
+          "lqip": "data:image/webp;base64,UklGRowBAABXRUJQVlA4IIABAAAwCACdASobACgAPslSp04npCOiKrgKAPAZCWQAsR8OQYL0pV5N5gjtxOfhNpHWoyxF1XKyKhTX+X3eL9bVQaQp9jcvbzqrBmJ9gADN7KblbyORnymmtHr3e1ZrF4XFPCp15fK2+wkhQyia1Xd2QLYECMl58lu6zhQkR1HTNWEB6fAaHwHNkqHZT6xJkBgECVBMs9k0rfwJ8FDzvpM5zf2pt4joj8XRcwD4WS0+Zcaa+QhleJBDJ4dAMb3MFwAGQQQG+AKiE9K4v0fgPkWA4WSUuATtle6wWBfIEYUVBg++q7pvQZu1zT1xpVfGJPfNRQujLWBMW7fZEzoK0gK7eP3DThUWBun3ybsAB5XTClU7qvEvor0+Wb8QOGjU71VWuYBEr0sRRGEtDNhPkXXyQeUDdbfUX1v/3hcIjuyzWOOJJzgua7uy8EOV3nNtpRdGyoBDW2o+eIhYuMCVElm99aw9ejHaN6LJ2Zn/R2/Td/YRdNp7QoZq8oAcTDP3SU0PsAA=",
           "ratio": 0.6667,
           "rgb": [
             8,
@@ -342,25 +747,25 @@
           "source": "EmptyName 7.jpg"
         },
         {
-          "id": "jpeg-06",
-          "tile": "jpeg/jpeg-06-tile.webp",
-          "wide": "jpeg/jpeg-06-wide.webp",
-          "full": "jpeg/jpeg-06-full.webp",
-          "lqip": "data:image/webp;base64,UklGRn4BAABXRUJQVlA4IHIBAADwBwCdASobACgAPslYqE8npKOiKrgIAPAZCWIAnTKyu+gsY0tGLj4YAzuDlJxw2Q7RnE7WeOFvRAHWEp5UQftMbhi6piWWqkgA/u9a/WfkuTHJ6novnFnyPRnvvUqttjcmJlUZeyU88vy9upwRWLgixZ3qRIgKw6MY8H1kuXNEF05LYJmZh27Cz8x188vdrfMJmbiOlpeUqNHPCcumKKVmw2BKeNXAzigAY6EqjSX/beoZIt5S4fikrMy2ZS18jHEemzBmS21AGoAOgno/TZRZu3rkrvkaG+pBSBj7SI9LB4F+93fWhUzEMXzUECRL82ZAFICacVQdVfHIsGRUUn7k7jOtE05qXVVUS9chIoiJD6KiJPr++CV83pYIOxgPmbkiftFtIo5havaI5fj2zad4rrS4+P4NAbikzyOO+1GXxJArRIj0O/PP1DejDpqCrlnRwElvWK/3IIqGOVJc/mUcsGUeRVIG8pdUhinvFpErtIAA",
+          "id": "hoa-06",
+          "tile": "hoa/hoa-06-tile.webp",
+          "wide": "hoa/hoa-06-wide.webp",
+          "full": "hoa/hoa-06-full.webp",
+          "lqip": "data:image/webp;base64,UklGRn4BAABXRUJQVlA4IHIBAAAQCACdASobACgAPsleq08npSQiJWmY8BkJYgCdMvaxkrPpSh/3j1QHDgaUFLEEKDFkRJNLt7jtxAhBrcFSOKRDYaEa9G855awAAP7vWny0k/E6h9Bx1t9sxIN0MmMaHeTGzBt5iioH6+YmzbTpt4EBmvJ0cPxJqyj1kuW4L76qMQwQQ2ncsLoJXKO0nCS2gzPA8xIQMzFqQcscKTTtMatt2aJcUonWpQm8TDtf2p8uJkSs7D78HB2rvQwJrFEvEPgIPVbE7Hbg+J89Flt9Pjh49571y1uM5P7AJqOzOK31Apv1vXAehzhrfJ7W6jm7gQLlditAKhReX/tvMwXnwTf9QtuUFjuhTWSiXw5GzS8Pit6EOz0oSFNQZX51Zs1aPZ0d4lYA/7CM0TTvowa9qqHg1eddJocQTfoDTQfnGjRXr+bmrhwHGNdsNNGhZBBB1oitr8lKQgonyH8jtbRqqnYRpNs/FQenZgH7ihcJeNJDeoAA",
           "ratio": 0.6667,
           "rgb": [
             8,
-            8,
+            24,
             8
           ],
           "source": "EmptyName 8.jpg"
         },
         {
-          "id": "jpeg-07",
-          "tile": "jpeg/jpeg-07-tile.webp",
-          "wide": "jpeg/jpeg-07-wide.webp",
-          "full": "jpeg/jpeg-07-full.webp",
-          "lqip": "data:image/webp;base64,UklGRggBAABXRUJQVlA4IPwAAACQBgCdASobACgAPslco08npSKiJWzI8BkJZQC+SDnfxspME+t2EOdcTNjqlx/KffAvvfv+lvzfn35MhSp4AP7562+uWohUx9wvUm1yq4w+5bBPQH/qpSYbDIl51/m9+z7J3pSGHFmcYGg/btY9xASCej21XKJNf8IfVwHviz7vkseyA+TM7Wchq6LsYvt+jrXNlruGAmQvxZ5mWKgU721399Y96qC1rTQ0H4pnJNjS0JztRkIssfOVu2OMIuVhFXiKw4HplYkXhmnkzxpwbocVwCJx4uFu3T9vHxl0RFuSGp1KMuiohP3U9TthkCbsdUYVQ/9idswEgV2AAAA=",
+          "id": "hoa-07",
+          "tile": "hoa/hoa-07-tile.webp",
+          "wide": "hoa/hoa-07-wide.webp",
+          "full": "hoa/hoa-07-full.webp",
+          "lqip": "data:image/webp;base64,UklGRhYBAABXRUJQVlA4IAoBAADQBgCdASobACgAPslepFAnpKMipWmY8BkJZQC7M8fDe9AhPczoz2Q9Qcyjwa03XRITSKrgZffxVuQNQi4mleAA/vk+wlXBw01ruI/sYkuGkMg+VG2+gSYTdiFqXHE9IG4P1SDTMsVgjhg0gAAr4xaPsVl7ANYODuIDUxyX1ZV6yq8y0jSC1AdKi083i+O9fCL6PvuyBRZy5mPcFzDDGi8evz9NMS8ThdtQhp0V4Q7Br8s8A7POvQnZ2u25rA6dlmpJibj7WDiRpn/aolCSEwc6gx6RlGDUkW6PdSKMpbVGzTRd1vKNm8zCW+czr6zrytZHHdnl76KubmZFvt4M/e3EeKh9NZzrzgAAAA==",
           "ratio": 0.6667,
           "rgb": [
             8,
@@ -370,11 +775,11 @@
           "source": "EmptyName 9.jpg"
         },
         {
-          "id": "jpeg-08",
-          "tile": "jpeg/jpeg-08-tile.webp",
-          "wide": "jpeg/jpeg-08-wide.webp",
-          "full": "jpeg/jpeg-08-full.webp",
-          "lqip": "data:image/webp;base64,UklGRowBAABXRUJQVlA4IIABAAAQCACdASobACgAPslep0+npKMiJWmY8BkJYgC26QqYLz+QimtGtQ5i+amKdQKH79sCs79Tx7EySiR+A6s5gEKDLlK78ZNZ2tgAAP78RtsC2PULBO9Fk1r+f7TQ4nZmQEQln38ObQabQivtD+9JkdC2gPiwUPF+eWFZtDOongeh1X4VkbffthiewfpHLFSRwVNEldek9t01/MCGUs8hHd6feuUSI2DT059CjJaRciX50Fy5NZbDoO2800uDs5lgCD0AoufEmvf95tHj+OY7wiE9rUORF2MSBj3mVvA4UpAMqOHQbTjm+9XOaN7sbBts6voQR9zBYZtoGfKxq+mD5d9ChHlLVhtQegVH/PWkRw6DoxCgX26RCDvnLtZD0h8BJ5opcPTKiJG+o5jg+R0Mg3u+bmvQXLLHn+VyrK4eSOWY4lPOI6VOCO/6NN0U6oBcCWVHS+CBYqYlJrKJZf+OGGapZi5k7MAkKYepVwYem2rN9WUTFFUO9ETYnyi+9VYAAAA=",
+          "id": "hoa-08",
+          "tile": "hoa/hoa-08-tile.webp",
+          "wide": "hoa/hoa-08-wide.webp",
+          "full": "hoa/hoa-08-full.webp",
+          "lqip": "data:image/webp;base64,UklGRoYBAABXRUJQVlA4IHoBAABQCACdASobACgAPslepk+npKMiJWmY8BkJYgCxDPs6dSfCujDBNEoJAE+0w4L40XexfndOEOucEgNeS/GaPGle2puNsrvsAiAHpsAA/vxGuLzkLMH0BPouU1r4DlsPqe9Fpuo/1ng5UchG4rZx09DTWRzJqJ6O+mxWmBQ7QhDueiEmMRtEx7VGx3P4cxXVJPVMgMCpHMdz1Ii69N9XgIk9oPm8worIANa9TyNNAN6M9FISevplrtuqFjK3yn5Z4I2OrMB/bU+MsZTeGhmaHoVlYvxS4XildC69rTz//YoJnnZ99jXfmoc6Iq3zIrlDd+5Prjd5OWc5pXSduLZhXtD36/9oCy9mhFwgH5FxrjMCU/vEZ5da+F/zWC+KSEQ26B04b0RI3z/PwXJObzrYX7JkedLioalU77Uv0OkdM0ZhoXTHMsWIEk9dr0C35pei3X0axYqWtZ7AVtIa795fkx0SHTC8XDfs8ZMfqY10kVMDQgngCYRuqU4AAAA=",
           "ratio": 0.6667,
           "rgb": [
             8,
@@ -384,11 +789,11 @@
           "source": "EmptyName 11.jpg"
         },
         {
-          "id": "jpeg-09",
-          "tile": "jpeg/jpeg-09-tile.webp",
-          "wide": "jpeg/jpeg-09-wide.webp",
-          "full": "jpeg/jpeg-09-full.webp",
-          "lqip": "data:image/webp;base64,UklGRiQBAABXRUJQVlA4IBgBAACwBgCdASobACgAPsFOnUsnpCKhtVgMAPAYCUAZQDuisL63IkzoiJfyOayquTcFo1fuLGMihdgE6/B6olv+SAD+/dlbu0AL7x7Exve8sF5xi+nrOgqdCVvUdbrZ2VV8o9uiEwVRt9JAFSPL8OdfEQ9lATlLoVZww1asixag6nZkc5Wo9Ih5VT0QFh25LEjXsQFldQ4S3yEQ7Cq52ckZ6sqPk1BbttEfD/QpdrNBVd6mNcN//N89sBeX2kPw3nd7i8JJyMIUacrU+DUzUd3oJgwhZJzjES9RBbj7Af4FVqb1qgm1voddf4peBMEjl8dpOSKqO/MmSyCqc7to1wUcgFuxprCPmRdi5MtnbO010zGlculyWE0A/AAA",
+          "id": "hoa-09",
+          "tile": "hoa/hoa-09-tile.webp",
+          "wide": "hoa/hoa-09-wide.webp",
+          "full": "hoa/hoa-09-full.webp",
+          "lqip": "data:image/webp;base64,UklGRiQBAABXRUJQVlA4IBgBAABwBgCdASobACgAPsFOnUsnpCKhtVgMAPAYCUAZizGfVuRJnRES/kQAvJaR+I8DsTTnUVtb58gPlaTzLmgA/v3ZKTkT0vMWqCa6Lz549a1/zvJGjZbRrHVzpRxGS5anxvoHqad08T050e8tsgX8KmwG3aPTHVH4pU4Y9Mj+ntHbUekQ8rLid64qrp2gADqVuX05KZPQZUb7hY9WVH08WerckT9TThcuc66caRTlu9pcxsqYUCfJ+lO6jKvb7Mk7GiPmqdJ7jn1LJq0FObT7wv2d3HUwLcAz2aRGGKK0w6AIUTpIIjohIVmrr7q9uHE1JTHUO/MmSyC/uzdpnzBMvqSpBqEl8AI+j4rMYK7TdycPyfosDrSEAAAA",
           "ratio": 0.6667,
           "rgb": [
             8,
@@ -396,26 +801,24 @@
             8
           ],
           "source": "EmptyName 12.jpg"
-        },
+        }
+      ],
+      "skipped": [],
+      "rgb": [
+        8,
+        24,
+        8
+      ]
+    },
+    {
+      "id": "jpeg",
+      "folder": "JPEG",
+      "images": [
         {
-          "id": "jpeg-10",
-          "tile": "jpeg/jpeg-10-tile.webp",
-          "wide": "jpeg/jpeg-10-wide.webp",
-          "full": "jpeg/jpeg-10-full.webp",
-          "lqip": "data:image/webp;base64,UklGRqgBAABXRUJQVlA4IJwBAACwCACdASobACgAPslcpEynpSOiMBVYAPAZCWYAtRrUjh80BxGymWidFIG2ItjP90EDgCB5lM2V8yIOxX0yFwT2OspvEww8TTCV5MxyQAAA/vXCOrKgTLUsFmqSsw4aXbT1zK5ldWjV8S9U1FwmBKz9XKOm9H9fJS51pF6500y0PcsG9f8pvzqRbXS8BExLvs+v0uOAO0HFGNPHBbWIdAqLgUadTR6FlJyDFe8wIhc8++FGpnIweXrQDHcnEmsbtvunnefe9xvja1gL7ErUGjhjVG4nKNmx6S3RYzDp249Pg2LSHusYYxJ0Xtl603rvheAw5LZ6uaCSYa7XGHGCFCxm+712zSmCS2lXgXONtHfEMsYAwv9gdeIsgKgc//42z/RakZQijZ6hlPcB5/1WTgUmc5lbU03JsfrLo+7jMhppdczWChoTKJx8Pvv7cCllMbC3DZ3r0Z4q1aN2hy2nwzuaVw+0FcYnw1dcg+G1loXp7sI3zvMSoeirtS12w4vfJsE+1raM9gp3HCN5QlWewBv/aBfL9+3damq1wAAA",
-          "ratio": 0.6667,
-          "rgb": [
-            8,
-            8,
-            8
-          ],
-          "source": "EmptyName 14.jpg"
-        },
-        {
-          "id": "jpeg-11",
-          "tile": "jpeg/jpeg-11-tile.webp",
-          "wide": "jpeg/jpeg-11-wide.webp",
-          "full": "jpeg/jpeg-11-full.webp",
+          "id": "jpeg-01",
+          "tile": "jpeg/jpeg-01-tile.webp",
+          "wide": "jpeg/jpeg-01-wide.webp",
+          "full": "jpeg/jpeg-01-full.webp",
           "lqip": "data:image/webp;base64,UklGRloBAABXRUJQVlA4IE4BAADQBwCdASobACgAPslcpk2npSOiKqgA8BkJYwDB/48OjhF9aAVvQ2Mt5De7Vm3hJn1UeQzNLEvrmJS4pWYmuK74nYObb6rrAAD+72cFPYZfaI94p7wPoIhs3zcNAI6e3SfEf0jDQ3xtijp8VSdr9iSOzNK2Xo0jRjg3n0Io/nruM+nm6H/MKyes/z0E47qfvCkgqSNaQOGfO5gaTpdk1mFfRT+WFyhEBVria6DF5j7jjx25sN5EIg8hH6TpQVFJzABP54fV7I9IR8E5qTp6sDszSVO9UGDvhn+PyoLPzB8PUX8OInxNsVt9Vk4tomuYNbT6tY00nfLXxUsQcMlD8l/DoI6TklPyVXtxQGt1IRcZcVrHvHTfQAUxeuh4WYl+kv75+BShOODhhueRmKC79yArpZZP9MmNrn/ghMA5LOpPC7fFAXovlN/2xr0dgAAA",
           "ratio": 0.6667,
           "rgb": [
@@ -426,10 +829,10 @@
           "source": "EmptyName 15.jpg"
         },
         {
-          "id": "jpeg-12",
-          "tile": "jpeg/jpeg-12-tile.webp",
-          "wide": "jpeg/jpeg-12-wide.webp",
-          "full": "jpeg/jpeg-12-full.webp",
+          "id": "jpeg-02",
+          "tile": "jpeg/jpeg-02-tile.webp",
+          "wide": "jpeg/jpeg-02-wide.webp",
+          "full": "jpeg/jpeg-02-full.webp",
           "lqip": "data:image/webp;base64,UklGRkoBAABXRUJQVlA4ID4BAACQBwCdASobACgAPslUo0ynpKMiMBVaqPAZCUAYdjXTjTBOAeN4GGZFUBq0cFQftR5BO4YyvUnGYJMNkayjb+f3jk2kJ3AA/vV0+cVxG3731DhzqyxlmJu5OzU0udLhflYSovTo1OjmiFXiod8EPlLSbJnRN2UubWLXOLAr4AA6qo2ZXb7khHGSPB1EVxi3F0lDcSZvSchFgE+ZY32NCmm0OTpJwSdlz0IWBhP47E5X5/7d5WNVsrO2rLoAGIHKQyEUcUL3XZpUl51EZrlWlNFBCpzTpsiVlmuRp59dsHCudHgoF2lutPftW7z4V4izrgkmyOQev06Dgk+Fkls6n8FwQ4pg33ug5dwp84NoT5/ebijVGL1brtTzAvsI+LaG97ZrawpaTrZGz+yr/pbPijUi+FrI3349QlWwDxvAAAA=",
           "ratio": 0.6667,
           "rgb": [
@@ -440,10 +843,10 @@
           "source": "EmptyName 16.jpg"
         },
         {
-          "id": "jpeg-13",
-          "tile": "jpeg/jpeg-13-tile.webp",
-          "wide": "jpeg/jpeg-13-wide.webp",
-          "full": "jpeg/jpeg-13-full.webp",
+          "id": "jpeg-03",
+          "tile": "jpeg/jpeg-03-tile.webp",
+          "wide": "jpeg/jpeg-03-wide.webp",
+          "full": "jpeg/jpeg-03-full.webp",
           "lqip": "data:image/webp;base64,UklGRkQBAABXRUJQVlA4IDgBAADwBwCdASobACgAPrFGnEsnI6MhtUwA4BYJZQDOAvJ1r5CK9bycd/ib+58kE7APa2qAf1+IzSK09XDofbyPNi0aDqUTmfd6EeAA/vEfc+sXtGTpbcxvdnMof1q1gzOicGimwxolFWQ52G1omey2wmzAlr6I8aPPGruJ+JIEW3azV4Vnjj2aJM1HHtad//TMvTGv0DhTb1wUXBSS1znP5IjYRW0KVHOqmK4522Kr/X9ZuzqUukgD9ejU6QEfp3kb6O0T8hNc9asyYc8jJoFO/cqEMhjnyuDa8tkVOb6OxVyuFvxpPvf2QQ3dXatVMp7xHx4PXYNqK4COW+rwtwjUH2P9sKQlWnhQEzbKho3ZhVurpfER0+wsyl0wmWINLTR/9v3s2SUH8URpVR5F+0NsO/aE7jvtAQVAAAA=",
           "ratio": 0.6667,
           "rgb": [
@@ -454,10 +857,10 @@
           "source": "EmptyName 18.jpg"
         },
         {
-          "id": "jpeg-14",
-          "tile": "jpeg/jpeg-14-tile.webp",
-          "wide": "jpeg/jpeg-14-wide.webp",
-          "full": "jpeg/jpeg-14-full.webp",
+          "id": "jpeg-04",
+          "tile": "jpeg/jpeg-04-tile.webp",
+          "wide": "jpeg/jpeg-04-wide.webp",
+          "full": "jpeg/jpeg-04-full.webp",
           "lqip": "data:image/webp;base64,UklGRlIBAABXRUJQVlA4IEYBAADQBwCdASobACgAPslUpUwnpKOiMBVaqPAZCWUAyJwJUfocFFka6i3Py9m05W9OGbr110ryrHl3PwNXHARi0jyzRk3vloffgAD+81+qq1LuDrwBK8CdOpcgWtpCZsFYD11mEHFiFM9r/05AMWIYXrCR20TjhEyFsSggENLbDciZdsOrd4PRg/LFbZ//fg9QyMIKaSGOnkiRNcnxhvH3iPAzmYP+b6lgGPwghgw1/d48NZi6CcjXo60XPy+VqjPbVJ8gGpHv0jBArYv/pvIf35ZwR/aGUouR+bwBSbJe4AyuizDB+lzxiGj9bbbm2sK47rYQ3y8i1cL98E1diX9uQ+O9/O3L8BNCCCtsWNppUClyKi8tqzAlukC01LyQfbuwNT6y8L3QsFODTA/P+E/Z+UCMSneLHC+/E4SaQo91HCLtXKqh4+xgAA==",
           "ratio": 0.6667,
           "rgb": [
@@ -468,10 +871,10 @@
           "source": "EmptyName 20.jpg"
         },
         {
-          "id": "jpeg-15",
-          "tile": "jpeg/jpeg-15-tile.webp",
-          "wide": "jpeg/jpeg-15-wide.webp",
-          "full": "jpeg/jpeg-15-full.webp",
+          "id": "jpeg-05",
+          "tile": "jpeg/jpeg-05-tile.webp",
+          "wide": "jpeg/jpeg-05-wide.webp",
+          "full": "jpeg/jpeg-05-full.webp",
           "lqip": "data:image/webp;base64,UklGRlwBAABXRUJQVlA4IFABAACQBwCdASobACgAPslapk0npSOiKqoA8BkJZQDRwrd/pZKatQTR5TT93lr9ZDH0vueYHRgYqAEEISL/Wx+HRy9ZEMsJ+AAA/vi0lF3o7K4eFLHU4bb8YPrL0cUxix5N56YSjnTWYF/JPls1X5vXZVuY3DWbVp1scuqvYnRioe+LiIib9nvyWVaehDOeV0NFHNySJoicY7vTDeNuJv9lEC8uVu1VvSFpHfsx0Ed2kit/jymJor/rxJjH7zX0EogTyByAG2/ufmvBqtQMl4SHju1XA3lACtzXLGrxh/eaLP+qJvBBEkFC7PXstONBRXl+5MJIVZJaiGxkpq34UzOpUzuzevgHQEhFycNSoK5xWpYyJ/XfoAZhQAd06xRWNSc9iSJ1hByuX/GPqY1nwOKl9qlzkGzglFFZv5QouWpABwTktGHLfM9sgtAV9B3pjLkvuAA=",
           "ratio": 0.6667,
           "rgb": [
@@ -482,10 +885,10 @@
           "source": "EmptyName 21.jpg"
         },
         {
-          "id": "jpeg-16",
-          "tile": "jpeg/jpeg-16-tile.webp",
-          "wide": "jpeg/jpeg-16-wide.webp",
-          "full": "jpeg/jpeg-16-full.webp",
+          "id": "jpeg-06",
+          "tile": "jpeg/jpeg-06-tile.webp",
+          "wide": "jpeg/jpeg-06-wide.webp",
+          "full": "jpeg/jpeg-06-full.webp",
           "lqip": "data:image/webp;base64,UklGRl4BAABXRUJQVlA4IFIBAAAwBwCdASobACgAPslcok4npSKiKrgKAPAZCWUA0BncDGKtJVzCfzhtSvQKKuf1MFFtBIRqncjl+QyakD1J+6hMMAAA/u1EXTzNlazdYq6+L4YCrB/yF3xCiPZzRWdS1SPVPnCo9ofjcD484Apie7Y0myUvOhC/uQ6tEppDjBeUpa93IeQqNE6Edov2y5ffhhVw1eZpkG+32t71WTkPvlr4OyUMBjyqE1hEQz73RO2Phuv7ihvta5TG61Oae0Pcb3tEIAbzrdAuPgLfRVRQVOS10CsCuQ+VvCuOJc6pre+1/TjksOPThPdt0qXW5bwt9D6LBd5Gq2eKxm+MBg72g6HdAMRmVcqEdDFXRuvMcmHRZFpnZw+RV5aXuWmBJigkpET5WImuKejn2/GPPRAsXNr80IjnquZR0g56XcPaSFbCIx0eulY5abAv33ycO2Ur2B4AAA==",
           "ratio": 0.6667,
           "rgb": [
@@ -496,10 +899,10 @@
           "source": "EmptyName 22.jpg"
         },
         {
-          "id": "jpeg-17",
-          "tile": "jpeg/jpeg-17-tile.webp",
-          "wide": "jpeg/jpeg-17-wide.webp",
-          "full": "jpeg/jpeg-17-full.webp",
+          "id": "jpeg-07",
+          "tile": "jpeg/jpeg-07-tile.webp",
+          "wide": "jpeg/jpeg-07-wide.webp",
+          "full": "jpeg/jpeg-07-full.webp",
           "lqip": "data:image/webp;base64,UklGRnoBAABXRUJQVlA4IG4BAADwBwCdASobACgAPslSpE2npCMiKrgMAPAZCWMAwv20ZT5kzmKA7jI5FZy74h1WKG37TacMnnb03x87Y8Sz6S4FXpetixRgjgAA/rhF1Ij5cM9Q0q1683zUQ71SZaJVc9MK4ZdUq1fogXJ9lG6Q6EtdW8BdkguVurdOPvI0jkRUmwg1rU5nV6jnRU6/C1CSbfEWWb8ga6j4+O/xtkn8/1IPKJpsfmqEUDCkW1GR6I50x57b3nWdz0C/DKqFvi5BIxZwdy57t8pNfg82LIFe0bJN91Jlvme92WokYSyX+nUfPA6ghsebLYtWDr+nj2npnw7g5r4e9smjheas6/wi/vQdMgRwGRhuC7sTyu/kUcB9Uyu75il4MJDFWSYoerav6gd4RuJ3EfqHMSCuBlWQu/ttIkD8EXA8dzeMmbKzY9RSIHl8i/8VdPAjo5Qm1vEjb/aiBin1KxL6evx/BK7RjMI+PJSxdcPryY/qtJXHNAA=",
           "ratio": 0.6669,
           "rgb": [
@@ -510,10 +913,10 @@
           "source": "EmptyName 23.jpg"
         },
         {
-          "id": "jpeg-18",
-          "tile": "jpeg/jpeg-18-tile.webp",
-          "wide": "jpeg/jpeg-18-wide.webp",
-          "full": "jpeg/jpeg-18-full.webp",
+          "id": "jpeg-08",
+          "tile": "jpeg/jpeg-08-tile.webp",
+          "wide": "jpeg/jpeg-08-wide.webp",
+          "full": "jpeg/jpeg-08-full.webp",
           "lqip": "data:image/webp;base64,UklGRgABAABXRUJQVlA4IPQAAAAQBgCdASobACgAPslWo0unpKMhqqwA8BkJQBZwAn2y30m4yyj6kwaiYUwMcsO1rIPcNyD3d6oFvAAA/d9NcsnpVIlETbDmbLk/exE3RzqlTwOiGC3st78J0F4B0HPjLBJ6ptNsuwbgvoYVEPJjg7ZKcYjWtYNY2W+9wPbFPLcNfl0vl6h/HcXpmtVEcyeupTj+ARKzoZY3vv9P1pviKwAqPL8e+JBbLRR7nbDhqil33AohG84lJJRE1VrDqx3M5qPQRtk4EN3+pIaD4/NmgaXqaLW6h4b7iXPII05PuWACMFYItzhQ6r8JKnc88xRpmIm/QAAA",
           "ratio": 0.6667,
           "rgb": [
@@ -524,10 +927,10 @@
           "source": "EmptyName 24.jpg"
         },
         {
-          "id": "jpeg-19",
-          "tile": "jpeg/jpeg-19-tile.webp",
-          "wide": "jpeg/jpeg-19-wide.webp",
-          "full": "jpeg/jpeg-19-full.webp",
+          "id": "jpeg-09",
+          "tile": "jpeg/jpeg-09-tile.webp",
+          "wide": "jpeg/jpeg-09-wide.webp",
+          "full": "jpeg/jpeg-09-full.webp",
           "lqip": "data:image/webp;base64,UklGRjQBAABXRUJQVlA4ICgBAACwBgCdASobACgAPslQoksnpKMhtVQMAPAZCUAU4obEZe2dSqtxngfKpMStn5AJOAy4eRR81KGPgLozb7788AD43ofmq8AyWNCMTfuVO7S1w/7TiPC5TBAQ6WZC1h5qIcdolzsxGAh+hJBgy94Wk8slFQlKGaT++c2QBtsjhIvpJsRblzpK51wlbsGDp5z2fx1MAhIIzbD0PAoacTR/5daGaVd3yCaN0OnA+7pfewUl692yGfCXBLHyPuuar3cQgq/4vBxXeG0HCf9LFsfyb9EulfTPIzfDzKr6wrJHkJ5XmvpGIoeWBVWMoBLpho+7v/WzdpTHjlSz6yRvHvIVyBneL00rtuQE6SODHobA0P73Z59DHqth4CvTsYSFpxYecGzBKxrW1ekAAA==",
           "ratio": 0.6667,
           "rgb": [
@@ -538,10 +941,10 @@
           "source": "EmptyName 25.jpg"
         },
         {
-          "id": "jpeg-20",
-          "tile": "jpeg/jpeg-20-tile.webp",
-          "wide": "jpeg/jpeg-20-wide.webp",
-          "full": "jpeg/jpeg-20-full.webp",
+          "id": "jpeg-10",
+          "tile": "jpeg/jpeg-10-tile.webp",
+          "wide": "jpeg/jpeg-10-wide.webp",
+          "full": "jpeg/jpeg-10-full.webp",
           "lqip": "data:image/webp;base64,UklGRkQBAABXRUJQVlA4IDgBAABQBwCdASobACgAPslUn0unpKKhsBVdUPAZCWIArk9o808vf9hL649eY3kDU6Eo/xnx+M4HBUnCqM0Igz4HrEEoUNeAAP767ikdhm8+e1faUImt3UsFjyLzkYukmzgeoIQ3nOWYrvc7joKLXLxD0+uaQRIaS/7dlOE+vKXRgnnYF6TXJ2AOVTui5VcBc6zZ6Ji+NXeRfSRIbNldEgi0yjqlEue9/8Yl42GWqCuC9GSjEgnqKOtGqeVBwtVq+BADZJLpnnt2ycwELwKpS8TInn9OQ82enSPY0O5hFNRdTQxegXSkWrXROXwXqEw64qvoHS+6jjzRZXiiVdNXKbBrIq5eFNjoi/PNA0rr1X9r+QnrFLFNO/5wq5Ty1Ec7VNTlIJQz1iU1XK6napn5bFdv5emauNbg3csAAAA=",
           "ratio": 0.6667,
           "rgb": [
@@ -552,10 +955,10 @@
           "source": "EmptyName 26.jpg"
         },
         {
-          "id": "jpeg-21",
-          "tile": "jpeg/jpeg-21-tile.webp",
-          "wide": "jpeg/jpeg-21-wide.webp",
-          "full": "jpeg/jpeg-21-full.webp",
+          "id": "jpeg-11",
+          "tile": "jpeg/jpeg-11-tile.webp",
+          "wide": "jpeg/jpeg-11-wide.webp",
+          "full": "jpeg/jpeg-11-full.webp",
           "lqip": "data:image/webp;base64,UklGRjQBAABXRUJQVlA4ICgBAAAwBwCdASobACgAPslYpEynpSOiJW5g8BkJQBfAaYjKXdECSNTkpF/j81FkEtqDKPNGZwa0cr1Vl5+WIe2TWYoOMAAA/o0wvdjmuO4R/RAMhzbY5snQLwWizoTLmAfxI0weDAC6+OpyWnatHARZ5IbJDURQQZ2wMmqP7qqgqGAS61wnaFvJluDNSQ+mdpxlDbQQmZyRzsdN3U2CghFyHBB3w8AXMsVkSnKShw137s4KBeDzEqU3Qaao1YzzzBw16uaaVMIJi2mR9VQgbnjP91UlcAOMi8CANz0WDfc/NiNNdBZwl9NuRRNQl2S13MTJ3anN4gNodeVQ89k+NiUjSG+gPnr6yZRRwPIm/8kJSfGFZdYGBHVu8zOBG+OMC0M5XQC3Y2MC5X5gAA==",
           "ratio": 0.6667,
           "rgb": [
@@ -566,10 +969,10 @@
           "source": "EmptyName 27.jpg"
         },
         {
-          "id": "jpeg-22",
-          "tile": "jpeg/jpeg-22-tile.webp",
-          "wide": "jpeg/jpeg-22-wide.webp",
-          "full": "jpeg/jpeg-22-full.webp",
+          "id": "jpeg-12",
+          "tile": "jpeg/jpeg-12-tile.webp",
+          "wide": "jpeg/jpeg-12-wide.webp",
+          "full": "jpeg/jpeg-12-full.webp",
           "lqip": "data:image/webp;base64,UklGRhgBAABXRUJQVlA4IAwBAADwBgCdASooABsAPslcqE6npSQiJWsw8BkJYwDIjzMB+BZWaU5ojw+xeD/WAiL2R9cctl3m29PSf8Y+FsI14EMAAP7wc2Om7nfYOKvryRDErDldzRbwtb9gBYRLCFatexalo4UrkZdhx5Hp3z2HRwsRIloypuTboQg/GI7W9UWVkwH8+O2+LAtyxY4pHVi4qn9yic5oCpXX7XH5dG0S4XyFAswMdvftlhUOcK+8no5jauwEcaMbnOf+iwh9zAdsRtQJ9tQGsi1DpYAo+5tB3B7WtY5NeFUbox7DTa2guMb03cnETM/uwoY43BxZEIaDPFUSJbpgxt5udeJVUPWyFb2NjWHGukhXzur0dAAA",
           "ratio": 1.5,
           "rgb": [
@@ -580,10 +983,10 @@
           "source": "EmptyName 28.jpg"
         },
         {
-          "id": "jpeg-23",
-          "tile": "jpeg/jpeg-23-tile.webp",
-          "wide": "jpeg/jpeg-23-wide.webp",
-          "full": "jpeg/jpeg-23-full.webp",
+          "id": "jpeg-13",
+          "tile": "jpeg/jpeg-13-tile.webp",
+          "wide": "jpeg/jpeg-13-wide.webp",
+          "full": "jpeg/jpeg-13-full.webp",
           "lqip": "data:image/webp;base64,UklGRiQBAABXRUJQVlA4IBgBAAAQBwCdASobACgAPslYp04npKOiKrgKAPAZCUAW31j/ssTkeC+1gV3BvcVKkAjbTKmxoUEctuwltyXccQXP1VUdQAD9+iSwYWXrB4WDckuexHpzHFw/Y2eWQ4nCvOi4E0pO/oo/aTUdLvPKLTpTi7Xdhxucx8uhFnLPhplslDt5dSr1OUNukq4lGy3ZHPJvV5rRuhvLhPnZxWBixHhq5qgbnpo/CgbBzUWZ6qaICdzz7/lcDsk84lNmpUqjtB4g4pcg6GWRwxf5s59InzELL1/yRr+ROEIUXN3zF5m5IR4v+ySolkAJ3ICOpF5StBnkzmbO0FVllR5tw8to0TF7z14QeENjutoNoxcRG0CfM51pCp0gfnyWvQAA",
           "ratio": 0.6667,
           "rgb": [
@@ -592,20 +995,6 @@
             168
           ],
           "source": "EmptyName 29.jpg"
-        },
-        {
-          "id": "jpeg-24",
-          "tile": "jpeg/jpeg-24-tile.webp",
-          "wide": "jpeg/jpeg-24-wide.webp",
-          "full": "jpeg/jpeg-24-full.webp",
-          "lqip": "data:image/webp;base64,UklGRq4BAABXRUJQVlA4IKIBAAAQCQCdASobACgAPslSo0unpKMhqqwA8BkJYwC/WUckqyJ/b2GBKu26R8sH9+jDxt9Arw6Y8PH5nDK4jW32l9boKqRM+RKV71CsaBjFaAt/YAAA/ulrKOPKy+HMqUa+cEQHYwRZqswpTPuEqutkUui1rDfl51T1XYy/dbfCuu2sN3DRasxpTbDN5x3yF9kamxBgPJjY2P+M1SizA/Mojhk9ZgkZGOlE2PnTETPoicOtPKU+xMfYax8QjUg+j3/tEUpPlyk+16BnDe4ybd3wyspSdcDo/FK6eoeq8WWkJuVmOGjOr6rnOWYX673c4Um4TuJybFR95JJPJ+4VNNIeAeRdzo3qJ3spduGzyam9VF3WBurROzfUqTXopfh4BsYWXqFF7oosOcn5PH2MkDpwToXukLcxWVKf1CKuB85jftsWgzAMUnqyyYr6fp05Z9EXk8BjWVDNTTcOLUG68AMi+ZacMgs+Y091TAycIpopGDXLzvkkSCiIbMkbdAMLd1G4sCLqNdTvYJXTdLmv1pxyEgJB0aAhYaHE0QsojE6sEseigAAA",
-          "ratio": 0.6667,
-          "rgb": [
-            8,
-            8,
-            8
-          ],
-          "source": "EmptyName.jpg"
         }
       ],
       "skipped": [
